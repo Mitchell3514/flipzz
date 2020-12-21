@@ -1,2 +1,2 @@
 # flippz
-Othello's time has come with this new version; flippz. An online multiplayer website to play othello in a beautiful way.
+Othello's time has come; introducing Flippz. A refreshed online multiplayer experience for a game that never gets old.
