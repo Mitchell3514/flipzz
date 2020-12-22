@@ -1,0 +1,43 @@
+{
+  "name": "flippz",
+  "version": "0.1.0",
+  "description": "Othello's time has come; introducing Flippz. A refreshed online multiplayer experience for a game that never gets old.",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "gulp build && echo You can now run the server with \"node ./dist/app.js\"",
+    "run": "gulp build && node -r dotenv/config dist/app.js && echo Help me father, for I have crashed.",
+    "dev": "concurrently -n gulp,node -c red,green \"gulp dev\" \"nodemon -r dotenv/config --watch dist src/app\"",
+    "test": "echo to be made && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mitchell3514/flippz.git"
+  },
+  "keywords": [
+    "othello",
+    "reversi",
+    "game of the year"
+  ],
+  "author": "Nadine Kuo, Mitchell Rademaker (https://mitchells.work)",
+  "license": "none",
+  "bugs": {
+    "url": "https://github.com/Mitchell3514/flippz/issues"
+  },
+  "homepage": "https://github.com/Mitchell3514/flippz#readme",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.16.0",
+    "eslint-plugin-ejs": "^0.0.2",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-livereload": "^4.0.2",
+    "gulp-minify": "^3.1.0",
+    "gulp-webp": "^4.0.1",
+    "nodemon": "^2.0.6"
+  }
+}
