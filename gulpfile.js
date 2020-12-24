@@ -16,7 +16,7 @@ function clear() {
 }
 
 function views() {
-    return src("src/public/views/*.ejs")
+    return src("src/views/*.ejs")
         .pipe(dest(out))
         .pipe(livereload());
 }
