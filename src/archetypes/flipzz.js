@@ -40,23 +40,23 @@ module.exports = class Flippz {
         return c.b === c.w ? -1 : +(c.b > c.w)^1;
     }
 
-    // Checks if a color can place on a certain position
+    // Checks if a color can place on a certain position.
     validate(pos, color) {
-        if (istaken(pos)) return false; // can't place if it's already taken
+        if (istaken(pos)) return false; // can't place if it's already taken.
 
-        const toFlips = []; // store which directions are valid
+        const toFlips = []; // store which directions are valid.
 
-        Object.keys(this.dirs).forEach(dir => { // check every direction
-            let newPos = move(pos, dir); // first move in that direction
+        Object.keys(this.dirs).forEach(dir => { // check every direction.
+            let newPos = move(pos, dir); // first move in that direction.
 
             if (!valPos(newPos)) return; // check if the new position is even on the board.
             if (getColor(newPos) !== +!color) return; // check if the new position is of the opponent, otherwise it's invalid.
 
             const toFlip = []; // store which positions we go over (will be flipped if valid).
 
-            while (getColor(newPos) === +!color) { // do this for as long as the new position is the opponent's
-                toFlip.push(newPos); // add the current position to the ones that'll be flipped
-                newPos = move(newPos, dir); // move position in direction again
+            while (getColor(newPos) === +!color) { // do this for as long as the new position is the opponent's.
+                toFlip.push(newPos); // add the current position to the ones that'll be flipped.
+                newPos = move(newPos, dir); // move position in direction again.
                 if (!valPos(newPos)) break; // position outside the board? stop the loop (getColor would break)
             }
 
@@ -64,7 +64,7 @@ module.exports = class Flippz {
         });
 
         if (!toFlips.length) return false; // if there are no valid directions: false
-        else return toFlips; // else you can place here
+        else return toFlips; // else you can place here.
     }
 
     start() {
