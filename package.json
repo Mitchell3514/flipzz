@@ -4,9 +4,10 @@
   "description": "Othello's time has come; introducing Flippz. A refreshed online multiplayer experience for a game that never gets old.",
   "main": "dist/app.js",
   "scripts": {
-    "build": "gulp build && echo You can now run the server with \"node ./dist/app.js\"",
-    "run": "gulp build && node -r dotenv/config dist/app.js && echo Help me father, for I have crashed.",
-    "dev": "concurrently -n gulp,node -c red,green \"gulp dev\" \"nodemon -r dotenv/config --watch dist src/app\"",
+    "build": "gulp build && echo You can now run the server with \"node ./dist/bin/www\"",
+    "run": "gulp build && node -r dotenv/config dist/bin/www && echo Help me father, for I have crashed.",
+    "dev": "concurrently -n gulp,node -c red,green \"gulp dev\" \"nodemon -r dotenv/config --watch dist src/bin/www\"",
+    "start": "npm run run",
     "test": "echo to be made && exit 0"
   },
   "repository": {
