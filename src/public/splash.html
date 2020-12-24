@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Flipzz: two player game</title>
+</head>
+
+<body bgcolor = "lightblue">
+
+    <main>
+
+        <section id="decoration-top">
+            <div id="logo">
+                <span id="F" class="chip"> </span>
+                <span id="L" class="chip"> </span>
+                <span id="I" class="chip"> </span>
+                <span id="P" class="chip"> </span>
+                <span id="darkz" class="chip"> </span>
+                <span id="lightz" class="chip"> </span>
+            </div>
+            <h1> TWO PLAYER BOARD GAME: <br> FLIP AS MANY PIECES AS POSSIBLE! </h1>
+        </section>
+
+        <section id="left">
+            <h3> REVERSI RULES </h3>
+            <div id="how-to-play" class="rules">
+            </div>
+            <form action="/fullrulesreference" method="get">
+                <button type="submit">FULL RULES</button>
+              </form>
+        </section>
+
+        <section id="center">
+            <form action="/play" method="get">
+                <button type="submit">PLAY</button>
+              </form>
+        </section>
+
+        <section id="right">
+            <div id="total-flipped" class="statistics">    </div>
+            <div id="players-online" class="statistics">    </div>
+            <div id="games-completed" class="statistics">    </div>
+        </section>
+
+    </main>
+
+</body>
+
+
+</html>
