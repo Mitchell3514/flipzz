@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const stats = require("../public/assets/stats.json");
 
-const { readFileSync } = require("fs");
 /* GET home page. */
 router.get('/', function(req, res) {
-	readFileSync("../public/assets/stats").then(res => {
-		const { gamesplayed, flipped } = JSON.parse(res);
-		res.render('index', { title: 'Express', connections: connections.length, gamesplayed, flipped });
-	});
+	const { gamesplayed, flipped } = stats;
+	res.render('index', { title: 'Express', connections: connections.length, gamesplayed, flipped });
 });
 
 module.exports = router;
