@@ -29,10 +29,6 @@ server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);
 
-
-// we want to store our connections globally
-global.connections = [];
-
 /**
  * Normalize a port into a number, string, or false.
  */

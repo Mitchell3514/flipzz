@@ -6,7 +6,7 @@ const { readFileSync } = require("fs");
 router.get('/', function(req, res) {
 	readFileSync("../public/assets/stats").then(res => {
 		const { gamesplayed, flipped } = JSON.parse(res);
-		res.render('index', { title: 'Express', connections.length, gamesplayed, flipped });
+		res.render('index', { title: 'Express', connections: connections.length, gamesplayed, flipped });
 	});
 });
 

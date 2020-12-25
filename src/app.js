@@ -38,4 +38,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// TODO move to main
+// we want to store our connections globally
+global.connections = [];
+
 module.exports = app;
