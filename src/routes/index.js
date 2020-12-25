@@ -4,8 +4,8 @@ const stats = require("../public/assets/stats.json");
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	const { gamesplayed, flipped } = stats;
-	res.render('index', { title: 'Express', connections: connections.length, gamesplayed, flipped });
+	const { games, flipped } = stats;
+	res.render('index', { title: 'Express', connections: connections.length, games, flipped });
 });
 
 module.exports = router;
