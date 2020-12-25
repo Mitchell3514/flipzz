@@ -57,7 +57,7 @@ function Board(x, y) {
 
     
     this._getFlips = (pos, color) => {
-        if (pos.isTaken()) return false; // can't this.place if it's already taken.
+        if (pos.isTaken()) return []; // can't this.place if it's already taken.
 
         const toFlips = []; // store which directions are valid.
 
@@ -65,7 +65,7 @@ function Board(x, y) {
             let newPos = this._getAt(pos, dir); // first move in that direction.
             
             if (!newPos) return; // if the pos isn't on the board.
-            if (pos.color !== +!color) return; // check if the new position is of the opponent, otherwise it's invalid.
+            if (pos.color !== +!color) break; // check if the new position is of the opponent, otherwise it's invalid.
 
             const toFlip = []; // store which positions we go over (will be flipped if valid).
 
@@ -76,7 +76,7 @@ function Board(x, y) {
                 if (!newPos) break; // position outside the board? stop the loop (getColor would break)
             }
 
-            if (this.getColor(newPos) === color) toFlips.push(...toFlip); // if the line ends with your colour, add to toflips for this position.
+            if (newPos && newPos.color === color) toFlips.push(...toFlip); // if the line ends with your colour, add to toflips for this position.
         }
 
         return toFlips; // return the amount flipped when placed at pos by color
