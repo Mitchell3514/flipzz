@@ -1,4 +1,4 @@
-function Position(id) {
+export default function Position(id) {
     this.id = id;
 
     this.color = null;
