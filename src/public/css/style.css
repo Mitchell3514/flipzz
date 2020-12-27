@@ -6,3 +6,20 @@ body {
 a {
   color: #00B7FF;
 }
+
+.pop-up {
+  position: absolute;
+  left: 10vw;
+  top: 20vh;
+  width: 20vw;
+  height: 20vh;
+  background-color: #de4771;
+  box-shadow: 3px 3px 5px #555;
+}
+
+.pop-up p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
