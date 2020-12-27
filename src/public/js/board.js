@@ -1,6 +1,10 @@
-function Board(x, y) {
+// @ts-check
+import Position from "./position.js";
+
+export default function Board(x, y) {
     this.board = [];
 
+    y ??= x; // FIXME[epic=prod] remove this in production
     this.x = x;
     this.y = y;
     this.size = x * y;
@@ -19,24 +23,25 @@ function Board(x, y) {
 
     this.dirs = Object.keys(this._dirs);
     
-
-    // initialize board
-    for (const i in " ".repeat(this.x).split(" "))
-        this.board.push(new Position(Number(i)));
-
-    // fill first 4
-    const 
-        topLeft = (this.x/2-1)*this.x + this.x/2-1,
-        topRight = (this.x/2-1)*this.x + this.x/2,
-        bottomLeft = (this.x/2)*this.x + this.x/2-1,
-        bottomRight = (this.x/2)*this.x + this.x/2;
-
-    get(topLeft).setColor(0);
-    get(topRight).setColor(1);
-    get(bottomLeft).setColor(0);
-    get(bottomRight).setColor(1);
-
     // public functions
+    this.init = () => {
+        // initialize board
+        for (const i in " ".repeat(this.x*this.y).split(" "))
+            this.board.push(new Position(Number(i)));
+                
+        // fill first 4
+        const 
+            topLeft = (this.x/2-1)*this.x + this.x/2-1,
+            topRight = (this.x/2-1)*this.x + this.x/2,
+            bottomLeft = (this.x/2)*this.x + this.x/2-1,
+            bottomRight = (this.x/2)*this.x + this.x/2;
+
+        this._getAt(topLeft).setColor(0);
+        this._getAt(topRight).setColor(1);
+        this._getAt(bottomLeft).setColor(0);
+        this._getAt(bottomRight).setColor(1);
+    }
+
     this.place = (pos, color) => {
         const toFlips = this._getFlips(pos, color); // Position[]
 
@@ -50,12 +55,16 @@ function Board(x, y) {
 
     // 'private' functions
     this._getAt = (pos, dir) => {
-        const newpos = pos.id + this._dirs[dir];
-        if (newpos >= 0 && newpos < this.size) return this.board[newpos];
+        let id;
+        if (typeof pos === "number") id = pos;
+        else id = pos.id;
+        
+        const newid = id + (dir ? this._dirs[dir] : 0);
+
+        if (newid >= 0 && newid < this.size) return this.board[newid];
         else return null;
     };
 
-    
     this._getFlips = (pos, color) => {
         if (pos.isTaken()) return []; // can't this.place if it's already taken.
 
@@ -81,7 +90,4 @@ function Board(x, y) {
 
         return toFlips; // return the amount flipped when placed at pos by color
     };
-
-    // syntactic sugar functions
-    function get(i) { return this.board[i]; }
 }
