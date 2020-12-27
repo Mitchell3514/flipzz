@@ -4,11 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Flipzz: Two Player Game</title>
+    <title>Flipzz: A Two Player Game</title>
+    <link href="css/base.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
 
-<body bgcolor="lightBlue">
+<body bgcolor="lightblue">
 
     <main>
 
@@ -28,22 +29,38 @@
             <h3> REVERSI RULES </h3>
             <div id="how-to-play">
             </div>
-            <button onclick="showrules()" type="submit">FULL RULES</button>
+            <!--ShowRules method is in index.js (public) folder-->
+            <button onclick="showRules()" type="submit">FULL RULES</button>
         </section>
 
 
         <!--Enter game screen-->
         <section id="center">
-            <form action="/play" method="get">
+            <form action="/game" method="get">
                 <button type="submit">PLAY</button>
               </form>
         </section>
-
+        <br>
         <section id="right">
-            <div id="total-flipped" class="statistics">    </div>
-            <div id="players-online" class="statistics">    </div>
-            <div id="games-completed" class="statistics">    </div>
+            <div id="total-flipped" class="statistics">   
+                <%= flipped %> pieces flipped in total </div>
+
+            <div id="players-online" class="statistics">  
+                 <%= connections %> players online </div>
+
+            <div id="games-completed" class="statistics">   
+                 <%= games %> games completed </div>
         </section>
+
+        <br> 
+
+        <div id="popup" class="hidden"> 
+            <p> You must place the piece so that an opponents piece, <br> or a row of opponents pieces, is flanked by your pieces. <br> All of the opponents pieces between your pieces are then turned over to become your color. <br> The object of the game is to own more pieces than your opponent when the game is over. </p>
+            <br>
+            <button onclick="showRules()" type="submit"> HIDE RULES AGAIN </button>
+        </div>
+
+        <script src="js/index.js"> </script>
 
     </main>
 
