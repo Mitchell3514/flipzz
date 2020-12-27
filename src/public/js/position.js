@@ -1,4 +1,5 @@
 function Position(id) {
+    
     this.id = id;
 
     this.color = null;
