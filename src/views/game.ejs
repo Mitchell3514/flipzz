@@ -5,6 +5,11 @@
 <head>
     <meta charset="utf-8">
     <title>Flipzz: two player game</title>
+
+    <% 
+        const dark = "./assets/dark.png";
+        const light = "./assets/light.png";
+    %>
 </head>
 
 <body bgcolor = "lightblue">
@@ -29,14 +34,14 @@
 
         <section id="center-board">
             <table bgcolor = "lightyellow" border = "4" cellpadding = "5" cellspacing = "5">
-                <tr> <td> <img src="dark.png"> </img> </td> <td> <img src="light.png"> </img> </td> <td><img src="dark.png"> </img></td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td></tr>
-                <tr> <td> <img src="dark.png"> </img> </td> <td> <img src="light.png"> </img> </td> <td><img src="dark.png"> </img></td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td></tr>
-                <tr> <td> <img src="dark.png"> </img> </td> <td> <img src="light.png"> </img> </td> <td><img src="dark.png"> </img></td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td></tr>
-                <tr> <td> <img src="dark.png"> </img> </td> <td> <img src="light.png"> </img> </td> <td><img src="dark.png"> </img></td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td></tr>
-                <tr> <td> <img src="dark.png"> </img> </td> <td> <img src="light.png"> </img> </td> <td><img src="dark.png"> </img></td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td></tr>
-                <tr> <td> <img src="dark.png"> </img> </td> <td> <img src="light.png"> </img> </td> <td><img src="dark.png"> </img></td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td></tr>
-                <tr> <td> <img src="dark.png"> </img> </td> <td> <img src="light.png"> </img> </td> <td><img src="dark.png"> </img></td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td></tr>
-                <tr> <td> <img src="dark.png"> </img> </td> <td> <img src="light.png"> </img> </td> <td><img src="dark.png"> </img></td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td> <td><img src="dark.png"> </img> </td> <td><img src="light.png"> </img></td></tr>
+                <% for (let i = 0; i < 8; i++) { %>
+                    <tr>
+                        <% for(let j = 0; j < 8; j++) { %>
+                            <td> <img src=<%= dark %> > </img> </td>
+                            <td> <img src=<%= light %>> </img> </td>
+                        <% } %>
+                    </tr>
+                <% } %>
             </table>
         </section>
 
