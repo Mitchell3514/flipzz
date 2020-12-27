@@ -2,13 +2,25 @@
     margin: 2rem;
 }
 
+td.placeable {
+    cursor: grab;
+}
+
+td > .chip.dark {
+    background-color: lightpink;
+}
+
+td > .chip.light {
+    background-color: indigo;
+}
+
 .chip {
     height: 3rem;
     width: 3rem;
-    margin: 5px;
+    padding: 5px;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 80%;
 }
 
 .dark {
