@@ -30,16 +30,17 @@ export default function Board(x, y) {
             this.board.push(new Position(Number(i)));
                 
         // fill first 4
-        const 
-            topLeft = (this.x/2-1)*this.x + this.x/2-1,
-            topRight = (this.x/2-1)*this.x + this.x/2,
-            bottomLeft = (this.x/2)*this.x + this.x/2-1,
-            bottomRight = (this.x/2)*this.x + this.x/2;
+        const toFills = [
+            this._getAt((this.x/2-1)*this.x + this.x/2-1), // NW
+            this._getAt((this.x/2-1)*this.x + this.x/2), // NE
+            this._getAt((this.x/2)*this.x + this.x/2-1), // SW
+            this._getAt((this.x/2)*this.x + this.x/2) // SE
+        ];
 
-        this._getAt(topLeft).setColor(0);
-        this._getAt(topRight).setColor(1);
-        this._getAt(bottomLeft).setColor(0);
-        this._getAt(bottomRight).setColor(1);
+        for (const toFill in toFills)
+            toFills[toFill].setColor(parseInt(toFill) % 2);
+
+        return toFills;
     }
 
     this.place = (pos, color) => {
@@ -50,7 +51,7 @@ export default function Board(x, y) {
         for (const toFlip of toFlips)
             toFlip.setColor(+!color); // flip all the positions
         
-        return toFlips.length; // return how many Positions we flipped
+        return toFlips; // return how many Positions we flipped
     };
 
     // 'private' functions

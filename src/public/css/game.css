@@ -1,0 +1,21 @@
+#center-board {
+    margin: 2rem;
+}
+
+.chip {
+    height: 3rem;
+    width: 3rem;
+    margin: 5px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.dark {
+    background-image: url("../assets/dark.png");
+}
+
+.light {
+    background-image: url("../assets/light.png");
+}
+
