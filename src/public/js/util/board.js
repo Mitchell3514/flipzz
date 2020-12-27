@@ -4,7 +4,7 @@ import Position from "./position.js";
 export default function Board(x, y) {
     this.board = [];
 
-    y ??= x; // FIXME[epic=prod] remove this in production
+    if (!y) y = x;
     this.x = x;
     this.y = y;
     this.size = x * y;

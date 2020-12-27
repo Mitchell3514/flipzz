@@ -36,9 +36,8 @@
             <table bgcolor = "lightyellow" border = "4" cellpadding = "5" cellspacing = "5">
                 <% for (let i = 0; i < 8; i++) { %>
                     <tr>
-                        <% for(let j = 0; j < 4; j++) { %>
-                            <td> <img src=<%= dark %> > </img> </td>
-                            <td> <img src=<%= light %>> </img> </td>
+                        <% for(let j = 0; j < 8; j++) { %>
+                            <td> <img data-pos=<%= (i*8)+j %>  src=<%= j % 2 === 0 ? light : dark %> > </img> </td>
                         <% } %>
                     </tr>
                 <% } %>
@@ -55,7 +54,7 @@
 
     </main>
 
-    <script type="module" src="js/index.js"></script>
+    <script type="module" src="js/game.js"></script>
 </body>
 
 

@@ -1,6 +1,6 @@
 // @ts-check
-import Flippz from "./flipzz.js";
-import "./config.js"
+import Flippz from "./util/flipzz.js";
+import "./util/config.js"
 
 
 // eventlisteners
