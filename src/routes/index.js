@@ -3,9 +3,14 @@ const router = express.Router();
 const stats = require("../public/assets/stats.json");
 
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get("/", (req, res) => {
 	const { games, flipped } = stats;
-	res.render('index', { title: 'Express', connections: connections.length, games, flipped });
+	res.render("index", { title: 'Express', connections: connections.length, games, flipped });
+});
+
+/* GET game page */
+router.get("/game", (req, res) => {
+	res.render("game");
 });
 
 module.exports = router;
