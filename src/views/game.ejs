@@ -37,7 +37,7 @@
                     <tr>
                         <% for(let j = 0; j < 8; j++) { %>
                             <td> 
-                                <div class="chip <%= (j+i) % 2 === 0 ? "dark" : "light" %>" data-pos=<%= (i*8)+j %>> </div>
+                                <div class="chip" data-pos=<%= (i*8)+j %>> </div>
                             </td>
                         <% } %>
                     </tr>
@@ -48,6 +48,9 @@
         <!-- TODO add time passed and status as innerHTML in flipzz.js -->
         <section id="right">
             <div id="status">
+                <p id="turn">  </p>
+                <p id="score-dark"> 2 </p>
+                <p id="score-light"> 2 </p>
             </div>
             <div id="time-passed"></div>
         </section>

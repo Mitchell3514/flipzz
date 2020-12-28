@@ -2,10 +2,6 @@
     margin: 2rem;
 }
 
-td.placeable {
-    cursor: grab;
-}
-
 td > .chip.dark {
     background-color: lightpink;
 }
@@ -31,3 +27,14 @@ td > .chip.light {
     background-image: url("../assets/light.webp");
 }
 
+.placeable {
+    background-image: url("../assets/dark.webp");
+    opacity: 0.5;
+}
+
+#status {
+    margin: 10px;
+    background-color: whitesmoke;
+    padding: 10px;
+    font-size: larger;
+}
