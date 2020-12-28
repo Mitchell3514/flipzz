@@ -29,7 +29,7 @@ function css() {
 }
 
 function js() {
-    return src(["src/public/js/*.js"])
+    return src(["src/public/js/**/*.js"])
         .pipe(minify({
             ext: ".js",
         }))

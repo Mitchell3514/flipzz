@@ -2,25 +2,21 @@
 const http = require("http");
 const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
+const { join } = require('path');
 const logger = require('morgan');
 
+// routers
 const indexRouter = require('./routes/index');
 
 const app = express();
 
+app.use(express.static(join(__dirname, 'public')));
+
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-// set express' static file path  (path.join works in all OS types)
-app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
@@ -43,4 +39,4 @@ app.use(function(err, req, res, next) {
 // we want to store our connections globally
 global.connections = [];
 
-http.createServer(app).listen(process.env.PORT || 3000);
+http.createServer(app).listen(process.argv[2] ?? process.env.PORT ?? 3000);
