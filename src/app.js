@@ -10,6 +10,8 @@ const indexRouter = require('./routes/index');
 
 const app = express();
 
+// set express' static file path  (path.join works in all OS types)
+// use this for EVERY request (GET, POST, PUT...)
 app.use(express.static(join(__dirname, 'public')));
 
 // view engine setup
