@@ -1,4 +1,5 @@
 // @ts-check
+const http = require("http");
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -41,4 +42,4 @@ app.use(function(err, req, res, next) {
 // we want to store our connections globally
 global.connections = [];
 
-module.exports = app;
+http.createServer(app).listen(process.env.PORT || 3000);
