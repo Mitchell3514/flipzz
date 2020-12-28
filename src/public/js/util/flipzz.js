@@ -11,6 +11,7 @@ export default function Flippz(x = bs, y = bs) {
     this.light = 2;
 
     this.turn = 0;
+    this.stopped = false;
 
     const initPlace = this.board.init();
     for (const pos of initPlace) {setColor(pos);}
@@ -35,8 +36,10 @@ export default function Flippz(x = bs, y = bs) {
         }
     }
 
-    function gameOver() {
+    const gameOver = () => {
         console.log("done");
+        document.querySelector("p#turn").innerHTML = `Winner: ${this.light > this.dark ? "light" : this.light === this.dark ? "tie" : "dark"}`;
+        this.stopped = true;
     }
 
     this.switchTurn = () => {
@@ -45,6 +48,8 @@ export default function Flippz(x = bs, y = bs) {
     }
 
     this.place = (pos) => {
+        if (this.stopped) return
+
         // Get toflips
         const toChange = this.board.place(pos, this.turn);
         if (!toChange.length) return;
@@ -66,10 +71,10 @@ export default function Flippz(x = bs, y = bs) {
         // switch turns
         this.switchTurn();
         let placeable = this.board.canPlace(this.turn);
-        if (!this.board.canPlace(this.turn)) {
+        if (!placeable.length) {
             this.switchTurn();
             placeable = this.board.canPlace(this.turn);
-            if (!this.board.canPlace(this.turn)) return gameOver();
+            if (!placeable.length) return gameOver();
         }
 
         // enable placeables
