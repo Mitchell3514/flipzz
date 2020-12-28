@@ -34,3 +34,9 @@ function listener(el) { // the clicked element
     // NOTE preview code ahead
     game.place(pos);
 }
+
+// TODO after game has finished, the PLAY AGAIN button must show up (see game.ejs)
+
+function restartGame() {
+    // ??? 
+}

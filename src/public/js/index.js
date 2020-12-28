@@ -3,6 +3,7 @@
 
 function showRules() {
     const CL = document.querySelector("#popup").classList;
-    if (CL.contains("hidden")) CL.remove("hidden");
-    else CL.add("hidden");
+    // hidden: display none (see base.css)
+    if (CL.contains("hidden")) CL.remove("hidden");     // removes class "hidden", so becomes visible
+    else CL.add("hidden");  // if you click again, it disappears
 }
