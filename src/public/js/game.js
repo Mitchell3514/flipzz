@@ -4,6 +4,12 @@ import "./util/config.js"
 
 
 // eventlisteners
+document.addEventListener("DOMContentLoaded", function(){
+    // NOTE preview code ahead
+    if (!window.game) window.game = new Flippz(); // NOTE Preview code
+});
+
+
 const board = document.querySelector("table"); // get board element 
 if (!board) throw new Error("Couldn't find board");
 
@@ -24,4 +30,7 @@ function listener(el) { // the clicked element
     // websocket.send(pos)
     else console.log(pos); 
 
+
+    // NOTE preview code ahead
+    game.place(pos);
 }

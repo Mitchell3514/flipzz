@@ -19,7 +19,7 @@ export default function Board(x, y) {
         W: -1,
         NW: -(this.x+1),
     };
-    Object.freeze(this._dirs);
+    // Object.freeze(this._dirs);
 
     this.dirs = Object.keys(this._dirs);
     
@@ -37,20 +37,35 @@ export default function Board(x, y) {
             this._getAt((this.x/2)*this.x + this.x/2) // SE
         ];
 
+        let d = 1;
         for (const toFill in toFills)
-            toFills[toFill].setColor(parseInt(toFill) % 2);
+            toFills[toFill].setColor(+[0,3].includes(Number(toFill)))
 
         return toFills;
     }
 
+    this.canPlace = (color) => {
+        const positions = [];
+        for (let i = 0; i < this.x * this.y; i++) {
+            const pos = this._getAt(i);
+            const toFlips = this._getFlips(pos, color);
+            if (toFlips.length) positions.push(pos);
+        }
+        return positions;
+    };
+    
+    
     this.place = (pos, color) => {
+        if (typeof pos === "number") pos = this._getAt(pos);
         const toFlips = this._getFlips(pos, color); // Position[]
 
-        if (!toFlips.length) return false; // nothing to flip -> can't place so return false
+        if (!toFlips.length) return []; // nothing to flip -> can't place so return false
         
         for (const toFlip of toFlips)
-            toFlip.setColor(+!color); // flip all the positions
+            toFlip.setColor(color); // flip all the positions
+        pos.setColor(color);
         
+        toFlips.push(pos);
         return toFlips; // return how many Positions we flipped
     };
 
@@ -60,6 +75,8 @@ export default function Board(x, y) {
         if (typeof pos === "number") id = pos;
         else id = pos.id;
         
+        if (id % 8 === 0 && dir === "W") return null;
+        if ((id+1) % 8 === 0 && dir === "E") return null;
         const newid = id + (dir ? this._dirs[dir] : 0);
 
         if (newid >= 0 && newid < this.size) return this.board[newid];
@@ -73,17 +90,15 @@ export default function Board(x, y) {
 
         for (const dir of this.dirs) { // for every direction
             let newPos = this._getAt(pos, dir); // first move in that direction.
-            
-            if (!newPos) return; // if the pos isn't on the board.
-            if (pos.color !== +!color) break; // check if the new position is of the opponent, otherwise it's invalid.
+
+            if (!newPos) continue; // if the pos isn't on the board.
+            if (newPos.color === null || newPos.color !== +!color) continue; // check if the new position is of the opponent, otherwise it's invalid.
 
             const toFlip = []; // store which positions we go over (will be flipped if valid).
 
-            while (newPos.color === +!color) { // do this for as long as the new position is the opponent's.
+            while (newPos && newPos.color === +!color) { // do this for as long as the new position is the opponent's.
                 toFlip.push(newPos); // add the current position to the ones that'll be flipped.
                 newPos = this._getAt(newPos, dir); // move position in direction again.
-
-                if (!newPos) break; // position outside the board? stop the loop (getColor would break)
             }
 
             if (newPos && newPos.color === color) toFlips.push(...toFlip); // if the line ends with your colour, add to toflips for this position.

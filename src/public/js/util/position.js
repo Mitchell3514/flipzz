@@ -3,5 +3,5 @@ export default function Position(id) {
 
     this.color = null;
     this.setColor = (color) => this.color = color;
-    this.isTaken = () => !!this.color;
+    this.isTaken = () => this.color !== null;
 }
