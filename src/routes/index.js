@@ -5,7 +5,7 @@ const stats = require("../public/assets/stats.json");
 /* GET home page. */
 router.get("/", (req, res) => {
 	const { games, flipped } = stats; 
-	// parameters sent to server (to render)
+	// parameters sent to server (to render) from stats.json
 	res.render("index", { title: 'Express', connections: connections.length, games, flipped }); // eslint-disable-line
 });
 
