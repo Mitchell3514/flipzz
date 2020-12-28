@@ -24,10 +24,10 @@ td > .chip.light {
 }
 
 .dark {
-    background-image: url("../assets/dark.png");
+    background-image: url("../assets/dark.webp");
 }
 
 .light {
-    background-image: url("../assets/light.png");
+    background-image: url("../assets/light.webp");
 }
 
