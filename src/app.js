@@ -4,14 +4,18 @@ const createError = require('http-errors');
 const express = require('express');
 const { join } = require('path');
 const logger = require('morgan');
+const websocket = require('ws');
 
 // routers
 const indexRouter = require('./routes/index');
+// const stats = require("../public/assets/stats.json");
+// import messages.js file <-- shared between client and server!!
+// const messages = require('./public/js/messages');
 
 const app = express();
 
 // set express' static file path  (path.join works in all OS types)
-// use this for EVERY request (GET, POST, PUT...)
+// uses this for EVERY request (GET, POST, PUT...)
 app.use(express.static(join(__dirname, 'public')));
 
 // view engine setup
@@ -41,4 +45,29 @@ app.use(function(err, req, res, next) {
 // we want to store our connections globally
 global.connections = [];
 
-http.createServer(app).listen(process.argv[2] ?? process.env.PORT ?? 3000);
+const server = http.createServer(app).listen(process.argv[2] ?? process.env.PORT ?? 3000);
+// create websocket object
+// const wss = new websocket.Server({ server });
+
+// // We keep track of which client is assigned to which game by mapping a WebSocket connection (the property) to a game (the value)
+// var websockets = {}; //property: websocket, value: game
+
+// /*
+//  * regularly clean up the websockets object
+//  */
+// setInterval(function() {
+//   for (let i in websockets) {
+//     if (Object.prototype.hasOwnProperty.call(websockets,i)) {
+//       let gameObj = websockets[i];
+//       //if the gameObj has a final status, the game is complete/aborted
+//       if (gameObj.finalStatus != null) {
+//         delete websockets[i];
+//       }
+//     }
+//   }
+// }, 50000);
+
+// // how to access stats.json??
+// var currentGame = new gameHandler(games++);
+// var connectionID = 0; //each websocket receives a unique ID
+
