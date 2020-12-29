@@ -8,7 +8,8 @@ const websocket = require('ws');
 
 // routers
 const indexRouter = require('./routes/index');
-// const stats = require("../public/assets/stats.json");
+const gameStats = require("./public/assets/stats.json");
+const gameHandler = require("./archetypes/gameHandler.js");
 // import messages.js file <-- shared between client and server!!
 // const messages = require('./public/js/messages');
 
@@ -47,27 +48,48 @@ global.connections = [];
 
 const server = http.createServer(app).listen(process.argv[2] ?? process.env.PORT ?? 3000);
 // create websocket object
-// const wss = new websocket.Server({ server });
+const wss = new websocket.Server({ server });
 
-// // We keep track of which client is assigned to which game by mapping a WebSocket connection (the property) to a game (the value)
-// var websockets = {}; //property: websocket, value: game
+// We keep track of which client is assigned to which game by mapping a WebSocket connection (the property) to a game (the value)
+var websockets = {}; //property: websocket, value: game
 
-// /*
-//  * regularly clean up the websockets object
-//  */
-// setInterval(function() {
-//   for (let i in websockets) {
-//     if (Object.prototype.hasOwnProperty.call(websockets,i)) {
-//       let gameObj = websockets[i];
-//       //if the gameObj has a final status, the game is complete/aborted
-//       if (gameObj.finalStatus != null) {
-//         delete websockets[i];
-//       }
-//     }
-//   }
-// }, 50000);
+/*
+ * regularly clean up the websockets object
+ */
+setInterval(function() {
+  for (let i in websockets) {
+    if (Object.prototype.hasOwnProperty.call(websockets,i)) {
+      let gameObj = websockets[i];
+      //if the gameObj has a final status, the game is complete/aborted
+      if (gameObj.finalStatus != null) {
+        delete websockets[i];
+      }
+    }
+  }
+}, 50000);
 
-// // how to access stats.json??
-// var currentGame = new gameHandler(games++);
-// var connectionID = 0; //each websocket receives a unique ID
+
+let currentGame = new gameHandler(gameStats.games++);
+let connectionID = 0; //each websocket receives a unique ID
+
+wss.on("connection", function connection(ws) {
+ /*
+   * two-player game: every two players are added to the same game
+   */
+  // add the player to the game currently missing a player 
+  let con = ws;
+  con.id = connectionID++;
+  let playerType = currentGame.addPlayer(con);
+  websockets[con.id] = currentGame;
+
+  console.log(
+    "Player %s placed in game %s as %s",
+    con.id,
+    currentGame.id,
+    playerType
+  );
+
+
+
+});
 
