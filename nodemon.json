@@ -1,0 +1,8 @@
+{
+    "verbose": true,
+    "ignore": ["./src"],
+    "watch": ["./dist/**/*"],
+    "ext": "js,mjs,html,ejs,css,webp,json",
+    "delay": "250",
+    "exec": "node -r dotenv/config dist/app"
+}

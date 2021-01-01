@@ -8,10 +8,10 @@ const websocket = require('ws');
 
 // routers
 const indexRouter = require('./routes/index');
-const gameStats = require("./public/assets/stats.json");
 const gameHandler = require("./archetypes/gameHandler.js");
 // import messages.js file <-- shared between client and server!!
-// const messages = require('./public/js/messages');
+const messages = require("./public/js/messages.js");
+const gameStats = require("./public/assets/stats.json");
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use('/', indexRouter);
 
-// catch 404 and forward to error handler
+// catch 404 and forward to error handler (middleware)
 app.use(function(req, res, next) {
   next(createError(404));
 });
@@ -40,10 +40,11 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+  next();
 });
 
 // TODO move to main
-// we want to store our connections globally
+// we want to store our connections globally (array)
 global.connections = [];
 
 const server = http.createServer(app).listen(process.argv[2] ?? process.env.PORT ?? 3000);
@@ -80,7 +81,7 @@ wss.on("connection", function connection(ws) {
   let con = ws;
   con.id = connectionID++;
   let playerType = currentGame.addPlayer(con);
-  websockets[con.id] = currentGame;
+  websockets[con.id] = currentGame; // each con.id mapped to a game
 
   console.log(
     "Player %s placed in game %s as %s",
@@ -88,6 +89,62 @@ wss.on("connection", function connection(ws) {
     currentGame.id,
     playerType
   );
+
+    /*
+   * inform the client about its assigned player type
+   */
+  con.send(playerType == "light" ? messages.S_PLAYER_A : messages.S_PLAYER_B);
+
+ 
+  /*
+   * once we have two players, there is no way back;
+   * a new game object is created;
+   * if a player now leaves, the game is aborted (player is not preplaced)
+   */
+  if (currentGame.hasTwoConnectedPlayers()) {
+    currentGame = new gameHandler(gameStats.games++);
+  }
+
+
+    /*
+   * message coming in from a player:
+   *  1. determine the game object
+   *  2. determine the opposing player OP
+   *  3. send the message to OP
+   */// TODO send this message from client to server (a move)
+  con.on("message", function incoming(message) {
+      let oMsg = JSON.parse(message);
+
+      let gameObj = websockets[con.id];   // value: a gameHandler
+      // playerLight is an attribute of gameHandler
+      let isPlayerLight = gameObj.playerLight == con ? true : false;
+
+      if (isPlayerLight) { 
+          if (gameObj.hasTwoConnectedPlayers()) {
+            gameObj.playerB.send(message);
+          }
+        }
+
+        else {
+          gameObj.playerA.send(message);
+    
+          if (oMsg.type == messages.T_GAME_WON_BY) {
+            gameObj.setStatus(oMsg.data);
+            //game was won by somebody, update statistics
+            gameStats.games++;
+          }
+        }
+      } 
+
+
+      con.on("close", function(code) {
+
+      });
+
+      
+  });
+
+
 
 
 

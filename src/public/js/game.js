@@ -1,6 +1,5 @@
 // @ts-check
 import Flippz from "./util/flipzz.js";
-import "./util/config.js"
 
 
 // eventlisteners
@@ -38,5 +37,5 @@ function listener(el) { // the clicked element
 // TODO after game has finished, the PLAY AGAIN button must show up (see game.ejs)
 
 function restartGame() {
-    // ??? 
+    // ???
 }
