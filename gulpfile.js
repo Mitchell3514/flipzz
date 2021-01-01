@@ -60,5 +60,5 @@ function livewatch() {
 }
 
 
-exports.dev = series(clear, parallel(views, css, js, assets, server), livewatch);
+exports.dev = series(livewatch);
 exports.build = series(clear, parallel( views, css, js, assets, server));
