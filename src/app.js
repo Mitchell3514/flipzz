@@ -19,7 +19,7 @@ const app = express();
 // uses this for EVERY request (GET, POST, PUT...)
 app.use(express.static(join(__dirname, 'public')));
 
-// view engine setup
+// view engine setup: views directory contains all templates
 app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
