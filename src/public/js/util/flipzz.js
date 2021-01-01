@@ -1,9 +1,4 @@
 // @ts-check
-import Position from "./position.js";
-import Board from "./board.js";
-import CFG from "./config.js";
-const { boardsize: bs } = CFG;
-
 export default function Flippz(x = bs, y = bs) {
     this.board = new Board(x, y);
 
