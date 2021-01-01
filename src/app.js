@@ -10,7 +10,7 @@ const websocket = require('ws');
 const indexRouter = require('./routes/index');
 const gameHandler = require("./archetypes/gameHandler.js");
 // import messages.js file <-- shared between client and server!!
-const messages = require("./public/js/messages.js");
+const messages = require("./public/js/util/messages.js");
 const gameStats = require("./public/assets/stats.json");
 
 const app = express();
@@ -74,7 +74,8 @@ let currentGame = new gameHandler(gameStats.games++);
 let connectionID = 0; //each websocket receives a unique ID
 
 wss.on("connection", function connection(ws) {
- /*
+
+   /*
    * two-player game: every two players are added to the same game
    */
   // add the player to the game currently missing a player 
@@ -93,7 +94,7 @@ wss.on("connection", function connection(ws) {
     /*
    * inform the client about its assigned player type
    */
-  con.send(playerType == "light" ? messages.S_PLAYER_A : messages.S_PLAYER_B);
+  con.send(playerType == "light" ? messages.S_PLAYER_LIGHT : messages.S_PLAYER_DARK);
 
  
   /*
@@ -128,19 +129,54 @@ wss.on("connection", function connection(ws) {
         else {
           gameObj.playerA.send(message);
     
+          // TODO server decides who won (most points)
           if (oMsg.type == messages.T_GAME_WON_BY) {
-            gameObj.setStatus(oMsg.data);
             //game was won by somebody, update statistics
             gameStats.games++;
           }
         }
-      } 
-
+      });
+      
 
       con.on("close", function(code) {
-
+        /*
+         * code 1001 means almost always closing initiated by the client;
+         * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
+         */
+        console.log(con.id + " disconnected ...");
+    
+        if (code == "1001") {
+          /*
+           * if possible, abort the game; if not, the game is already completed
+           */
+          let gameObj = websockets[con.id];
+    
+            /*
+             * determine whose connection remains open;
+             * close it
+             */
+            try {
+              gameObj.playerLight.close();
+              gameObj.playerLight = null;
+            } catch (e) {
+              console.log("Player Light closing: " + e);
+            }
+    
+            try {
+              gameObj.playerDark.close();
+              gameObj.playerDark = null;
+            } catch (e) {
+              console.log("Player Dark closing: " + e);
+            }
+        }
       });
 
-
 });
+
+
+
+     
+
+
+  
 

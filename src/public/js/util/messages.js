@@ -23,20 +23,20 @@
      * Server to client: set as player A
      */
     exports.T_PLAYER_TYPE = "PLAYER-TYPE";
-    exports.O_PLAYER_A = {
+    exports.O_PLAYER_LIGHT = {
       type: exports.T_PLAYER_TYPE,
-      data: "A"
+      data: "LIGHT"
     };
-    exports.S_PLAYER_A = JSON.stringify(exports.O_PLAYER_A);
+    exports.S_PLAYER_LIGHT = JSON.stringify(exports.O_PLAYER_LIGHT);
   
     /*
      * Server to client: set as player B
      */
-    exports.O_PLAYER_B = {
+    exports.O_PLAYER_DARK = {
       type: exports.T_PLAYER_TYPE,
-      data: "B"
+      data: "DARK"
     };
-    exports.S_PLAYER_B = JSON.stringify(exports.O_PLAYER_B);
+    exports.S_PLAYER_DARK = JSON.stringify(exports.O_PLAYER_DARK);
   
     /*
      * Player B to server OR server to Player A

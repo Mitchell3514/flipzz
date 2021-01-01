@@ -1,5 +1,3 @@
-const Flippz = require("./flipzz");
-
 var handler = function(gameID) {
     this.id = gameID;
     this.playerLight = null;
@@ -32,15 +30,6 @@ handler.prototype.addPlayer = function(p) {
           "Invalid call to addPlayer, current state is %s",
           this.gameState
         );
-      }
-    
-      /*
-       * revise the game state
-       */
-    
-      var error = this.setStatus("1 JOINT");
-      if (error instanceof Error) {
-        this.setStatus("2 JOINT");
       }
     
       if (this.playerLight == null) {
