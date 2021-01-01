@@ -16,7 +16,7 @@ function clear() {
 }
 
 function views() {
-    return src("src/views/*.ejs")
+    return src("src/views/**/*.ejs")
         .pipe(dest(out))
         .pipe(livereload());
 }
@@ -52,12 +52,13 @@ function server() {
 
 function livewatch() {
     livereload.listen();
-    watch("src/public/views", parallel(views));
-    watch("src/public/css", parallel(css));
-    watch("src/public/js", parallel(js));
-    watch("src/public/assets", parallel(assets));
+    watch("src/views/**/*", parallel(views));
+    watch("src/public/css/**/*.css", parallel(css));
+    watch("src/public/js/**/*.js", parallel(js));
+    watch("src/public/assets/**/*", parallel(assets));
     watch("src/**/*.js", { ignored: "src/public" }, parallel(server));
 }
+
 
 exports.dev = series(clear, parallel(views, css, js, assets, server), livewatch);
 exports.build = series(clear, parallel( views, css, js, assets, server));

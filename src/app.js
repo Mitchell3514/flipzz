@@ -1,12 +1,12 @@
 // @ts-check
-const http = require("http");
-const createError = require('http-errors');
-const express = require('express');
-const { join } = require('path');
-const logger = require('morgan');
+const http =  require("http");
+const createError =  require("http-errors");
+const express =  require("express");
+const { join } = require("path");
+const logger =  require("morgan");
 
 // routers
-const indexRouter = require('./routes/index');
+const indexRouter = require("./routes/index.js");
 
 const app = express();
 
@@ -36,9 +36,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-// TODO move to main
-// we want to store our connections globally
-global.connections = [];
 
 http.createServer(app).listen(process.argv[2] ?? process.env.PORT ?? 3000);

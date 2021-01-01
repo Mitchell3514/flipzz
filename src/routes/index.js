@@ -1,12 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const stats = require("../public/assets/stats.json");
+const Router = require("express").Router;
+
+const router = new Router();
 
 /* GET home page. */
 router.get("/", (req, res) => {
-	const { games, flipped } = stats; 
-	// parameters sent to server (to render) from stats.json
-	res.render("index", { title: 'Express', connections: connections.length, games, flipped }); // eslint-disable-line
+	// parameters sent to server (to render) from stats.json.
+	res.render("index", { }); // eslint-disable-line
 });
 
 /* GET game page after pressing PLAY */
