@@ -1,6 +1,23 @@
 const Flippz = require("./flipzz");
-module.exports = function Handler() {
+
+var handler = function(gameID) {
+    this.id = gameID;
     this.games = new Map();
     this.waiting = null;
 };
+
+handler.prototype.addPlayer = function(p) {
+    // ??
+}
+
+// module.exports = function Handler(gameID) {
+//     this.id = gameID;
+//     this.games = new Map();
+//     this.waiting = null;
+//     this.addPlayer = function(p) {
+
+//     }
+// };
+
+module.exports = handler;
 
