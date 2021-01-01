@@ -1,7 +1,7 @@
 // Code shared between client and server: game setup.
 
-export default ({
-    boardsize: 8,
-})
+(function(exports) {
+    exports.boardsize = 8;
+})(exports === "undefined" ? (this.CFG = {})  : exports);
 
 
