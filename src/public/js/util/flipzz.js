@@ -1,10 +1,10 @@
 // @ts-check
-import Position from "./position.js";
-import Board from "./board.js";
-import CFG from "./config.js";
-const { boardsize: bs } = CFG;
 
-export default function Flippz(x = bs, y = bs) {
+// board, config and position get imported in game.EJS
+function Flippz(x = CFG.boardsize, y = CFG.boardsize) {
+
+    var socket = new WebSocket("ws://localhost:3000");
+
     this.board = new Board(x, y);
 
     this.dark = 2;
@@ -13,11 +13,13 @@ export default function Flippz(x = bs, y = bs) {
     this.turn = 0;
     this.stopped = false;
 
+    // array of Positions
     const initPlace = this.board.init();
     for (const pos of initPlace) {setColor(pos);}
     for (const pos of this.board.canPlace(this.turn)) {setColor(pos);}
     document.querySelector("#score-dark").innerHTML = `Score dark: ${this.dark}`;
     document.querySelector("#score-light").innerHTML = `Score light: ${this.light}`;
+    // dark = 0, light = 1
     document.querySelector("p#turn").innerHTML = `Turn: ${this.turn ? "light" : "dark"}`;
 
     function setColor(pos) {
