@@ -1,37 +1,12 @@
 // @ts-check
-import Flippz from "./util/flipzz.js";
 
+// Configures everything that has not to do with the game
 
-// eventlisteners
-document.addEventListener("DOMContentLoaded", function(){
-    // NOTE preview code ahead
-    if (!window.game) window.game = new Flippz(); // NOTE Preview code
-});
-
-
-const board = document.querySelector("table"); // get board element 
-if (!board) throw new Error("Couldn't find board");
-
-/** @ts-ignore */
-// event fired, event.target is the element that's clicked on
-board.addEventListener("click", event => listener(event.target)); // add listener to board
-
-/** @param {HTMLDivElement} el */
-function listener(el) { // the clicked element
-    if (!el.classList.contains("chip")) return; // not a chip
-    // dataset contains all attributes starting with data-.... 
-    // see data-pos in game.ejs file
-    const pos = parseInt(el.dataset["pos"]); // get pos-data from TD
-    // numbers 0, 1, 2, .... 63
-
-    if (isNaN(pos)) return;
-    // TODO log pos for now until we have WS set-up 
-    // websocket.send(pos)
-    else console.log(pos); 
-
-
-    // NOTE preview code ahead
-    game.place(pos);
+// TODO setInterval, 
+function timer() {
+    const timer = document.querySelector("#time-passed");
+    let timepassed = 
+    timer.innerHTML = timepassed;
 }
 
 // TODO after game has finished, the PLAY AGAIN button must show up (see game.ejs)

@@ -49,4 +49,137 @@ global.connections = [];
 
 const server = http.createServer(app).listen(process.argv[2] ?? process.env.PORT ?? 3000);
 
+// We keep track of which client is assigned to which game by mapping a WebSocket connection (the property) to a game (the value)
+var websockets = {}; //property: websocket, value: game
+
+/*
+ * regularly clean up the websockets object
+ */
+setInterval(function() {
+  for (let i in websockets) {
+    if (Object.prototype.hasOwnProperty.call(websockets,i)) {
+      let gameObj = websockets[i];
+      //if the gameObj has a final status, the game is complete/aborted
+      if (gameObj.finalStatus != null) {
+        delete websockets[i];
+      }
+    }
+  }
+}, 50000);
+
+
+let currentGame = new gameHandler(gameStats.games++);
+let connectionID = 0; //each websocket receives a unique ID
+
+wss.on("connection", function connection(ws) {
+
+   ws.send("Hello from the server");
+   ws.on("message", function incoming(message) {
+      console.log(message);
+   });
+
+  /*
+   * two-player game: every two players are added to the same game
+   */
+  // add the player to the game currently missing a player 
+  let con = ws;
+  con.id = connectionID++;
+  let playerType = currentGame.addPlayer(con);
+  websockets[con.id] = currentGame; // each con.id mapped to a game
+
+  console.log(
+    "Player %s placed in game %s as %s",
+    con.id,
+    currentGame.id,
+    playerType
+  );
+
+    /*
+   * inform the client about its assigned player type
+   */
+  con.send(playerType == "light" ? messages.S_PLAYER_LIGHT : messages.S_PLAYER_DARK);
+
+ 
+  /*
+   * once we have two players, there is no way back;
+   * a new game object is created;
+   * if a player now leaves, the game is aborted (player is not preplaced)
+   */
+  if (currentGame.hasTwoConnectedPlayers()) {
+    currentGame = new gameHandler(gameStats.games++);
+  }
+
+
+    /*
+   * message coming in from a player:
+   *  1. determine the game object
+   *  2. determine the opposing player OP
+   *  3. send the message to OP
+   */// TODO send this message from client to server (a move)
+  con.on("message", function incoming(message) {
+      // let oMsg = JSON.parse(message);
+
+      let gameObj = websockets[con.id];   // value: a gameHandler
+      // playerLight is an attribute of gameHandler
+      let isPlayerLight = gameObj.playerLight == con ? true : false;
+
+      if (isPlayerLight) { 
+          if (gameObj.hasTwoConnectedPlayers()) {
+            gameObj.playerLight.send(message);
+          }
+        }
+
+        else {
+          gameObj.playerDark.send(message);
+    
+          // // TODO server decides who won (most points)
+          // if (oMsg.type == messages.T_GAME_WON_BY) {
+          //   //game was won by somebody, update statistics
+          //   gameStats.games++;
+          // }
+        }
+      });
+      
+
+      con.on("close", function(code) {
+        /*
+         * code 1001 means almost always closing initiated by the client;
+         * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
+         */
+        console.log(con.id + " disconnected ...");
+    
+        if (code == "1001") {
+          /*
+           * if possible, abort the game; if not, the game is already completed
+           */
+          let gameObj = websockets[con.id];
+    
+            /*
+             * determine whose connection remains open;
+             * close it
+             */
+            try {
+              gameObj.playerLight.close();
+              gameObj.playerLight = null;
+            } catch (e) {
+              console.log("Player Light closing: " + e);
+            }
+    
+            try {
+              gameObj.playerDark.close();
+              gameObj.playerDark = null;
+            } catch (e) {
+              console.log("Player Dark closing: " + e);
+            }
+        }
+      });
+
+});
+
+
+
+     
+
+
+  
 

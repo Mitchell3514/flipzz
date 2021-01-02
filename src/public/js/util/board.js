@@ -26,7 +26,7 @@
         this.init = (Position) => {
             // initialize board
             for (const i in " ".repeat(this.x*this.y).split(" "))
-                this.board.push(new Position(Number(i)));
+                this.board.push(new Position.Position(Number(i)));
                     
             // fill first 4
             const toFills = [
@@ -113,4 +113,5 @@
             return toFlips; // return the amount flipped when placed at pos by color
         };
     }
-})(typeof exports === "undefined" ? (this.CLASSES = {}) : exports);
+    // this refers to Window
+})(typeof exports === "undefined" ? (this.Board = {}) : exports);

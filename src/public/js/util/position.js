@@ -6,4 +6,6 @@
         this.setColor = (color) => this.color = color;
         this.isTaken = () => this.color !== null;
     }
-})(typeof exports === "undefined" ? (this.CLASSES = {}) : exports)
+    // if client-side: exports = this.Position where this refers to Window
+    // if server-side: exports is just module.exports
+})(typeof exports === "undefined" ? (this.Position = {}) : exports)
