@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7fbe0bca-fe5c-467e-a7bd-01d683828975" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/archetypes/gameHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/archetypes/gameHandler.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/public/js/util/messages.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/js/util/messages.js" afterDir="false" />
-    </list>
+    <list default="true" id="7fbe0bca-fe5c-467e-a7bd-01d683828975" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
