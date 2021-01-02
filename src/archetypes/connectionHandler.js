@@ -25,14 +25,17 @@ const ConnectionHandler = function ConnectionHandler() {
 			game = new Game();
 			game.addPlayer(connection);
 			this.waiting = game;
-			connection.game = game;
-		} else connection.game = game;
+		} 
+		connection.game = game;
 		if (game.isFull()) this.waiting = new Game();
 
 		// status change received by client (move, ...)
 		connection.on("message", (data) => {
-			if (connection.game) connection.game.handle(connection.id, JSON.parse(data.toString()));
-			else connection.send(JSON.stringify({ status: -1, message: "Game hasn't been initialized yet" }));
+			if (!connection.game) connection.send(JSON.stringify({ status: -1, message: "Game hasn't been initialized yet" }));
+			try {
+				const payload = JSON.parse(data.toString());
+				if (connection.game) connection.game.handle(connection.id, payload);
+			} catch(e) { console.error(e); }
 		});
 
 		// once means it runs only 1x

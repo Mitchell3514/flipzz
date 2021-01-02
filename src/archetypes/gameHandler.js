@@ -49,6 +49,8 @@ function Game() {
         let payload = { position: data.position };
 
         if (result.includes(data.position)) {
+            payload.valid = true;
+
             this.board.place(data.position, color); // update board
             
             // player can place, see if next player can place
@@ -63,7 +65,7 @@ function Game() {
             this.turn = +!this.turn;
             this._send(2, { turn: this.turn, ...payload });
         } else {
-            this._send(color, JSON.stringify({ valid: false }));
+            this._send(color, { valid: false });
         }
     };
 
