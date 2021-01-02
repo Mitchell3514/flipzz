@@ -6,8 +6,11 @@ const Board = require("../public/js/util/board").Board;
  * @typedef {import("./connectionHandler").ExtendedConnection} EC
  */
 
+// UPDATES STATS.JSON? (flipped, games)
+// Total points per player
+
  // SENDS DATA TO CONNECTIONS (HANDLER) isFull?
- // To client: turn (payload)
+ // To client: turn (payload), total points per client
 
 /**
  * Status codes:

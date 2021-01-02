@@ -1,22 +1,35 @@
 // @ts-check
+// NO REQUIRES ON THE CLIENT SIDE!
 
-// position, config and board get imported in game.ejs
 
+// const { Position } = require("./position");
 const socket = new WebSocket("ws://localhost:3000");
-
 const board = new Board.Board(CFG.boardsize, CFG.boardsize);
+// position, config and board get imported in game.ejs, BEFORE flipzz
+
+// import messages.js file <-- shared between client and server!!
+// const messages = require("./messages.js");
 
 let dark = 2;
 let light = 2;
 let turn = 0;
 let stopped = false;
+let waiting = true;     // if waiting is false, eventListener enabled
 
 
-// send positions (id) to server (move)
+// send positions (id) to server (moves) --> server sends game update to client B
 // receive from server: JSON.parse + try catch
-// if valid call place()
-// if invalid: output message
 
+socket.onopen = function() {
+    console.log("Hello from the client");
+    socket.send("Hello from the client");
+}
+
+// STATUS 0 Game start: replace "waiting" string by "your turn" + enable eventListener
+// STATUS 1 Move invalid: output string
+// STATUS 1 Move valid: call place() + next turn
+// STATUS 2 Winner: "you won!" + add restart game button to innerHTML game.ejs
+// STATUS -1 Game aborted: output string
 socket.onmessage = function(event) {
     let message = event.data;
     console.log(message);
@@ -24,46 +37,55 @@ socket.onmessage = function(event) {
     target.innerHTML = message;
 }
 
-socket.onopen = function() {
-    console.log("Hello from the client");
-    socket.send("Hello from the client");
-}
-
 socket.onclose = function() {
-    console.log("CLOSED");
-    socket.send(Messages.S_GAME_ABORTED);
+    console.log("WEBSOCKET CLOSED");
+    // socket.send(Messages.S_GAME_ABORTED);
 }
 
 socket.onerror = function(event) {
     console.log(event);
 }
 
-// document.addEventListener("DOMContentLoaded", function(){
-//     // NOTE preview code ahead
-//     if (!window.game) window.game = new Flippz(); // NOTE Preview code
+// document.addEventListener("DOMContentLoaded", function(){    
+//     if (!window.game) window.game = new Flipzz(); // NOTE Preview code
 // });
 
-// /** @param {HTMLDivElement} el */
-// function listener(el) { // the clicked element
-//     if (!el.classList.contains("chip")) return; // not a chip
-//     // dataset contains all attributes starting with data-.... 
-//     // see data-pos in game.ejs file
-//     const pos = parseInt(el.dataset["pos"]); // get pos-data from TD
-//     // numbers 0, 1, 2, .... 63
 
-//     if (isNaN(pos)) return;
-//     // TODO log pos for now until we have WS set-up 
-//     // websocket.send(pos)
-//     else console.log(pos); 
+document.addEventListener("DOMContentLoaded", startGame);
+
+function startGame() {
+    console.log("PAGE FULLY LOADED")
+}
+
+let clicked = document.querySelector("tbody");
+let row = clicked.lastElementChild;
+let cell = row.lastElementChild;
+let celldiv = cell.lastElementChild;
+clicked.addEventListener("click", mouseClick(celldiv));
 
 
-//     // NOTE preview code ahead
-//     game.place(pos);
-// }
+/** @param {HTMLDivElement} el */
+function mouseClick(el) { // the clicked element
+    console.log(this);
+    if (!el.classList.contains("chip")) return; // not a chip
+    // dataset contains all attributes starting with data-.... 
+    // see data-pos in game.ejs file
+    const posid = parseInt(el.dataset["pos"]); // get pos-data from TD
+    // numbers 0, 1, 2, .... 63
+
+    if (isNaN(posid)) return;
+    // TODO log pos for now until we have WS set-up 
+    // websocket.send(pos)
+    else console.log(posid); 
+
+    // NOTE preview code ahead
+    let position = new CLASSES.Position(posid);
+    place(position);         
+}
     
 
 // array of Positions
-const initPlace = board.init();
+const initPlace = board.init();  //TODO Parameter should be Position
 for (const pos of initPlace) {setColor(pos);}
 for (const pos of board.canPlace(turn)) {setColor(pos);}
 document.querySelector("#score-dark").innerHTML = `Score dark: ${dark}`;
@@ -72,7 +94,7 @@ document.querySelector("#score-light").innerHTML = `Score light: ${light}`;
 document.querySelector("p#turn").innerHTML = `Turn: ${turn ? "light" : "dark"}`;
 
 
-
+// CSS: adds the colored piece to the board
 function setColor(pos) {
     const el = document.querySelector(`[data-pos="${pos.id}"]`);
     el.classList.remove("dark", "light", "placeable");
@@ -95,12 +117,12 @@ const gameOver = () => {
     stopped = true;
 }
 
-function switchTurn() => {
+function switchTurn() {
     turn = +!turn;
     document.querySelector("p#turn").innerHTML = `Turn: ${turn ? "light" : "dark"}`;
 }
 
-function place(pos) => {
+function place(pos) {
     if (stopped) return
 
     // Get toflips

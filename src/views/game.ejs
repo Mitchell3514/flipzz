@@ -25,7 +25,7 @@
             </div>
         </section>
 
-        <!-- TODO add points as innerHTML in flipzz.js -->
+        <!-- TODO add points as innerHTML in flipzz.js (Sent by gameHandler) -->
         <section id="left">
             <div id="you" class="points"></div>
             <div id="opponent" class="points"></div>
@@ -33,6 +33,7 @@
 
         <section id="center-board">
             <table bgcolor = "lightyellow" border = "4" cellpadding = "5" cellspacing = "5">
+                <!-- Scriplet tags to embed JS in HTML-->
                 <% for (let i = 0; i < 8; i++) { %>
                     <tr>
                         <% for(let j = 0; j < 8; j++) { %>
@@ -45,14 +46,14 @@
             </table>
         </section>
 
-        <!-- TODO add time passed (game.js) and status as innerHTML (flipzz.js) -->
+        <!-- TODO add time passed (game.js) and status as innerHTML (gameHandler sends to flipzz.js) -->
         <section id="right">
             <div id="status">
                 <p id="turn"> Turn:  </p>
-                <p id="score-dark"> 2 </p>
-                <p id="score-light"> 2 </p>
+                <p id="score-dark"> Your score: 2 </p>
+                <p id="score-light"> Your opponents score: 2 </p>
+                <p id="time-passed"> 0:00 </p>
             </div>
-            <div id="time-passed"> 0:00 </div>
         </section>
        
 

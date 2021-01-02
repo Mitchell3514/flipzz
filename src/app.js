@@ -8,8 +8,6 @@ const websocket = require('ws');
 
 // routers
 const indexRouter = require('./routes/index');
-// import messages.js file <-- shared between client and server!!
-// const gameStats = require("./public/assets/stats.json");
 const { ConnectionHandler } = require("./archetypes/connectionHandler");
 const connectionHandler = new ConnectionHandler();
 
@@ -24,7 +22,7 @@ app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use('/', indexRouter);
+app.use('/', indexRouter);		// route handler (middleware)
 
 // catch 404 and forward to error handler (middleware)
 app.use(function (req, res, next) {

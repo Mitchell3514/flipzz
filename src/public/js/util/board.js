@@ -23,6 +23,7 @@
         this.dirs = Object.keys(this._dirs);
         
         // public functions
+        // parameter: class Position, not object
         this.init = (Position) => {
             // initialize board
             for (const i in " ".repeat(this.x*this.y).split(" "))
