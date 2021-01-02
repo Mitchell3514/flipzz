@@ -44,7 +44,6 @@ app.use(function (err, req, res, next) {
 });
 
 const server = http.createServer(app).listen(process.argv[2] ?? process.env.PORT ?? 3000);
-
 const wss = new websocket.Server({ server });
 
 wss.on("connection", function connection(ws) {
