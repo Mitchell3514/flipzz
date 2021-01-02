@@ -44,5 +44,5 @@ const ConnectionHandler = function ConnectionHandler() {
 };
 
 module.exports = ConnectionHandler;
-module.exports.current = conns;
+exports.current = conns;
 
