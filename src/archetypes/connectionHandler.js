@@ -5,7 +5,6 @@ const Game = require("./gameHandler");
  * @typedef ExtendedConnection
  * @property {number} id Way to identify the connection for the game
  * @property {Game} game Game object for the connection
- * @property {number} color 0=dark, 1=light
  */
 
 const ConnectionHandler = function ConnectionHandler() {
@@ -15,7 +14,6 @@ const ConnectionHandler = function ConnectionHandler() {
 
 	this.handle = (/** @type {import("ws") & ExtendedConnection} */ connection) => {
 		connection.id = this.connID++;
-		connection.color = +this.waiting;
 
 		let game = this.waiting;
 		let success = game.addPlayer(connection);
