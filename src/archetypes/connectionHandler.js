@@ -25,8 +25,8 @@ const ConnectionHandler = function ConnectionHandler() {
 			game = new Game();
 			game.addPlayer(connection);
 			this.waiting = game;
-			connection.game = game;
-		} else connection.game = game;
+		} 
+		connection.game = game;
 		if (game.isFull()) this.waiting = new Game();
 
 		connection.on("message", (data) => {
