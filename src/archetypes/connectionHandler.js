@@ -7,6 +7,8 @@ const Game = require("./gameHandler");
  * @property {Game} game Game object for the connection
  */
 
+let conns = 0;
+
 const ConnectionHandler = function ConnectionHandler() {
 	/** @type {Game} */
 	this.waiting = new Game();
@@ -14,6 +16,7 @@ const ConnectionHandler = function ConnectionHandler() {
 
 	// connection is websocket + extra attributes
 	this.handle = (/** @type {import("ws") & ExtendedConnection} */ connection) => {
+		conns++;
 		connection.id = this.connID++;
 
 		let game = this.waiting;
@@ -31,6 +34,7 @@ const ConnectionHandler = function ConnectionHandler() {
 		});
 
 		connection.once("end", () => {
+			conns--;
 			if (connection.game) {
 				connection.game.stop(connection.id);
 				if (connection.game === this.waiting) this.waiting = null;
@@ -40,4 +44,5 @@ const ConnectionHandler = function ConnectionHandler() {
 };
 
 module.exports = ConnectionHandler;
+module.exports.current = conns;
 

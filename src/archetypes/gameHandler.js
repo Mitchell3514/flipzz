@@ -1,5 +1,6 @@
+// @ts-check
 const Position = require("../public/js/util/position");
-const Board = require("../public/js/util/board");
+const Board = require("../public/js/util/board").Board;
 
 /**
  * @typedef {import("./connectionHandler").ExtendedConnection} EC
@@ -17,8 +18,8 @@ const Board = require("../public/js/util/board");
  */
 
 function Game() {
-    /** @type {Board} */
-    this.board = new Board();
+    console.log(Board);
+    this.board = new Board(8, 8);
     this.board.init(Position);
 
     this.dark = null;
@@ -29,9 +30,7 @@ function Game() {
 
     this.isFull = () => this.light && this.dark;
     
-    // each color is assigned a particular ws connection
-    // dark is added first, and when light is added, the game starts
-    this.addPlayer = (/** @type {EC} */ connection) => {
+    this.addPlayer = (/** @type {EC & import("ws")} */ connection) => {
         if (!this.dark) return (this.dark = connection, true);
         if (!this.light) return (this.light = connection, this._start(), true);
         return false;
@@ -43,7 +42,7 @@ function Game() {
         
         // determine what player's msg this is
         const color = +(id === this.light.id);
-        if (!this.turn === color) return; // return if not their turn
+        if (this.turn !== color) return; // return if not their turn
 
         // check if move is valid
         const result = this.board.canPlace(color);
