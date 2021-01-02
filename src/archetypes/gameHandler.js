@@ -1,23 +1,22 @@
 // @ts-check
-const Position = require("../public/js/util/position");
-const Board = require("../public/js/util/board").Board;
+const Position = require("../public/js/util/position");     // class
+const Board = require("../public/js/util/board").Board;     // object (function)
+const gameStats = require("../public/assets/stats.json");
 
 /**
  * @typedef {import("./connectionHandler").ExtendedConnection} EC
  */
 
-// UPDATES STATS.JSON? (flipped, games)
-// Total points per player
-
- // SENDS DATA TO CONNECTIONS (HANDLER) isFull?
- // To client: turn (payload), total points per client
+ // SENDS DATA TO CONNECTIONS (is game full?)
+ // To client: turn (payload), total points per client? Or Flipzz?
 
 /**
  * Status codes:
- * -1   Game aborted {}
- *  0   Game started { player: 0/1 }
- *  1   Game continuing { move: number, turn: 0/1 }
- *  2   Game ended { winner: 0/1 }
+ * -1   Game aborted { status: -1}
+ *  0   Game started  { status: 0, player: 0/1, turn: 0/1 } TODO remove "still waiting" 
+ *  1   Game continuing/move { status: 1, valid: true, turn: 0/1  } else {status: 1, valid: false}
+ *  2   Game ended { status: 2, valid: true, position: number, winner: 0/1  }
+
  */
 
 function Game() {
@@ -28,17 +27,25 @@ function Game() {
     this.dark = null;
     this.light = null;
 
-    this.turn = 0;
+    this.turn = 0;      // 0 is dark, 1 is light
+
+    gameStats.flipped++;
+    gameStats.games++;
     
 
     this.isFull = () => this.light && this.dark;
     
+    // player added to game if not full yet, else return false
+    // first added player (connection) is dark
     this.addPlayer = (/** @type {EC & import("ws")} */ connection) => {
         if (!this.dark) return (this.dark = connection, true);
-        if (!this.light) return (this.light = connection, this._start(), true);
+        if (!this.light) return (this.light = connection, this._start(), true);     // after player 2 (light) is added, game starts
         return false;
     };
 
+    // HANDLES A MESSAGE FROM CLIENT: a move (position id)
+    // id: connection.id
+    // data: payload (position id of move sent by client)
     this.handle = (/** @type {number} */ id, data) => {
         // ignore messages from other conns
         if (![this.dark.id, this.light.id].includes(id)) return false;
@@ -73,24 +80,24 @@ function Game() {
     };
 
     this.stop = (/** @type {number} */ id) => {
-        this.status = -1;
-        this._send(+!id);
+        this.status = -1;       // aborted
+        this._send(+!id, {message: "The other player has left the game."});       // inform other player who is left
     };
 
     // payload is an object containing data
     // 0 --> send to dark
     // 1 --> send to light
-    // 2 --> send to both
+    // 2 --> send to both   (id-1 guarantees this)
     this._send = (id, payload = {}) => {
-        const msg = JSON.stringify({ status: this.status, ...payload });
-        if (id-1) this.dark.send(msg);
+        const msg = JSON.stringify({ status: this.status, ...payload });    // concatenated output string: {"status":0,"player":0,"turn":0} 
+        if (id-1) this.dark.send(msg);      
         if (id) this.light.send(msg);
     };
 
     this._start = () => {
         this.status = 0;
-        this._send(0, { player: 0, turn: this.turn });
-        this._send(1, { player: 1, turn: this.turn });
+        this._send(0, { player: 0, turn: this.turn });  // sent to dark: payload contains 
+        this._send(1, { player: 1, turn: this.turn });  // sent to light
     };
 }
 

@@ -10,6 +10,7 @@ let light = 2;
 let turn = 0;
 let stopped = false;
 let waiting = true;     // if waiting is false, eventListener enabled
+// TODO Total points per player: update game.ejs innerHTML
 
 
 // send positions (id) to server (moves) --> server sends game update to client B
@@ -80,7 +81,7 @@ function mouseClick(el) { // the clicked element
     
 
 // array of Positions
-const initPlace = board.init();  //TODO Parameter should be Position
+const initPlace = board.init(Position);  //TODO Parameter should be Position
 for (const pos of initPlace) {setColor(pos);}
 for (const pos of board.canPlace(turn)) {setColor(pos);}
 document.querySelector("#score-dark").innerHTML = `Score dark: ${dark}`;

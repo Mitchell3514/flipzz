@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const stats = require("../public/assets/stats.json");				// JSON files don't have to be exported like JS files
-const { current } = require("../archetypes/connectionHandler");
+const { current } = require("../archetypes/connectionHandler");		// how many players online, sent to index.ejs
 
 console.log(current);
 
