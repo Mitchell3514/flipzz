@@ -1,5 +1,4 @@
 // @ts-check
-const Position = require("../public/js/util/position");
 const Board = require("../public/js/util/board").Board;
 
 /**
@@ -23,7 +22,7 @@ const Board = require("../public/js/util/board").Board;
 function Game() {
     console.log(Board);
     this.board = new Board(8, 8);
-    this.board.init(Position);
+    this.board.init();
 
     this.dark = null;
     this.light = null;
