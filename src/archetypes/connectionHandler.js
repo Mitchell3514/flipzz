@@ -1,7 +1,7 @@
 // @ts-check
 const Game = require("./gameHandler");
 
-/**
+/** Adding extra attributes to connection (websocket)
  * @typedef ExtendedConnection
  * @property {number} id Way to identify the connection for the game
  * @property {Game} game Game object for the connection
@@ -13,6 +13,7 @@ const ConnectionHandler = function ConnectionHandler() {
 	this.waiting = new Game();
 	this.connID = 0;
 
+	// connection is websocket + extra attributes
 	this.handle = (/** @type {import("ws") & ExtendedConnection} */ connection) => {
 		connection.id = this.connID++;
 		connection.color = +this.waiting;

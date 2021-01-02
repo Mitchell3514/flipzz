@@ -5,6 +5,9 @@ const Board = require("../public/js/util/board");
  * @typedef {import("./connectionHandler").ExtendedConnection} EC
  */
 
+ // SENDS DATA TO CONNECTIONS (HANDLER) isFull?
+ // To client: turn (payload)
+
 /**
  * Status codes:
  * -1   Game aborted {}

@@ -52,20 +52,6 @@ const server = http.createServer(app).listen(process.argv[2] ?? process.env.PORT
 // We keep track of which client is assigned to which game by mapping a WebSocket connection (the property) to a game (the value)
 var websockets = {}; //property: websocket, value: game
 
-/*
- * regularly clean up the websockets object
- */
-setInterval(function() {
-  for (let i in websockets) {
-    if (Object.prototype.hasOwnProperty.call(websockets,i)) {
-      let gameObj = websockets[i];
-      //if the gameObj has a final status, the game is complete/aborted
-      if (gameObj.finalStatus != null) {
-        delete websockets[i];
-      }
-    }
-  }
-}, 50000);
 
 
 let currentGame = new gameHandler(gameStats.games++);
