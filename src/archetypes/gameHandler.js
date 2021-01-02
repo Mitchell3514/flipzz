@@ -1,71 +1,84 @@
-const Flippz = require("./flipzz");
+const Position = require("../public/js/util/position");
+const Board = require("../public/js/util/board");
 
-var handler = function(gameID) {
-    this.id = gameID;
-    this.playerLight = null;
-    this.playerDark = null;
-    this.gameState = "0 JOINT";
-};
-
-/*
- * The game can be in a number of different states.
+/**
+ * @typedef {import("./connectionHandler").ExtendedConnection} EC
  */
-handler.prototype.transitionStates = {};
-handler.prototype.transitionStates["0 JOINT"] = 0;
-handler.prototype.transitionStates["1 JOINT"] = 1;
-handler.prototype.transitionStates["2 JOINT"] = 2;
-handler.prototype.transitionStates["LIGHT"] = 3; //LIGHT won
-handler.prototype.transitionStates["DARK"] = 4; //DARK won
-handler.prototype.transitionStates["ABORTED"] = 5;
 
-// p is a websocket connection (ws), see app.js
-handler.prototype.addPlayer = function(p) {
-    console.assert(
-        p instanceof Object,
-        "%s: Expecting an object (WebSocket), got a %s",
-        arguments.callee.name,
-        typeof p
-      );
+/**
+ * Status codes:
+ * -1   Game aborted {}
+ *  0   Game started { player: 0/1 }
+ *  1   Game continuing { move: number, turn: 0/1 }
+ *  2   Game ended { winner: 0/1 }
+ */
+
+function Game() {
+    /** @type {Board} */
+    this.board = new Board();
+    this.board.init(Position);
+
+    this.dark = null;
+    this.light = null;
+
+    this.turn = 0;
     
-      if (this.gameState != "0 JOINT" && this.gameState != "1 JOINT") {
-        return new Error(
-          "Invalid call to addPlayer, current state is %s",
-          this.gameState
-        );
-      }
+
+    this.isFull = () => this.light && this.dark;
     
-      /*
-       * revise the game state
-       */
-    
-      var error = this.setStatus("1 JOINT");
-      if (error instanceof Error) {
-        this.setStatus("2 JOINT");
-      }
-    
-      if (this.playerLight == null) {
-        this.playerLight = p;
-        return "light";
-      } else {
-        this.playerDark = p;
-        return "dark";
-      }
-};
+    this.addPlayer = (/** @type {EC} */ connection) => {
+        if (!this.dark) return (this.dark = connection, true);
+        if (!this.light) return (this.light = connection, this._start(), true);
+        return false;
+    };
 
+    this.handle = (/** @type {number} */ id, data) => {
+        // ignore messages from other conns
+        if (![this.dark.id, this.light.id].includes(id)) return false;
+        
+        // determine what player's msg this is
+        const color = +(id === this.light.id);
+        if (!this.turn === color) return; // return if not their turn
 
-handler.prototype.hasTwoConnectedPlayers = function() {
-    return this.gameState == "2 JOINT";
-  };
-  
+        // check if move is valid
+        const result = this.board.canPlace(color);
+        let payload = { position: data.position };
 
-// module.exports = function Handler(gameID) {
-//     this.id = gameID;
-//     this.games = new Map();
-//     this.waiting = null;
-//     this.addPlayer = function(p) {
+        if (result.includes(data.position)) {
+            this.board.place(data.position, color); // update board
+            
+            // player can place, see if next player can place
+            const canPlay = this.board.canPlace(+!color);
 
-//     }
-// };
+            if (!canPlay) { // can't place - send who won
+                this.status = 2;
+                return this._send(2, { winner: this.board.winner(), ...payload });
+            }
 
-module.exports = handler;
+            // next player's turn - send data
+            this.turn = +!this.turn;
+            this._send(2, { turn: this.turn, ...payload });
+        } else {
+            this._send(color, JSON.stringify({ valid: false }));
+        }
+    };
 
+    this.stop = (/** @type {number} */ id) => {
+        (this.light.id === id ? this.dark : this.light)
+            .send(JSON.stringify({ status: -1 }));
+    };
+
+    this._send = (id, payload) => {
+        const msg = JSON.stringify({ status: this.status, ...payload });
+        if (id-1) this.dark.send(msg);
+        if (id) this.light.send(msg);
+    };
+
+    this._start = () => {
+        this.status = 0;
+        this._send(0, { player: 0, turn: this.turn });
+        this._send(1, { player: 1, turn: this.turn });
+    };
+}
+
+module.exports = Game;
