@@ -6,6 +6,6 @@
         this.setColor = (color) => this.color = color;
         this.isTaken = () => this.color !== null;
     }
-    // if client-side: exports = this.Position where this refers to Window
+    // if client-side: exports = this.Position where this refers to Window, so it becomes a global property (can be accessed by client)
     // if server-side: exports is just module.exports
 })(typeof exports === "undefined" ? (this.Classes = {}) : exports)

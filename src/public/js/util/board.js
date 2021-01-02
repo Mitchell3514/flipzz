@@ -27,7 +27,7 @@
         this.init = (Position) => {
             // initialize board
             for (const i in " ".repeat(this.x*this.y).split(" "))
-                this.board.push(new Position.Position(Number(i)));
+                this.board.push(new Position.Position(Number(i)));      // second position refers to object
                     
             // fill first 4
             const toFills = [
