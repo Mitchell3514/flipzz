@@ -116,4 +116,4 @@
     }
     exports.Board = Board;
     // this refers to Window
-})(typeof exports === "undefined" ? (this.Board = {}) : exports);
+})(typeof exports === "undefined" ? (this.Classes = {}) : exports);

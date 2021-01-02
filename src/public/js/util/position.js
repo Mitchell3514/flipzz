@@ -8,4 +8,4 @@
     }
     // if client-side: exports = this.Position where this refers to Window
     // if server-side: exports is just module.exports
-})(typeof exports === "undefined" ? (this.Position = {}) : exports)
+})(typeof exports === "undefined" ? (this.Classes = {}) : exports)
