@@ -10,7 +10,7 @@ const websocket = require('ws');
 const indexRouter = require('./routes/index');
 // import messages.js file <-- shared between client and server!!
 // const gameStats = require("./public/assets/stats.json");
-const ConnectionHandler = require("./archetypes/connectionHandler");
+const { ConnectionHandler } = require("./archetypes/connectionHandler");
 const connectionHandler = new ConnectionHandler();
 
 const app = express();
