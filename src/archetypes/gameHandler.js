@@ -68,11 +68,11 @@ function Game() {
     };
 
     this.stop = (/** @type {number} */ id) => {
-        (this.light.id === id ? this.dark : this.light)
-            .send(JSON.stringify({ status: -1 }));
+        this.status = -1;
+        this._send(+!id);
     };
 
-    this._send = (id, payload) => {
+    this._send = (id, payload = {}) => {
         const msg = JSON.stringify({ status: this.status, ...payload });
         if (id-1) this.dark.send(msg);
         if (id) this.light.send(msg);
