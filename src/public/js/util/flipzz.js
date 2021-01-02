@@ -57,6 +57,7 @@ function startGame() {
     console.log("PAGE FULLY LOADED")
 }
 
+// user can click anywhere on the table
 let clicked = document.querySelector("tbody");
 let row = clicked.lastElementChild;
 let cell = row.lastElementChild;
