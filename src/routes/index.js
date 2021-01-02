@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const stats = require("../public/assets/stats.json");
+const {conns} = require("../archetypes/connectionHandler");
 
 /* GET home page. */
 router.get("/", (req, res) => {
@@ -11,7 +12,7 @@ router.get("/", (req, res) => {
 	// param1: index.ejs file (our template)
 	// param2: data for template
 	// connections is global array in app.js
-	res.render("index", { title: 'Express', connections: connections.length, games, flipped }); // eslint-disable-line
+	res.render("index", {connections: conns, games, flipped }); // eslint-disable-line
 });
 
 /* GET game page after pressing PLAY */
