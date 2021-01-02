@@ -17,7 +17,7 @@ const app = express();
 
 // set express' static file path  (path.join works in all OS types)
 // uses this for EVERY request (GET, POST, PUT...)
-app.use(express.static(join(__dirname, 'public')));
+app.use(express.static(join(__dirname, "/public")));
 
 // view engine setup: views directory contains all templates
 app.set('views', join(__dirname, 'views'));
@@ -48,8 +48,6 @@ app.use(function(err, req, res, next) {
 global.connections = [];
 
 const server = http.createServer(app).listen(process.argv[2] ?? process.env.PORT ?? 3000);
-// create websocket object
-const wss = new websocket.Server({ server });
 
 // We keep track of which client is assigned to which game by mapping a WebSocket connection (the property) to a game (the value)
 var websockets = {}; //property: websocket, value: game

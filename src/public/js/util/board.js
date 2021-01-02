@@ -23,7 +23,7 @@
         this.dirs = Object.keys(this._dirs);
         
         // public functions
-        this.init = () => {
+        this.init = (Position) => {
             // initialize board
             for (const i in " ".repeat(this.x*this.y).split(" "))
                 this.board.push(new Position.Position(Number(i)));
@@ -52,7 +52,14 @@
             }
             return positions;
         };
-        
+
+        this.winner = () => {
+            let light = 0;
+            let dark = 0;
+            for (const pos of this.board)
+                pos.color === 0 ? dark++ : pos.color === 1 ? light++ : null;
+            return +(light > dark);
+        }
         
         this.place = (pos, color) => {
             if (typeof pos === "number") pos = this._getAt(pos);
@@ -65,7 +72,7 @@
             pos.setColor(color);
             
             toFlips.push(pos);
-            return toFlips; // return how many Positions we flipped
+            return toFlips; // return where the color has been placed
         };
     
         // 'private' functions
