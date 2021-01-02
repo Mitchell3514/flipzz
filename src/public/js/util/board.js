@@ -1,12 +1,4 @@
 // @ts-check
-let EXPORT, Position;
-if (typeof exports === "undefined") {
-    EXPORT = this.Classes || {};             // this refers to Window
-    Position = Classes.Position;
-} else {
-    EXPORT = exports;
-    Position = require("./position").Position;  // object (function) of module
-}
 
 (function (exports, Position) {
     function Board(x, y) {
@@ -124,5 +116,5 @@ if (typeof exports === "undefined") {
         };
     }
     exports.Board = Board;
-   
-})(EXPORT, Position);
+    // this refers to Window
+})(typeof exports === "undefined" ? this.Classes || (this.Classes = {}) : exports, typeof exports === "undefined" ? Classes.Position : require("./position").Position);
