@@ -1,5 +1,4 @@
 // @ts-check
-const Position = require("../public/js/util/position");     // class
 const Board = require("../public/js/util/board").Board;     // object (function)
 const gameStats = require("../public/assets/stats.json");
 
