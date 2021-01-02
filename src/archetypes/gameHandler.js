@@ -49,6 +49,8 @@ function Game() {
         let payload = { position: data.position };
 
         if (result.includes(data.position)) {
+            payload.valid = true;
+
             this.board.place(data.position, color); // update board
             
             // player can place, see if next player can place
