@@ -1,4 +1,5 @@
 // @ts-check
+
 // position, config and board get imported in game.ejs
 
 const socket = new WebSocket("ws://localhost:3000");
@@ -9,6 +10,12 @@ let dark = 2;
 let light = 2;
 let turn = 0;
 let stopped = false;
+
+
+// send positions (id) to server (move)
+// receive from server: JSON.parse + try catch
+// if valid call place()
+// if invalid: output message
 
 socket.onmessage = function(event) {
     let message = event.data;
@@ -88,12 +95,12 @@ const gameOver = () => {
     stopped = true;
 }
 
-this.switchTurn = () => {
+function switchTurn() => {
     turn = +!turn;
     document.querySelector("p#turn").innerHTML = `Turn: ${turn ? "light" : "dark"}`;
 }
 
-this.place = (pos) => {
+function place(pos) => {
     if (stopped) return
 
     // Get toflips
