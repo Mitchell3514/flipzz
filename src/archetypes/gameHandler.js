@@ -29,6 +29,8 @@ function Game() {
 
     this.isFull = () => this.light && this.dark;
     
+    // each color is assigned a particular ws connection
+    // dark is added first, and when light is added, the game starts
     this.addPlayer = (/** @type {EC} */ connection) => {
         if (!this.dark) return (this.dark = connection, true);
         if (!this.light) return (this.light = connection, this._start(), true);

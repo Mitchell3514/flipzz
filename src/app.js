@@ -43,15 +43,12 @@ app.use(function(err, req, res, next) {
   next();
 });
 
-// TODO move to main
-// we want to store our connections globally (array)
-global.connections = [];
 
 const server = http.createServer(app).listen(process.argv[2] ?? process.env.PORT ?? 3000);
+const wss = new websocket.Server({ server });
 
 // We keep track of which client is assigned to which game by mapping a WebSocket connection (the property) to a game (the value)
 var websockets = {}; //property: websocket, value: game
-
 
 
 let currentGame = new gameHandler(gameStats.games++);
