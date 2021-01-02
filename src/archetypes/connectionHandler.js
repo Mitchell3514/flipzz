@@ -37,7 +37,7 @@ const ConnectionHandler = function ConnectionHandler() {
 				const payload = JSON.parse(data.toString());
 				// payload is a move sent by client here
 				if (connection.game) connection.game.handle(connection.id, payload);		// if con assigned to a game, gameHandler called
-			} catch(e) { console.error(e); }
+			} catch(e) { console.log(`Couldn't parse the following message as JSON: ${data.toString()}`); }
 		});
 
 		// once means it runs only 1x
