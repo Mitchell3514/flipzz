@@ -63,7 +63,7 @@ function Game() {
             this.turn = +!this.turn;
             this._send(2, { turn: this.turn, ...payload });
         } else {
-            this._send(color, JSON.stringify({ valid: false }));
+            this._send(color, { valid: false });
         }
     };
 
