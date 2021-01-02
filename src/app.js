@@ -75,7 +75,12 @@ let connectionID = 0; //each websocket receives a unique ID
 
 wss.on("connection", function connection(ws) {
 
-   /*
+   ws.send("Hello from the server");
+   ws.on("message", function incoming(message) {
+      console.log(message);
+   });
+
+  /*
    * two-player game: every two players are added to the same game
    */
   // add the player to the game currently missing a player 
@@ -114,7 +119,7 @@ wss.on("connection", function connection(ws) {
    *  3. send the message to OP
    */// TODO send this message from client to server (a move)
   con.on("message", function incoming(message) {
-      let oMsg = JSON.parse(message);
+      // let oMsg = JSON.parse(message);
 
       let gameObj = websockets[con.id];   // value: a gameHandler
       // playerLight is an attribute of gameHandler
@@ -122,18 +127,18 @@ wss.on("connection", function connection(ws) {
 
       if (isPlayerLight) { 
           if (gameObj.hasTwoConnectedPlayers()) {
-            gameObj.playerB.send(message);
+            gameObj.playerLight.send(message);
           }
         }
 
         else {
-          gameObj.playerA.send(message);
+          gameObj.playerDark.send(message);
     
-          // TODO server decides who won (most points)
-          if (oMsg.type == messages.T_GAME_WON_BY) {
-            //game was won by somebody, update statistics
-            gameStats.games++;
-          }
+          // // TODO server decides who won (most points)
+          // if (oMsg.type == messages.T_GAME_WON_BY) {
+          //   //game was won by somebody, update statistics
+          //   gameStats.games++;
+          // }
         }
       });
       
