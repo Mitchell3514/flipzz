@@ -1,5 +1,14 @@
 // @ts-check
-(function (exports) {
+let EXPORT, Position;
+if (typeof exports === "undefined") {
+    EXPORT = this.Classes || {};
+    Position = Classes.Position;
+} else {
+    EXPORT = exports;
+    Position = require("./position").Position;
+}
+
+(function (exports, Position) {
     function Board(x, y) {
         this.board = [];
     
@@ -24,10 +33,10 @@
         
         // public functions
         // parameter: class Position, not object
-        this.init = (Position) => {
+        this.init = () => {
             // initialize board
             for (const i in " ".repeat(this.x*this.y).split(" "))
-                this.board.push(new Position.Position(Number(i)));      // second position refers to object
+                this.board.push(new Position(Number(i)));
                     
             // fill first 4
             const toFills = [
@@ -116,4 +125,4 @@
     }
     exports.Board = Board;
     // this refers to Window
-})(typeof exports === "undefined" ? (this.Classes = {}) : exports);
+})(EXPORT, Position);

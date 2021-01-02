@@ -22,7 +22,7 @@ const gameStats = require("../public/assets/stats.json");
 function Game() {
     console.log(Board);
     this.board = new Board(8, 8);
-    this.board.init(Position);
+    this.board.init();
 
     this.dark = null;
     this.light = null;
