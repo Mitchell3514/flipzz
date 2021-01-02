@@ -1,6 +1,6 @@
 // @ts-check
 (function (exports) {
-    exports.Board = function Board(x, y) {
+    function Board(x, y) {
         this.board = [];
     
         if (!y) y = x;
@@ -113,5 +113,6 @@
             return toFlips; // return the amount flipped when placed at pos by color
         };
     }
+    exports.Board = Board;
     // this refers to Window
 })(typeof exports === "undefined" ? (this.Board = {}) : exports);
