@@ -74,6 +74,10 @@ function Game() {
         this._send(+!id);
     };
 
+    // payload is an object containing data
+    // 0 --> send to dark
+    // 1 --> send to light
+    // 2 --> send to both
     this._send = (id, payload = {}) => {
         const msg = JSON.stringify({ status: this.status, ...payload });
         if (id-1) this.dark.send(msg);
