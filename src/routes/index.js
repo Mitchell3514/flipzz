@@ -3,7 +3,9 @@
 const express = require('express');
 const router = express.Router();
 const stats = require("../public/assets/stats.json");
-const {current} = require("../archetypes/connectionHandler");		// current is the name of the exported module
+const { current } = require("../archetypes/connectionHandler");
+
+console.log(current);
 
 /* GET home page. */
 router.get("/", (req, res) => {
