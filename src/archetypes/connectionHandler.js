@@ -7,6 +7,7 @@ const Game = require("./gameHandler");
  * @property {Game} game Game object for the connection
  */
 
+ // current is used in index.ejs, required by routes/index (how many players online)
 let current = 0;
 
 const ConnectionHandler = function ConnectionHandler() {
@@ -22,19 +23,20 @@ const ConnectionHandler = function ConnectionHandler() {
 		let game = this.waiting;
 		let success = game.addPlayer(connection);
 		if (!success) {
-			game = new Game();
+			game = new Game();				// add player to a new game, if full
 			game.addPlayer(connection);
-			this.waiting = game;
+			this.waiting = game;			// again, wait for 2nd player
 		} 
-		connection.game = game;
-		if (game.isFull()) this.waiting = new Game();
+		connection.game = game;				// each connection mapped to a game
+		if (game.isFull()) this.waiting = new Game();		// if 2 players added, create new game
 
 		// status change received by client (move, ...)
 		connection.on("message", (data) => {
 			if (!connection.game) connection.send(JSON.stringify({ status: -1, message: "Game hasn't been initialized yet" }));
 			try {
 				const payload = JSON.parse(data.toString());
-				if (connection.game) connection.game.handle(connection.id, payload);
+				// payload is a move sent by client here
+				if (connection.game) connection.game.handle(connection.id, payload);		// if con assigned to a game, gameHandler called
 			} catch(e) { console.error(e); }
 		});
 
@@ -43,7 +45,7 @@ const ConnectionHandler = function ConnectionHandler() {
 			current--;
 			if (connection.game) {
 				connection.game.stop(connection.id);
-				if (connection.game === this.waiting) this.waiting = null;
+				if (connection.game === this.waiting) this.waiting = null;		// if only 1 player waiting for 2nd player, stop the game
 			}
 		});
 	};

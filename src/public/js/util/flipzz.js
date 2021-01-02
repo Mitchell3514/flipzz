@@ -1,27 +1,23 @@
 // @ts-check
 // NO REQUIRES ON THE CLIENT SIDE!
 
-
-// const { Position } = require("./position");
 const socket = new WebSocket("ws://localhost:3000");
-const board = new Board.Board(CFG.boardsize, CFG.boardsize);
+const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 // position, config and board get imported in game.ejs, BEFORE flipzz
-
-// import messages.js file <-- shared between client and server!!
-// const messages = require("./messages.js");
 
 let dark = 2;
 let light = 2;
 let turn = 0;
 let stopped = false;
 let waiting = true;     // if waiting is false, eventListener enabled
+// TODO Total points per player: update game.ejs innerHTML
 
 
 // send positions (id) to server (moves) --> server sends game update to client B
 // receive from server: JSON.parse + try catch
 
 socket.onopen = function() {
-    console.log("Hello from the client");
+    console.log("CLIENT SENT HELLO TO SERVER...");
     socket.send("Hello from the client");
 }
 
@@ -57,8 +53,7 @@ function startGame() {
     console.log("PAGE FULLY LOADED")
 }
 
-// user can click anywhere on the table
-let clicked = document.querySelector("tbody");
+let clicked = document.querySelector("tbody");  // user can click anywhere on the table
 let row = clicked.lastElementChild;
 let cell = row.lastElementChild;
 let celldiv = cell.lastElementChild;
@@ -67,7 +62,7 @@ clicked.addEventListener("click", mouseClick(celldiv));
 
 /** @param {HTMLDivElement} el */
 function mouseClick(el) { // the clicked element
-    console.log(this);
+    console.log(el);
     if (!el.classList.contains("chip")) return; // not a chip
     // dataset contains all attributes starting with data-.... 
     // see data-pos in game.ejs file
@@ -80,13 +75,13 @@ function mouseClick(el) { // the clicked element
     else console.log(posid); 
 
     // NOTE preview code ahead
-    let position = new CLASSES.Position(posid);
+    let position = new Classes.Position(posid); //TODO ?????????
     place(position);         
 }
     
 
 // array of Positions
-const initPlace = board.init();  //TODO Parameter should be Position
+const initPlace = board.init(Position);  //TODO Parameter should be Position
 for (const pos of initPlace) {setColor(pos);}
 for (const pos of board.canPlace(turn)) {setColor(pos);}
 document.querySelector("#score-dark").innerHTML = `Score dark: ${dark}`;
