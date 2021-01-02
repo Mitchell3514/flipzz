@@ -34,6 +34,7 @@ const ConnectionHandler = function ConnectionHandler() {
 			else connection.send(JSON.stringify({ status: -1, message: "Game hasn't been initialized yet" }));
 		});
 
+		// once means it runs only 1x
 		connection.once("end", () => {
 			current--;
 			if (connection.game) {
