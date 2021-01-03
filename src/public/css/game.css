@@ -1,5 +1,26 @@
+/* GAME STATUS */
+#status {
+    margin: 10px;
+    background-color: var(--popupColor);
+    padding: 10px;
+    font-size: larger;
+}
+
+/* TABLE */
 #center-board {
     margin: 2rem;
+}
+
+table {
+    display: table;
+    background-color: var(--tableColor);
+    border-collapse: separate;
+    border-spacing: 5px;
+    border-width: 4px;
+}
+
+table, th, td {
+    border: 1px solid lightslategrey;
 }
 
 td > .chip.dark {
@@ -10,6 +31,7 @@ td > .chip.light {
     background-color: indigo;
 }
 
+/* CHIPS */
 .chip {
     height: 3rem;
     width: 3rem;
@@ -32,9 +54,3 @@ td > .chip.light {
     opacity: 0.3;
 }
 
-#status {
-    margin: 10px;
-    background-color: whitesmoke;
-    padding: 10px;
-    font-size: larger;
-}
