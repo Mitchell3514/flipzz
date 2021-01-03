@@ -6,3 +6,17 @@
 .hidden {
     display: none;
 }
+
+section#top {
+    width: 100vw;
+    max-height: 15vh;
+}
+
+#logo {
+    margin: 25px
+}
+
+#logo img {
+    max-width: 100vw;
+    max-height: 10vh;
+}
