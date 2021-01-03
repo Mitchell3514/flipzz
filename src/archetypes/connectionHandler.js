@@ -12,10 +12,11 @@ let current = 0;
 
 // to see what game we're connected to client-side
 let gameID = 0;
+function newGame() { return new Game(gameID++); }
 
 const ConnectionHandler = function ConnectionHandler() {
 	/** @type {Game} */
-	this.waiting = new Game();		// TODO no gameID assigned?
+	this.waiting = newGame();		// TODO no gameID assigned?
 	this.connID = 0;
 
 	// connection is websocket + extra attributes
@@ -24,14 +25,13 @@ const ConnectionHandler = function ConnectionHandler() {
 		connection.id = this.connID++;
 
 		let game = this.waiting;
-		let success = game.addPlayer(connection);
-		if (!success) {
-			game = new Game(gameID++);				// add player to a new game, if full
+		if (!game.addPlayer(connection)) {
+			game = newGame();				// add player to a new game, if full
 			game.addPlayer(connection);
 			this.waiting = game;			// again, wait for 2nd player
-		} 
+		}
 		connection.game = game;				// each connection mapped to a game
-		if (game.isFull()) this.waiting = new Game();		// if 2 players added, create new game
+		if (game.isFull()) this.waiting = newGame();		// if 2 players added, create new game
 
 		// data: JSON string received by client --> status change: position id of move in format: {position: pos.id}
 		connection.on("message", (data) => {
@@ -41,10 +41,10 @@ const ConnectionHandler = function ConnectionHandler() {
 				if (typeof payload !== "object") throw new TypeError("Payload received by client is not an object");
 
 				// so far we only have payloads that should be handled by the game. (pos.id of moves)
-				if (connection.game) connection.game.handle(connection.id, payload);		// if con assigned to a game, gameHandler called
-			} catch(e) { 
+				if (connection.game && !connection.game.handle(connection.id, payload)) throw new Error("Unknown payload"); // if con assigned to a game, gameHandler called
+			} catch(e) {
 				console.log(`Error parsing the following payload: ${data.toString()}`);
-				connection.send(JSON.stringify({ error: true, message: e.message, received: data })); 
+				connection.send(JSON.stringify({ error: true, message: e.message, payload: data })); 
 			}
 		});
 

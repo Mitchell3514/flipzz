@@ -19,7 +19,7 @@ const gameStats = require("../public/assets/stats.json");
 
 function Game(id) {
     this.id = id;
-    this.status = 0;
+    this.status = -1;
 
     this.board = new Board(8, 8);
     this.board.init();
@@ -38,8 +38,8 @@ function Game(id) {
     // player added to game if not full yet, else return false
     // first added player (connection) is dark
     this.addPlayer = (/** @type {EC & import("ws")} */ connection) => {
-        if (!this.dark) return (this.dark = connection, true);
-        if (!this.light) return (this.light = connection, this._start(), true);     // after player 2 (light) is added, game starts
+        if (!this.dark) return (this.dark = connection, this._send(0, { id: this.id }), true);
+        if (!this.light) return (this.light = connection, this._send(1, { id: this.id }), this._start(), true);     // after player 2 (light) is added, game starts
         return false;
     };
 
@@ -47,27 +47,33 @@ function Game(id) {
     // id: connection.id
     // data: payload as JSON object (position id of move sent by client) sent by connectionHandler
     this.handle = (/** @type {number} */ id, data) => {
-
-        if (![this.dark.id, this.light.id].includes(id)) return false;       // ignore messages from other conns
+        if (![this.dark?.id, this.light?.id].includes(id)) return false;       // ignore messages from other conns
+        if (!data || !data.position) return false;
         
         // determine what player's msg this is: if id matches id of player light's ws connection, color = 1
         const color = +(id === this.light.id);  // + turns boolean into number
-        if (this.turn !== color) return; // ignore if not their turn
+        if (this.turn !== color) return (this._send(color, { valid: false, reason: "Other player's turn." }), true); // ignore if not their turn
 
         // check if move is valid
         const result = this.board.canPlace(color);  // array of all Positions where can be placed
         let payload = { position: data.position };      // Object sent by client must be in form: {position: pos.id}
+        let table = [];
+        this.board.board.forEach((pos, ind) => { ind % 8 === 0 ? table.push([pos.color ?? "x"]) : table[Math.floor(ind/8)].push(pos.color ?? "x"); });
+        console.table(table);
 
-        if (result.includes(data.position)) {       // if the position sent is placeable
+        if (result.some(pos => pos.id === data.position)) {       // if the position sent is placeable
             payload.valid = true;
 
             this.board.place(data.position, color); // update board: (pos.id, color)
+            let table = [];
+            this.board.board.forEach((pos, ind) => { ind % 8 === 0 ? table.push([pos.color ?? "x"]) : table[Math.floor(ind/8)].push(pos.color ?? "x"); });
+            console.table(table);
             
             // player can place, see if next player can place
             const canPlay = this.board.canPlace(+!color);       // array of all Positions where can be placed by other player
 
             if (!canPlay) { // other player can't place - send who won
-                this.status++;      // status 1 --> status 2
+                this.status++; // status 1 --> status 2
                 // update stats: games completed
                 gameStats.games++;      
                 // ---------- IF GAME COMPLETED --------------------------------------
@@ -80,12 +86,13 @@ function Game(id) {
             this._send(2, { valid: true, turn: this.turn, ...payload });         // 2 = send to both: valid + next turn + payload (pos id validated)
         } else {
             // ----------IF INVALID MOVE-------------------------------------------------
-            this._send(color, { valid: false });                    // sent to (color =) 0/1, player (conn) who sent move
+            this._send(color, { valid: false, reason: "Invalid move." });                    // sent to (color =) 0/1, player (conn) who sent move
         }
+        return true;
     };
 
     this.stop = (/** @type {number} */ id) => {
-        this.status = -1;       // aborted --> status -1
+        this.status = 3;       // aborted --> status 3
         this._send(+!id, {message: "The other player has left the game."});       // inform other player who is left
     };
 
@@ -100,6 +107,7 @@ function Game(id) {
     };
 
     this._start = () => {
+        this.status++;
         this._send(0, { player: 0, turn: this.turn });  // sent to dark: payload contains player type and turn
         this._send(1, { player: 1, turn: this.turn });  // sent to light
         this.status++;                                  // status 0 sent, but now becomes status 1 (game continuing)
