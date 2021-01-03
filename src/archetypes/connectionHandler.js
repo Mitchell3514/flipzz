@@ -15,7 +15,7 @@ let gameID = 0;
 
 const ConnectionHandler = function ConnectionHandler() {
 	/** @type {Game} */
-	this.waiting = new Game();
+	this.waiting = new Game();		// TODO no gameID assigned?
 	this.connID = 0;
 
 	// connection is websocket + extra attributes
@@ -33,14 +33,14 @@ const ConnectionHandler = function ConnectionHandler() {
 		connection.game = game;				// each connection mapped to a game
 		if (game.isFull()) this.waiting = new Game();		// if 2 players added, create new game
 
-		// status change received by client: position id om move
+		// data: JSON string received by client --> status change: position id of move in format: {position: pos.id}
 		connection.on("message", (data) => {
 			if (!connection.game) connection.send(JSON.stringify({ error: true, message: "Game hasn't been initialized yet" }));
 			try {
-				const payload = JSON.parse(data.toString());
+				const payload = JSON.parse(data.toString());		// turn client's JSON string into Object 
 				if (typeof payload !== "object") throw new TypeError("Payload received by client is not an object");
 
-				// so far we only have payloads that should be handled by the game.
+				// so far we only have payloads that should be handled by the game. (pos.id of moves)
 				if (connection.game) connection.game.handle(connection.id, payload);		// if con assigned to a game, gameHandler called
 			} catch(e) { 
 				console.log(`Error parsing the following payload: ${data.toString()}`);

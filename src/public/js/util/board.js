@@ -55,6 +55,8 @@
             return positions;           // array of ALL Positions where can be placed (in the whole board)
         }; 
 
+        // if dark won: 0 returned
+        // if light won: 1 returned
         this.winner = () => {
             let light = 0;
             let dark = 0;

@@ -24,7 +24,7 @@ function Game(id) {
     this.board = new Board(8, 8);
     this.board.init();
 
-    this.dark = null;
+    this.dark = null;       // dark and light are both assigned ws connections
     this.light = null;
     this.turn = 0;      // 0 is dark, 1 is light
 
@@ -45,44 +45,47 @@ function Game(id) {
 
     // HANDLES A MESSAGE FROM CLIENT: a move (position id)
     // id: connection.id
-    // data: payload (position id of move sent by client)
+    // data: payload as JSON object (position id of move sent by client) sent by connectionHandler
     this.handle = (/** @type {number} */ id, data) => {
 
         if (![this.dark.id, this.light.id].includes(id)) return false;       // ignore messages from other conns
         
-        // determine what player's msg this is
-        const color = +(id === this.light.id);  // + turns boolean into number?
+        // determine what player's msg this is: if id matches id of player light's ws connection, color = 1
+        const color = +(id === this.light.id);  // + turns boolean into number
         if (this.turn !== color) return; // ignore if not their turn
 
         // check if move is valid
         const result = this.board.canPlace(color);  // array of all Positions where can be placed
-        let payload = { position: data.position };
+        let payload = { position: data.position };      // Object sent by client must be in form: {position: pos.id}
 
-        if (result.includes(data.position)) {
+        if (result.includes(data.position)) {       // if the position sent is placeable
             payload.valid = true;
 
-            this.board.place(data.position, color); // update board
+            this.board.place(data.position, color); // update board: (pos.id, color)
             
             // player can place, see if next player can place
-            const canPlay = this.board.canPlace(+!color);
+            const canPlay = this.board.canPlace(+!color);       // array of all Positions where can be placed by other player
 
-            if (!canPlay) { // can't place - send who won
-                this.status++;
+            if (!canPlay) { // other player can't place - send who won
+                this.status++;      // status 1 --> status 2
                 // update stats: games completed
                 gameStats.games++;      
-                return this._send(2, { winner: this.board.winner(), ...payload });
+                // ---------- IF GAME COMPLETED --------------------------------------
+                return this._send(2, { winner: this.board.winner(), ...payload });      // 2 = send to both --> winner (0/1) + payload (pos id)
             }
 
             // next player's turn - send data
             this.turn = +!this.turn;
-            this._send(2, { turn: this.turn, ...payload });
+            // ------------IF VALID MOVE-------------------------------------------------
+            this._send(2, { valid: true, turn: this.turn, ...payload });         // 2 = send to both: valid + next turn + payload (pos id validated)
         } else {
-            this._send(color, { valid: false });
+            // ----------IF INVALID MOVE-------------------------------------------------
+            this._send(color, { valid: false });                    // sent to (color =) 0/1, player (conn) who sent move
         }
     };
 
     this.stop = (/** @type {number} */ id) => {
-        this.status = -1;       // aborted
+        this.status = -1;       // aborted --> status -1
         this._send(+!id, {message: "The other player has left the game."});       // inform other player who is left
     };
 
@@ -99,7 +102,7 @@ function Game(id) {
     this._start = () => {
         this._send(0, { player: 0, turn: this.turn });  // sent to dark: payload contains player type and turn
         this._send(1, { player: 1, turn: this.turn });  // sent to light
-        this.status++;
+        this.status++;                                  // status 0 sent, but now becomes status 1 (game continuing)
     };
 }
 

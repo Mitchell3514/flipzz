@@ -11,6 +11,7 @@ let dark = 2;
 let light = 2;
 let turn = 0;
 let stopped = false;
+let recentpos = 0;              // pos id where just has been clicked on
 const playerturn = document.querySelector('#turn');
 const gamestat = document.querySelector('#message');
 const scoredark = document.querySelector('#score-dark');
@@ -21,7 +22,8 @@ const grids = document.querySelectorAll(".chip");               // all cell divs
 
 socket.onopen = function() {
     console.log("CLIENT SENT HELLO TO SERVER...");
-    socket.send("Hello from the client");
+    let clientmessage = "Hello from the client";
+    socket.send(JSON.stringify({string: clientmessage}));       // JSON object: attribute-value pairs
 }
 
 
@@ -57,17 +59,25 @@ socket.onmessage = function(event) {
             playerturn.innerHTML = "Turn: light"
         }
         if (message.player == message.turn) {
-             enableEventListener();                 // only enable eventListener for player who has turn
+             enableEventListener();                 // enable eventListener for player who has first turn
         }
         break;
 
         case(1):
         console.log("NEW MOVE VALIDATED BY SERVER");
-        // TODO remove Eventlistener again after turn switch
-        // STATUS 1 Move invalid: output string
-        // STATUS 1 Move valid: call place() + switchturn 
+        // SENT TO BOTH CLIENTS --> { status: 1, valid: true, turn: 0/1  }
+        // case 1: This player's move has just been validated, turn switches
+        // case 2: Other player's move has just been validated, now it's your turn
         if (message.valid) {
-            
+            let newposition = new Classes.Position(recentpos);      // BOTH clients need to place to update board!!
+            place(newposition);  
+            if (message.turn != turn) {    // if player has switched turn
+                gamestat.innerHTML = "Waiting for other player to place a chip...";
+                disableEventListener();
+            }
+            if (message.turn == turn) {    // if this player now has turn, enable eventListener
+                enableEventListener();                  
+            }
         } else {
             gamestat.innerHTML = "Invalid move!";
         }
@@ -94,14 +104,10 @@ socket.onerror = function(event) {
     console.log(event);
 }
 
-// document.addEventListener("DOMContentLoaded", function(){    
-//     if (!window.game) window.game = new Flipzz(); // NOTE Preview code
-// });
 
+document.addEventListener("DOMContentLoaded", pageLoaded);
 
-document.addEventListener("DOMContentLoaded", startGame);
-
-function startGame() {
+function pageLoaded() {
     console.log("PAGE FULLY LOADED")
 }
 
@@ -112,6 +118,7 @@ function enableEventListener() {
     }   
 }
 
+// This method is not really necessary, since gameHandler ignores move if it's not their turn. But still less server load.
 function disableEventListener() {
     for(let g of grids){
         g.removeEventListener("click", mouseClick);
@@ -123,15 +130,14 @@ function mouseClick() { // the clicked element
     if (!this.classList.contains("chip")) return;   // not a chip
                                                     // dataset contains all attributes starting with data-.... (see data-pos in game.ejs)
     const posid = parseInt(this.dataset["pos"]);     // get pos-data from TD (numbers 0, 1, 2, .... 63)
+    recentpos = posid;                              // update pos where just has been clicked on
 
     if (isNaN(posid)) return;
     else {
-        // socket.send(JSON.stringify(posid));     // send position ID (move) to server --> validated by gameHandler
-        console.log(posid); 
-    }
-    // NOTE preview code ahead
-    let position = new Classes.Position(posid); 
-    place(position);         
+        // THIS player sends position to be validated by server
+        // If its not his turn, gameHandler ignores.
+        socket.send(JSON.stringify({position: posid}));          // send OBJECT with Position id propery to server --> connectionHandler calls gameHandler --> verifies
+    }       
 }
     
 
@@ -165,7 +171,7 @@ const gameOver = () => {
     playerturn.innerHTML = `Winner: ${light > dark ? "light" : light === dark ? "tie" : "dark"}`;
     stopped = true;
     //TODO add restart game button
-    // TODO send totalflipped to server
+    // TODO send totalflipped to server (or can we change stats.json from here?)
 }
 
 function switchTurn() {
@@ -180,9 +186,6 @@ function place(pos) {
 
     const toChange = board.place(pos, turn);        // array of Positions sthat hould change color (just placed + flipped)
     if (!toChange.length) return;                   // nothing flipped
-
-    socket.send(JSON.stringify(pos.id));            // send Position id to server --> connectionHandler calls gameHandler --> verifies
-                                                    // if invalid, 
 
     // remove placeable signs
     document.querySelectorAll(".placeable").forEach(el => el.classList.remove("placeable"));
