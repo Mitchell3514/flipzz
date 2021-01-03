@@ -15,18 +15,19 @@ const gameStats = require("../public/assets/stats.json");
  *  0   Game started  { status: 0, player: 0/1, turn: 0/1 } 
  *  1   Game continuing/move { status: 1, valid: true, turn: 0/1  } else {status: 1, valid: false}
  *  2   Game ended { status: 2, valid: true, position: number, winner: 0/1  }
-
  */
 
-function Game() {
-    console.log(Board);
+function Game(id) {
+    this.id = id;
+    this.status = 0;
+
     this.board = new Board(8, 8);
     this.board.init();
 
     this.dark = null;
     this.light = null;
-
     this.turn = 0;      // 0 is dark, 1 is light
+
 
     // TODO update stats: amount of flipped pieces sent by flipzz - gameOver()
     gameStats.flipped++;
@@ -66,7 +67,7 @@ function Game() {
             const canPlay = this.board.canPlace(+!color);
 
             if (!canPlay) { // can't place - send who won
-                this.status = 2;
+                this.status++;
                 // update stats: games completed
                 gameStats.games++;      
                 return this._send(2, { winner: this.board.winner(), ...payload });
@@ -90,15 +91,15 @@ function Game() {
     // 1 --> send to light
     // 2 --> send to both   (id-1 guarantees this)
     this._send = (id, payload = {}) => {
-        const msg = JSON.stringify({ status: this.status, ...payload });    // concatenated output string: {"status":0,"player":0,"turn":0} 
+        const msg = JSON.stringify({ id: this.id, status: this.status, ...payload });    // concatenated output string: {"status":0,"player":0,"turn":0} 
         if (id-1) this.dark.send(msg);      
         if (id) this.light.send(msg);
     };
 
     this._start = () => {
-        this.status = 0;
         this._send(0, { player: 0, turn: this.turn });  // sent to dark: payload contains player type and turn
         this._send(1, { player: 1, turn: this.turn });  // sent to light
+        this.status++;
     };
 }
 

@@ -10,6 +10,9 @@ const Game = require("./gameHandler");
  // current is used in index.ejs, required by routes/index (how many players online)
 let current = 0;
 
+// to see what game we're connected to client-side
+let gameID = 0;
+
 const ConnectionHandler = function ConnectionHandler() {
 	/** @type {Game} */
 	this.waiting = new Game();
@@ -23,7 +26,7 @@ const ConnectionHandler = function ConnectionHandler() {
 		let game = this.waiting;
 		let success = game.addPlayer(connection);
 		if (!success) {
-			game = new Game();				// add player to a new game, if full
+			game = new Game(gameID++);				// add player to a new game, if full
 			game.addPlayer(connection);
 			this.waiting = game;			// again, wait for 2nd player
 		} 
@@ -32,12 +35,17 @@ const ConnectionHandler = function ConnectionHandler() {
 
 		// status change received by client: position id om move
 		connection.on("message", (data) => {
-			if (!connection.game) connection.send(JSON.stringify({ status: -1, message: "Game hasn't been initialized yet" }));
+			if (!connection.game) connection.send(JSON.stringify({ error: true, message: "Game hasn't been initialized yet" }));
 			try {
 				const payload = JSON.parse(data.toString());
-				// payload is a move sent by client here
+				if (typeof payload !== "object") throw new TypeError("Payload received by client is not an object");
+
+				// so far we only have payloads that should be handled by the game.
 				if (connection.game) connection.game.handle(connection.id, payload);		// if con assigned to a game, gameHandler called
-			} catch(e) { console.log(`Couldn't parse the following message as JSON: ${data.toString()}`); }
+			} catch(e) { 
+				console.log(`Error parsing the following payload: ${data.toString()}`);
+				connection.send(JSON.stringify({ error: true, message: "Invalid payload received." })); 
+			}
 		});
 
 		// once means it runs only 1x
