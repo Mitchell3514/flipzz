@@ -11,6 +11,7 @@ let dark = 2;
 let light = 2;
 let turn = 0;
 let stopped = false;
+let gameID;
 const playerturn = document.querySelector('#turn');
 const gamestat = document.querySelector('#message');
 const scoredark = document.querySelector('#score-dark');
@@ -36,61 +37,66 @@ socket.onopen = function() {
 
 socket.onmessage = function(event) {
     let message = JSON.parse(event.data);       // unpack (string --> object) message received by server
-    console.log(message);
+    console.table(message);
+
+    if (message.error) return console.error(`Received error from server: ${message.message}\nOur payload was: ${message.payload}`);
     
     switch(message.status) {
-        
         case(-1):
-        console.log("GAME ABORTED");
-        gamestat.innerHTML = "The other player has left the game :(";
-        break;
+            gameID = message.id;
+            break;
 
         case(0):
-        console.log("2 PLAYERS JOINED: GAME START");
-        if(message.player == 0) {                               // message.player is type assigned to this player (light/dark)
-            gamestat.innerHTML = "You are player dark :)";      // replace "waiting for player 2"
-        } else {
-            gamestat.innerHTML = "You are player light :)";
-        }
-        if (message.turn == 0) {
-            playerturn.innerHTML = "Turn: dark"
-        } else {
-            playerturn.innerHTML = "Turn: light"
-        }
-        if (message.player == message.turn) {
-             enableEventListener();                 // enable eventListener for player who has first turn
-        }
-        break;
+            console.log("2 PLAYERS JOINED: GAME START");
+            if(message.player == 0) {                               // message.player is type assigned to this player (light/dark)
+                gamestat.innerHTML = "You are player dark :)";      // replace "waiting for player 2"
+            } else {
+                gamestat.innerHTML = "You are player light :)";
+            }
+            if (message.turn == 0) {
+                playerturn.innerHTML = "Turn: dark"
+            } else {
+                playerturn.innerHTML = "Turn: light"
+            }
+            if (message.player == message.turn) {
+                enableEventListener();                 // enable eventListener for player who has first turn
+            }
+            break;
 
         case(1):
-        console.log("NEW MOVE VALIDATED BY SERVER");
-        // SENT TO BOTH CLIENTS --> { status: 1, valid: true, turn: 0/1  }
-        // case 1: This player's move has just been validated, turn switches
-        // case 2: Other player's move has just been validated, now it's your turn
-        if (message.valid) {
-            let validpos = message.position;                     // payload (pos id) sent back by server to BOTH clients
-            let newposition = new Classes.Position(validpos);      // BOTH clients need to place to update board!!
-            place(newposition);  
-            if (message.turn != turn) {    // if player has switched turn
-                gamestat.innerHTML = "Waiting for other player to place a chip...";
-                disableEventListener();
+            console.log("NEW MOVE VALIDATED BY SERVER");
+            // SENT TO BOTH CLIENTS --> { status: 1, valid: true, turn: 0/1  }
+            // case 1: This player's move has just been validated, turn switches
+            // case 2: Other player's move has just been validated, now it's your turn
+            if (message.valid) {
+                let validpos = message.position;                     // payload (pos id) sent back by server to BOTH clients
+                let newposition = new Classes.Position(validpos);      // BOTH clients need to place to update board!!
+                place(newposition);  
+                if (message.turn != turn) {    // if player has switched turn
+                    gamestat.innerHTML = "Waiting for other player to place a chip...";
+                    disableEventListener();
+                }
+                if (message.turn == turn) {    // if this player now has turn, enable eventListener
+                    enableEventListener();                  
+                }
+            } else {
+                gamestat.innerHTML = "Invalid move!";
             }
-            if (message.turn == turn) {    // if this player now has turn, enable eventListener
-                enableEventListener();                  
-            }
-        } else {
-            gamestat.innerHTML = "Invalid move!";
-        }
-        break;
+            break;
 
         case(2):
-        console.log("GAME ENDED! Restart game?");
-        gameOver();
-        // TODO  add restart game button to innerHTML game.ejs in gameOver()
-        break;
+            console.log("GAME ENDED! Restart game?");
+            gameOver();
+            // TODO  add restart game button to innerHTML game.ejs in gameOver()
+            break;
+
+        case(3):
+            console.log("GAME ABORTED");
+            gamestat.innerHTML = "The other player has left the game :(";
+            break;
         
         default:
-        console.log("NO STATUS RECEIVED BY SERVER");
+            console.log("NO KNOWN STATUS RECEIVED BY SERVER");
     }
 
 }
