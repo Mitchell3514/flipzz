@@ -44,7 +44,7 @@ const ConnectionHandler = function ConnectionHandler() {
 				if (connection.game) connection.game.handle(connection.id, payload);		// if con assigned to a game, gameHandler called
 			} catch(e) { 
 				console.log(`Error parsing the following payload: ${data.toString()}`);
-				connection.send(JSON.stringify({ error: true, message: "Invalid payload received." })); 
+				connection.send(JSON.stringify({ error: true, message: e.message, received: data })); 
 			}
 		});
 
