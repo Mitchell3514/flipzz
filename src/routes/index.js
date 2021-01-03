@@ -2,8 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const stats = require("../public/assets/stats.json");				// JSON files don't have to be exported like JS files
-const { current } = require("../archetypes/connectionHandler");		// how many players online, sent to index.ejs
+const { join } = require("path"); 
+const stats = require(join(ROOT, "../stats.json"));	// eslint-ignore-line JSON files don't have to be exported like JS files
+const { current } = require("../archetypes/connectionHandler");	// how many players online, sent to index.ejs
 
 console.log(current);
 
