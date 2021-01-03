@@ -20,14 +20,14 @@
             W: -1,
             NW: -(this.x+1),
         };
-        // Object.freeze(this._dirs);
+        Object.freeze(this._dirs);
     
         this.dirs = Object.keys(this._dirs); 
         
         // public functions
         this.init = () => {
             // initialize board
-            for (const i in " ".repeat(this.x*this.y).split(" "))
+            for (let i = 0; i < this.x*this.y; i++)
                 this.board.push(new Position(Number(i)));
                     
             // fill first 4
@@ -121,6 +121,11 @@
     }
     exports.Board = Board;
     // this refers to Window
-})(typeof exports === "undefined" ? this.Classes || (this.Classes = {}) : exports, typeof exports === "undefined" ? Classes.Position : require("./position").Position);
+})(typeof exports === "undefined" ? 
+        this.Classes || (this.Classes = {}) 
+        : exports
+    , typeof exports === "undefined" ?
+        Classes.Position 
+        : require("./position").Position);
 // param exports: if client, we give property Classes to window (if already defined, use that one)
 // param Position: if client, we use Position already assigned to Classes, if server, we require Position (object of the module!)
