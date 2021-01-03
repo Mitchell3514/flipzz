@@ -11,7 +11,6 @@ let dark = 2;
 let light = 2;
 let turn = 0;
 let stopped = false;
-let recentpos = 0;              // pos id where just has been clicked on
 const playerturn = document.querySelector('#turn');
 const gamestat = document.querySelector('#message');
 const scoredark = document.querySelector('#score-dark');
@@ -69,7 +68,8 @@ socket.onmessage = function(event) {
         // case 1: This player's move has just been validated, turn switches
         // case 2: Other player's move has just been validated, now it's your turn
         if (message.valid) {
-            let newposition = new Classes.Position(recentpos);      // BOTH clients need to place to update board!!
+            let validpos = message.position;                     // payload (pos id) sent back by server to BOTH clients
+            let newposition = new Classes.Position(validpos);      // BOTH clients need to place to update board!!
             place(newposition);  
             if (message.turn != turn) {    // if player has switched turn
                 gamestat.innerHTML = "Waiting for other player to place a chip...";
@@ -130,7 +130,6 @@ function mouseClick() { // the clicked element
     if (!this.classList.contains("chip")) return;   // not a chip
                                                     // dataset contains all attributes starting with data-.... (see data-pos in game.ejs)
     const posid = parseInt(this.dataset["pos"]);     // get pos-data from TD (numbers 0, 1, 2, .... 63)
-    recentpos = posid;                              // update pos where just has been clicked on
 
     if (isNaN(posid)) return;
     else {
