@@ -1,11 +1,12 @@
 // @ts-check
 // NO REQUIRES ON THE CLIENT SIDE!
 
+// For each client, we create a new WebSocket, so each player has its own ws connection with server
 const socket = new WebSocket("ws://localhost:3000");
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 // position, config and board get imported in game.ejs, BEFORE flipzz
 
-let totalflipped = 0;       // TODO send to server in gameOver() to update stats.json
+let totalflipped = 0;       // TODO send to server in gameOver() to update stats.json (or can stats.json be updated from here?)
 let dark = 2;
 let light = 2;
 let turn = 0;
@@ -45,7 +46,7 @@ socket.onmessage = function(event) {
 
         case(0):
         console.log("2 PLAYERS JOINED: GAME START");
-        if(message.player == 0) {
+        if(message.player == 0) {                               // message.player is type assigned to this player (light/dark)
             gamestat.innerHTML = "You are player dark :)";      // replace "waiting for player 2"
         } else {
             gamestat.innerHTML = "You are player light :)";
@@ -56,7 +57,7 @@ socket.onmessage = function(event) {
             playerturn.innerHTML = "Turn: light"
         }
         if (message.player == message.turn) {
-             enableEventListener();                 // inly enable eventListener for player who has turn
+             enableEventListener();                 // only enable eventListener for player who has turn
         }
         break;
 
@@ -119,11 +120,9 @@ function disableEventListener() {
 
 function mouseClick() { // the clicked element
     console.log(this.dataset["pos"]);
-    if (!this.classList.contains("chip")) return; // not a chip
-    // dataset contains all attributes starting with data-.... 
-    // see data-pos in game.ejs file
-    const posid = parseInt(this.dataset["pos"]); // get pos-data from TD
-    // numbers 0, 1, 2, .... 63
+    if (!this.classList.contains("chip")) return;   // not a chip
+                                                    // dataset contains all attributes starting with data-.... (see data-pos in game.ejs)
+    const posid = parseInt(this.dataset["pos"]);     // get pos-data from TD (numbers 0, 1, 2, .... 63)
 
     if (isNaN(posid)) return;
     else {
