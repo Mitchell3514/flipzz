@@ -57,17 +57,11 @@ function Game(id) {
         // check if move is valid
         const result = this.board.canPlace(color);  // array of all Positions where can be placed
         let payload = { position: data.position };      // Object sent by client must be in form: {position: pos.id}
-        let table = [];
-        this.board.board.forEach((pos, ind) => { ind % 8 === 0 ? table.push([pos.color ?? "x"]) : table[Math.floor(ind/8)].push(pos.color ?? "x"); });
-        console.table(table);
 
         if (result.some(pos => pos.id === data.position)) {       // if the position sent is placeable
             payload.valid = true;
 
             this.board.place(data.position, color); // update board: (pos.id, color)
-            let table = [];
-            this.board.board.forEach((pos, ind) => { ind % 8 === 0 ? table.push([pos.color ?? "x"]) : table[Math.floor(ind/8)].push(pos.color ?? "x"); });
-            console.table(table);
             
             // player can place, see if next player can place
             const canPlay = this.board.canPlace(+!color);       // array of all Positions where can be placed by other player
