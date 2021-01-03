@@ -29,7 +29,7 @@ function Game() {
     this.turn = 0;      // 0 is dark, 1 is light
 
     // TODO update stats: amount of flipped pieces sent by flipzz - gameOver()
-    gameStats.flipped++;
+    gameStats.flipped ++;
     
 
     this.isFull = () => this.light && this.dark;
