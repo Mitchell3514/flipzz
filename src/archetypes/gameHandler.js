@@ -12,7 +12,7 @@ const gameStats = require("../public/assets/stats.json");
 /**
  * Status codes:
  * -1   Game aborted { status: -1}
- *  0   Game started  { status: 0, player: 0/1, turn: 0/1 } TODO remove "still waiting" 
+ *  0   Game started  { status: 0, player: 0/1, turn: 0/1 } 
  *  1   Game continuing/move { status: 1, valid: true, turn: 0/1  } else {status: 1, valid: false}
  *  2   Game ended { status: 2, valid: true, position: number, winner: 0/1  }
 
@@ -28,8 +28,8 @@ function Game() {
 
     this.turn = 0;      // 0 is dark, 1 is light
 
+    // TODO update stats: amount of flipped pieces sent by flipzz - gameOver()
     gameStats.flipped++;
-    gameStats.games++;
     
 
     this.isFull = () => this.light && this.dark;
@@ -46,15 +46,15 @@ function Game() {
     // id: connection.id
     // data: payload (position id of move sent by client)
     this.handle = (/** @type {number} */ id, data) => {
-        // ignore messages from other conns
-        if (![this.dark.id, this.light.id].includes(id)) return false;
+
+        if (![this.dark.id, this.light.id].includes(id)) return false;       // ignore messages from other conns
         
         // determine what player's msg this is
-        const color = +(id === this.light.id);
-        if (this.turn !== color) return; // return if not their turn
+        const color = +(id === this.light.id);  // + turns boolean into number?
+        if (this.turn !== color) return; // ignore if not their turn
 
         // check if move is valid
-        const result = this.board.canPlace(color);
+        const result = this.board.canPlace(color);  // array of all Positions where can be placed
         let payload = { position: data.position };
 
         if (result.includes(data.position)) {
@@ -67,6 +67,8 @@ function Game() {
 
             if (!canPlay) { // can't place - send who won
                 this.status = 2;
+                // update stats: games completed
+                gameStats.games++;      
                 return this._send(2, { winner: this.board.winner(), ...payload });
             }
 
@@ -95,7 +97,7 @@ function Game() {
 
     this._start = () => {
         this.status = 0;
-        this._send(0, { player: 0, turn: this.turn });  // sent to dark: payload contains 
+        this._send(0, { player: 0, turn: this.turn });  // sent to dark: payload contains player type and turn
         this._send(1, { player: 1, turn: this.turn });  // sent to light
     };
 }

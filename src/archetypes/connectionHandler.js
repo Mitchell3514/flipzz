@@ -30,7 +30,7 @@ const ConnectionHandler = function ConnectionHandler() {
 		connection.game = game;				// each connection mapped to a game
 		if (game.isFull()) this.waiting = new Game();		// if 2 players added, create new game
 
-		// status change received by client (move, ...)
+		// status change received by client: position id om move
 		connection.on("message", (data) => {
 			if (!connection.game) connection.send(JSON.stringify({ status: -1, message: "Game hasn't been initialized yet" }));
 			try {
