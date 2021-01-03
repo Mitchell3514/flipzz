@@ -49,13 +49,13 @@ const ConnectionHandler = function ConnectionHandler() {
 		});
 
 		// once means it runs only 1x
-		connection.once("end", () => {
+		connection.once("close", () => {
+			console.log("Websocket ended");
 			current--;
-			if (connection.game) {
-				connection.game.stop(connection.id);
-				if (connection.game === this.waiting) this.waiting = null;		// if only 1 player waiting for 2nd player, stop the game
-			}
+			if (connection.game) connection.game.leave(connection.id);
 		});
+
+		connection.on("error", () => console.log("error"));
 	};
 };
 
