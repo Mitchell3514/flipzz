@@ -53,6 +53,8 @@ socket.onmessage = function(event) {
             break;
 
         case(0):
+            // LINK - ../../../views/game.ejs#players
+            // TODO - set correct bg for the players
             console.log("2 PLAYERS JOINED: GAME START");
             if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
             else updateStatus("Waiting for the opponent's move.");

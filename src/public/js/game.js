@@ -2,6 +2,7 @@
 
 // Configures everything that has not to do with the game
 
+// LINK - ../../views/game.ejs#timer
 // TODO setInterval, 
 function timer() {
     const timer = document.querySelector("#time-passed");
