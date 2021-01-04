@@ -129,11 +129,15 @@ function Game(id) {
     };
 
     this.leave = (/** @type {number} */ id) => {
-        if (!this.light && this.dark?.id === id) return this.dark = null;
+        if (this.status === 3) return; // if already quit ignore
+        if (!this.light && this.dark?.id === id) return this.dark = null; // if only 1 player joiend, simply remove.
+
         this.status = 3;       // aborted --> status 3
-        this._send(+!(id === this.light.id), {message: "The other player has left the game."});       // inform other player who is left
-        this._updateStats({ flipped: this.flipped });
-        log(`Game ${this.id} (${this.name}) stopped due to Connection ${id} leaving.`);
+        this._send(+!(id === this.light.id), {message: "The other player has left the game."});       // inform other player who is left.
+        id ? this.light.game = null : this.dark.game = null; // remove this game from other connection.
+
+        this._updateStats({ flipped: this.flipped }); // add to stats.
+        log(`Game ${this.id} (${this.name}) stopped due to Connection ${id} leaving.`); // log.
     };
 
     // payload is an object containing data
