@@ -87,8 +87,8 @@
             if (typeof pos === "number") id = pos;
             else id = pos.id;
             
-            if (id % 8 === 0 && dir === "W") return null;
-            if ((id+1) % 8 === 0 && dir === "E") return null;
+            if (id % 8 === 0 && ["NW", "W", "SW"].includes(dir)) return null;
+            if ((id+1) % 8 === 0 && ["NE", "E", "SE"].includes(dir)) return null;
             const newid = id + (dir ? this._dirs[dir] : 0);
     
             if (newid >= 0 && newid < this.size) return this.board[newid];
