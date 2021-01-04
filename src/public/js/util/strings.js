@@ -1,6 +1,6 @@
 //@ts-check
 
-const STRINGS = {
+const STRINGS = { // eslint-disable-line
 	gameWon: "Congratulations! You won!",
 	gameLost: "Game over. You lost!",
 	playAgain: "Why not play again?",
@@ -8,4 +8,4 @@ const STRINGS = {
 	playerDark: "Player dark. Place a piece in a valid grid to flip you opponents pieces!",
 	waiting: "Waiting for your opponent to place a piece.",
 	aborted: "The other player has left the game."
-}
+};
