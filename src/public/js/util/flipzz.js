@@ -5,6 +5,7 @@
 
 // For each client, we create a new WebSocket, so each player has its own ws connection with server
 const socket = new WebSocket("ws://localhost:3000");
+/** @type {import("./Board").Board} */ // @ts-expect-error
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 // position, config and board get imported in game.ejs, BEFORE flipzz
 let dark = 2;
@@ -108,7 +109,7 @@ document.addEventListener("DOMContentLoaded", pageLoaded);
 function pageLoaded() {
     console.log("PAGE FULLY LOADED")
     document.querySelector("#board").addEventListener("click", event => {
-        mouseClick(event.target);
+        mouseClick((/** @type {HTMLElement} */ (event.target)));
     });
 }
 
