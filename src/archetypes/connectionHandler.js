@@ -17,7 +17,7 @@ function newGame() { return new Game(gameID++); }
 
 const ConnectionHandler = function ConnectionHandler() {
 	/** @type {Game} */
-	this.waiting = newGame();		// TODO no gameID assigned?
+	this.waiting = newGame();
 	this.connID = 0;
 
 	// connection is websocket + extra attributes
