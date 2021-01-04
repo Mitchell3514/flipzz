@@ -7,7 +7,6 @@ const gameStats = require("../public/assets/stats.json");
  */
 
  // SENDS DATA TO CONNECTIONS (is game full?)
- // To client: turn (payload), total points per client? Or Flipzz?
 
 /**
  * Status codes:
@@ -29,7 +28,7 @@ function Game(id) {
     this.turn = 0;      // 0 is dark, 1 is light
 
 
-    // TODO update stats: amount of flipped pieces sent by flipzz - gameOver()
+    // TODO update stats: amount of flipped pieces
     gameStats.flipped ++;
     
 

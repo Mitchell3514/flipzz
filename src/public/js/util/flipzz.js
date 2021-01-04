@@ -5,8 +5,7 @@
 const socket = new WebSocket("ws://localhost:3000");
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 // position, config and board get imported in game.ejs, BEFORE flipzz
-
-let totalflipped = 0;       // TODO send to server in gameOver() to update stats.json (or can stats.json be updated from here?)
+    
 let dark = 2;
 let light = 2;
 let turn = 0;
@@ -176,7 +175,6 @@ const gameOver = () => {
     playerturn.innerHTML = `Winner: ${light > dark ? "light" : light === dark ? "tie" : "dark"}`;
     stopped = true;
     //TODO add restart game button
-    // TODO send totalflipped to server (or can we change stats.json from here?)
 }
 
 function switchTurn() {
@@ -201,7 +199,6 @@ function place(pos) {
 
     // Change score
     const amount = toChange.length;     // score is how much has just changed color
-    totalflipped += amount;
     if (turn) {dark -= (amount-1), light += (amount) }  // if light had turn, assign light's points and subtract dark's points
     else { light -= (amount-1), dark += (amount) }
     scoredark.innerHTML = `Score dark: ${dark}`;
