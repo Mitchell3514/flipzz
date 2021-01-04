@@ -7,6 +7,7 @@ const { log } = new (require("./logger"))({ prefix: "[StatsHandler]", color: "\x
 // NOTE intentionally not made for multi threading
 
 let stats = null;
+let change = false;
 const defaultstats = { games: 0, flipped: 0 };
 
 function createStats() {
@@ -16,11 +17,11 @@ function createStats() {
 
 function updateStats(/** @type {Object} */ obj) {
     log(`Updating stats: ${i(obj)}`);
-    if (stats === null) getStats();
     Object.keys(obj)
-        .forEach(key => {
-            typeof stats[key] === "number" ? stats[key] += obj[key] : stats[key] = obj[key];
-        });
+        .forEach(key => 
+            (typeof stats[key] === "number" ? stats[key] += obj[key] : stats[key] = obj[key])
+            && (change = true)
+        );
 }
 
 function getStats() {
@@ -37,13 +38,16 @@ function getStats() {
     }
 }
 
-setInterval(() => {
+function writeStats() {
     if (stats === null) getStats();
     fs.writeFile(PATH, JSON.stringify(stats), e => {
         if (e) console.log(e);
         log(`Stats file updated.`);
     });
-}, 3e4)
+}
+
+setInterval(() => change &&= (writeStats(), false), 5e3)
+writeStats();
 
 module.exports = {
     getStats,
