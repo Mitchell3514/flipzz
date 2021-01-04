@@ -11,7 +11,7 @@ function getName() {
     return fetchNames();
 }
 let stop = false;
-function fetchNames() {
+function fetchNames() {         // give each game a random name (retrieved from API)
     return new Promise((resolve, reject) => {
         if (stop) reject();
         log(`Fetching random names.`);

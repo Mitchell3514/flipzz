@@ -1,6 +1,8 @@
 // @ts-check
 // NO REQUIRES ON THE CLIENT SIDE!
 
+//TODO Status "Invalid move! Still your turn" should disappear again after next move.
+
 // For each client, we create a new WebSocket, so each player has its own ws connection with server
 const socket = new WebSocket("ws://localhost:3000");
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
@@ -52,7 +54,6 @@ socket.onmessage = function(event) {
 
         case(0):
             console.log("2 PLAYERS JOINED: GAME START");
-            color = message.player;
             if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
             else updateStatus("Waiting for the opponent's move.");
             gamestatus = 1;
@@ -64,10 +65,11 @@ socket.onmessage = function(event) {
             // case 1: This player's move has just been validated, turn switches
             // case 2: Other player's move has just been validated, now it's your turn
             if (message.valid) {
+                updateStatus("Waiting for the opponent's move.");
                 let validpos = message.position;                     // payload (pos id) sent back by server to BOTH clients
-                let newposition = validpos;      // BOTH clients need to place to update board!!
+                let newposition = validpos;                          // BOTH clients need to place to update board!!
                 place(newposition);
-                turn = message.turn; // NOTE change turn after placing!
+                turn = message.turn;                            // NOTE change turn after placing!
                 if (turn === color) updatePlaceable();
             } else {
                 updateStatus("Invalid move! Still your turn.");
