@@ -37,7 +37,7 @@ function getStats() {
     }
 }
 
-setTimeout(() => {
+setInterval(() => {
     if (stats === null) getStats();
     fs.writeFile(PATH, JSON.stringify(stats), e => {
         if (e) console.log(e);
