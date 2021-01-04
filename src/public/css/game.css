@@ -1,13 +1,29 @@
 main {
     display: flex;
-    flex-wrap: wrap;
-    width: 100vw;
+    flex-flow: row wrap;
+    max-width: 100vw;
+    justify-content: center;
+
+    --bigfont: calc(.5em + 1.25vw);
+    --top: 15%;
+    --bottom: 20%;
 }
+
+.infocard {
+    border: 1px solid gray;
+    box-shadow: 2px 2px 4px slategray;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                    LEFT                                    */
+/* -------------------------------------------------------------------------- */
 
 /* LEFT (scores) */
 #left {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 10vw;
     position: relative;
-    width: 30vw;
 }
 
 div.points {
@@ -16,23 +32,27 @@ div.points {
     right: 10%;
 
     /* sizing */
-    width: 50%;
     height: 50px;
+    min-width: fit-content;
 
     /* styling */
     padding: 5px;
+    display: inline-block;
+    white-space: nowrap;
     vertical-align: middle;
     border-radius: 10px;
     border: 1px solid black;
-    box-shadow: 2px 2px 4px slategray;
 }
 
-div.points span {
+/* Text positioning */
+div.points p {
     line-height: 50px;
     display: inline-block;
     height: 100%;
-    font-size: calc(1em + 1.25vw);
+    font-size: var(--bigfont);
 }
+
+span.points { display: inline-block; }
 
 span.points:nth-child(odd) {
     text-align: left;
@@ -46,19 +66,26 @@ span.points:nth-child(even) {
 }
 
 /* positioning points */
-#you { top: 15%; }
-#opponent { bottom: 20%; }
+#you { top: var(--top); }
+#opponent { bottom: var(--bottom); }
 
+/* -------------------------------------------------------------------------- */
+/*                                   CENTER                                   */
+/* -------------------------------------------------------------------------- */
 
 /* TABLE */
 #center {
+    display: flex;
+    flex: 0 0 auto;
     height: 100%;
     position: relative;
 }
 
 #board-wrapper {
-    width: 40vw;
-    height: 40vw;
+    position: relative;
+    margin: 0 auto;
+    width: 80vh;
+    height: 80vh;
 }
 
 #board {
@@ -113,19 +140,45 @@ span.points:nth-child(even) {
     opacity: 0.3;
 }
 
+/* -------------------------------------------------------------------------- */
+/*                                    RIGHT                                   */
+/* -------------------------------------------------------------------------- */
+
 /* RIGHT info, time */
 #right {
-    width: 30vw;
+    display: flex;
+    flex: 1 1 auto;
+
+    position: relative;
+}
+
+#right div {
+    display: inline-block;
+    border-radius: 10px;
+
+    padding: 10px;
+    text-align: center;
+    font-size: var(--bigfont);
 }
 
 /* GAME STATUS */
-#status {
-    background-color: var(--popupColor);
-    font-size: larger;
-    padding: 10px;
-    border-radius: 20px;
-    width: 80%;
-    position: relative;
-    overflow: wrap;
+div#status {
+    position: absolute;
+    top: var(--top);
+
+    background-color: #98EDF6;
+
+    transition: opacity .5s ease-in-out;
+}
+
+p#status-body {
+    font-size: calc(var(--bigfont) - .35em);
+}
+
+div#clock {
+    position: absolute;
+    bottom: var(--bottom);
+
+    background-color: #95F6BA;
 }
 

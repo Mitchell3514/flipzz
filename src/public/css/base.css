@@ -26,7 +26,8 @@ section#top {
 }
 
 #logo {
-    margin: 25px;
+    padding: 25px;
+    padding-top: 35px;
     text-align: center;
     left: 50%
 }
