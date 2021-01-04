@@ -1,56 +1,184 @@
-/* GAME STATUS */
-#status {
-    margin: 10px;
-    background-color: var(--popupColor);
-    padding: 10px;
-    font-size: larger;
+main {
+    display: flex;
+    flex-flow: row wrap;
+    max-width: 100vw;
+    justify-content: center;
+
+    --bigfont: calc(.5em + 1.25vw);
+    --top: 15%;
+    --bottom: 20%;
 }
+
+.infocard {
+    border: 1px solid gray;
+    box-shadow: 2px 2px 4px slategray;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                    LEFT                                    */
+/* -------------------------------------------------------------------------- */
+
+/* LEFT (scores) */
+#left {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 10vw;
+    position: relative;
+}
+
+div.points {
+    /* positioning, more below */
+    position: absolute;
+    right: 10%;
+
+    /* sizing */
+    height: 50px;
+    min-width: fit-content;
+
+    /* styling */
+    padding: 5px;
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+/* Text positioning */
+div.points p {
+    line-height: 50px;
+    display: inline-block;
+    height: 100%;
+    font-size: var(--bigfont);
+}
+
+span.points { display: inline-block; }
+
+span.points:nth-child(odd) {
+    text-align: left;
+    margin-left: 5%;
+    width: 75%
+}
+span.points:nth-child(even) {
+    text-align: right;
+    right: 0%;
+    width: 15%;
+}
+
+/* positioning points */
+#you { top: var(--top); }
+#opponent { bottom: var(--bottom); }
+
+/* -------------------------------------------------------------------------- */
+/*                                   CENTER                                   */
+/* -------------------------------------------------------------------------- */
 
 /* TABLE */
-#center-board {
-    margin: 2rem;
+#center {
+    display: flex;
+    flex: 0 0 auto;
+    height: 100%;
+    position: relative;
 }
 
-table {
-    display: table;
+#board-wrapper {
+    position: relative;
+    margin: 0 auto;
+    width: 80vh;
+    height: 80vh;
+}
+
+#board {
+    /* flex properties */
+    display: flex;
+    flex-wrap: wrap;
+    flex-flow: row wrap;
+
+    /* size */
+    width: 75%;
+    height: 75%;
+
+    /* positioning */
+    position: absolute;
+    top: 10%;
+    left: 12.5%;
+
+    /* styling */
     background-color: var(--tableColor);
-    border-collapse: separate;
-    border-spacing: 5px;
-    border-width: 4px;
+    border-radius: 5%;
+    overflow: hidden;
+    box-shadow: inset 0px 0px 0px 1px lightslategrey;
 }
 
-table, th, td {
-    border: 1px solid lightslategrey;
-}
-
-td > .chip.dark {
-    background-color: lightpink;
-}
-
-td > .chip.light {
-    background-color: indigo;
+.chip {
+    width: 100%;
+    margin: 0;
+    flex: 1 0 11%;
+    border: 1px solid slategray;
 }
 
 /* CHIPS */
-.chip {
-    height: 3rem;
-    width: 3rem;
-    padding: 5px;
+.chip div {
+    margin: 0;
+    height: 100%;
+    width: 100%;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 80%;
+    background-size: 95%;
 }
 
-.dark {
+.chip.dark div {
     background-image: url("../assets/dark.webp");
 }
 
-.light {
+.chip.light div {
     background-image: url("../assets/light.webp");
 }
 
-.placeable {
+.chip.placeable div {
     background-image: url("../assets/dark.webp");
     opacity: 0.3;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                    RIGHT                                   */
+/* -------------------------------------------------------------------------- */
+
+/* RIGHT info, time */
+#right {
+    display: flex;
+    flex: 1 1 auto;
+
+    position: relative;
+}
+
+#right div {
+    display: inline-block;
+    border-radius: 10px;
+
+    padding: 10px;
+    text-align: center;
+    font-size: var(--bigfont);
+}
+
+/* GAME STATUS */
+div#status {
+    position: absolute;
+    top: var(--top);
+
+    background-color: #98EDF6;
+
+    transition: opacity .5s ease-in-out;
+}
+
+p#status-body {
+    font-size: calc(var(--bigfont) - .35em);
+}
+
+div#clock {
+    position: absolute;
+    bottom: var(--bottom);
+
+    background-color: #95F6BA;
 }
 

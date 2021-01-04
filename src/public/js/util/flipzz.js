@@ -5,16 +5,20 @@
 const socket = new WebSocket("ws://localhost:3000");
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 // position, config and board get imported in game.ejs, BEFORE flipzz
-    
 let dark = 2;
 let light = 2;
 let turn = 0;
 let stopped = false;
+let color;
 let gameID;
-const playerturn = document.querySelector('#turn');
-const gamestat = document.querySelector('#message');
-const scoredark = document.querySelector('#score-dark');
-const scorelight = document.querySelector('#score-light');
+let gamestatus;
+
+/** @type {HTMLDivElement} */
+const statusdiv = document.querySelector("div#status");
+/** @type {HTMLSpanElement} */
+const statusMessage = document.querySelector("p#status-body");
+const pointsPlayer = document.querySelector("#points-you");
+const pointsOpponent = document.querySelector("#points-opponent");
 const grids = document.querySelectorAll(".chip");               // all cell divs (to be clicked by user)
 
 
@@ -40,6 +44,7 @@ socket.onmessage = function(event) {
 
     if (message.error) return console.error(`Received error from server: ${message.message}\nOur payload was: ${message.payload}`);
     
+    if (message.status !== undefined) gamestatus = message.status;
     switch(message.status) {
         case(-1):
             gameID = message.id;
@@ -47,19 +52,10 @@ socket.onmessage = function(event) {
 
         case(0):
             console.log("2 PLAYERS JOINED: GAME START");
-            if(message.player == 0) {                               // message.player is type assigned to this player (light/dark)
-                gamestat.innerHTML = "You are player dark :)";      // replace "waiting for player 2"
-            } else {
-                gamestat.innerHTML = "You are player light :)";
-            }
-            if (message.turn == 0) {
-                playerturn.innerHTML = "Turn: dark"
-            } else {
-                playerturn.innerHTML = "Turn: light"
-            }
-            if (message.player == message.turn) {
-                enableEventListener();                 // enable eventListener for player who has first turn
-            }
+            color = message.player;
+            if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
+            else updateStatus("Waiting for the opponent's move.");
+            gamestatus = 1;
             break;
 
         case(1):
@@ -69,17 +65,12 @@ socket.onmessage = function(event) {
             // case 2: Other player's move has just been validated, now it's your turn
             if (message.valid) {
                 let validpos = message.position;                     // payload (pos id) sent back by server to BOTH clients
-                let newposition = new Classes.Position(validpos);      // BOTH clients need to place to update board!!
-                place(newposition);  
-                if (message.turn != turn) {    // if player has switched turn
-                    gamestat.innerHTML = "Waiting for other player to place a chip...";
-                    disableEventListener();
-                }
-                if (message.turn == turn) {    // if this player now has turn, enable eventListener
-                    enableEventListener();                  
-                }
+                let newposition = validpos;      // BOTH clients need to place to update board!!
+                place(newposition);
+                turn = message.turn; // NOTE change turn after placing!
+                if (turn === color) updatePlaceable();
             } else {
-                gamestat.innerHTML = "Invalid move!";
+                updateStatus("Invalid move! Still your turn.");
             }
             break;
 
@@ -91,7 +82,7 @@ socket.onmessage = function(event) {
 
         case(3):
             console.log("GAME ABORTED");
-            gamestat.innerHTML = "The other player has left the game :(";
+            updateStatus("The other player has left the game :(");
             break;
         
         default:
@@ -114,27 +105,26 @@ document.addEventListener("DOMContentLoaded", pageLoaded);
 
 function pageLoaded() {
     console.log("PAGE FULLY LOADED")
+    document.querySelector("#board").addEventListener("click", event => {
+        mouseClick(event.target);
+    });
 }
 
-function enableEventListener() {
-    // add eventlisteners to all cells
-    for(let g of grids){
-    g.addEventListener("click", mouseClick);
-    }   
+function updateStatus(str) { 
+    statusdiv.style.opacity = "0"; 
+    setTimeout(() => {
+        statusMessage.innerHTML = str;
+        statusdiv.style.opacity = "1";
+    }, 500);
 }
 
-// This method is not really necessary, since gameHandler ignores move if it's not their turn. But still less server load.
-function disableEventListener() {
-    for(let g of grids){
-        g.removeEventListener("click", mouseClick);
-    }   
-}
-
-function mouseClick() { // the clicked element
-    console.log(this.dataset["pos"]);
-    if (!this.classList.contains("chip")) return;   // not a chip
+function mouseClick(/** @type {HTMLElement} */ element) { // the clicked element
+    if (gamestatus !== 1) return;
+    // could be chip or its child in theory (in practice always child)
+    if (!element.classList.contains("chip")) element = element.parentElement
+    if (!element.classList.contains("chip")) return;   // not a chip
                                                     // dataset contains all attributes starting with data-.... (see data-pos in game.ejs)
-    const posid = parseInt(this.dataset["pos"]);     // get pos-data from TD (numbers 0, 1, 2, .... 63)
+    const posid = parseInt(element.dataset["pos"]);     // get pos-data from TD (numbers 0, 1, 2, .... 63)
 
     if (isNaN(posid)) return;
     else {
@@ -147,10 +137,8 @@ function mouseClick() { // the clicked element
 
 const firstFour = board.init();                             // array of Positions (first 4)
 for (const pos of firstFour) {setColor(pos);}                // color first 4
-for (const pos of board.canPlace(turn)) {setColor(pos);}    // color the placeable cells 
-scoredark.innerHTML = `Score dark: ${dark}`;
-scorelight.innerHTML = `Score light: ${light}`;
-playerturn.innerHTML = `Turn: ${turn ? "light" : "dark"}`;  // dark = 0, light = 1
+pointsPlayer.innerHTML = `${dark}`;
+pointsOpponent.innerHTML = `${light}`;
 
 
 // CSS: adds the colored piece to the board
@@ -172,21 +160,13 @@ function setColor(pos) {
 
 const gameOver = () => {
     console.log("GAME OVER");
-    playerturn.innerHTML = `Winner: ${light > dark ? "light" : light === dark ? "tie" : "dark"}`;
+    updateStatus(`Winner: ${light > dark ? "light" : light === dark ? "tie" : "dark"}`);
     stopped = true;
     //TODO add restart game button
 }
 
-function switchTurn() {
-    turn = +!turn;
-    playerturn.innerHTML = `Turn: ${turn ? "light" : "dark"}`;
-}
-
-
 // Sends Position (id) to server (moves) --> server sends game update to client B
 function place(pos) {
-    if (stopped) return
-
     const toChange = board.place(pos, turn);        // array of Positions sthat hould change color (just placed + flipped)
     if (!toChange.length) return;                   // nothing flipped
 
@@ -194,27 +174,20 @@ function place(pos) {
     document.querySelectorAll(".placeable").forEach(el => el.classList.remove("placeable"));
 
     // Color all positions that have just been flipped (and the 1 placed)
-    for (const pos of toChange)
-        {setColor(pos);}
+    for (const pos of toChange) 
+        setColor(pos);
 
     // Change score
     const amount = toChange.length;     // score is how much has just changed color
     if (turn) {dark -= (amount-1), light += (amount) }  // if light had turn, assign light's points and subtract dark's points
     else { light -= (amount-1), dark += (amount) }
-    scoredark.innerHTML = `Score dark: ${dark}`;
-    scorelight.innerHTML = `Score light: ${light}`;
-
-    // switch turns and color placeable cells for next player
-    switchTurn();
-    let placeable = board.canPlace(turn);       // array of Positions that are placeable
-    if (!placeable.length) {                    // nothing to place, so switch turn again
-        switchTurn();
-        placeable = board.canPlace(turn);
-        if (!placeable.length) return gameOver();       // if no one can place, game over...
-    }
-
-    // enable placeables (Position objects)
-    for (const pos of placeable)
-        {setColor(pos);}
+    pointsPlayer.innerHTML = `${dark}`;
+    pointsOpponent.innerHTML = `${light}`;   
 }
 
+function updatePlaceable() {
+    let placeable = board.canPlace(turn);       // array of Positions that are placeable
+    // enable placeables (Position objects)
+    for (const pos of placeable)
+        setColor(pos);
+}

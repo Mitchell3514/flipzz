@@ -1,5 +1,6 @@
 // @ts-check
 const Game = require("./gameHandler");
+const { log, warn } = new (require("./logger"))({ prefix: "[ConnectionHandler]", color: "\x1b[36m" });
 
 /** Adding extra attributes to connection (websocket)
  * @typedef ExtendedConnection
@@ -23,6 +24,7 @@ const ConnectionHandler = function ConnectionHandler() {
 	this.handle = (/** @type {import("ws") & ExtendedConnection} */ connection) => {
 		current++;
 		connection.id = this.connID++;
+		log(`New connection assigned ID of ${connection.id}`);
 
 		let game = this.waiting;
 		if (!game.addPlayer(connection)) {
@@ -43,19 +45,19 @@ const ConnectionHandler = function ConnectionHandler() {
 				// so far we only have payloads that should be handled by the game. (pos.id of moves)
 				if (connection.game && !connection.game.handle(connection.id, payload)) throw new Error("Unknown payload"); // if con assigned to a game, gameHandler called
 			} catch(e) {
-				console.log(`Error parsing the following payload: ${data.toString()}`);
+				warn(`Could not parse following payload: ${data.toString()}`);
 				connection.send(JSON.stringify({ error: true, message: e.message, payload: data })); 
 			}
 		});
 
 		// once means it runs only 1x
-		connection.once("end", () => {
+		connection.once("close", () => {
 			current--;
-			if (connection.game) {
-				connection.game.stop(connection.id);
-				if (connection.game === this.waiting) this.waiting = null;		// if only 1 player waiting for 2nd player, stop the game
-			}
+			if (connection.game) connection.game.leave(connection.id);
+			log(`[ConnectionHandler] Connection ${connection.id} was closed.`);
 		});
+
+		connection.on("error", () => console.log("error"));
 	};
 };
 

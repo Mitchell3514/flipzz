@@ -10,45 +10,58 @@
     <link rel="stylesheet" href="/css/game.css">
 </head>
 
-<body>
-   
-    <main>
 
+
+<body>
+    <header>
         <section id="top">
             <div id="logo">
-                <img src="/assets/logo_cropped.webp" alt="Logo">
+                <a href="./">
+                    <img src="/assets/logo_cropped.webp" alt="Logo">
+                </a>
+            </div>
+        </section>
+    </header>
+
+    <main>
+        <!-- TODO add points as innerHTML in flipzz.js (Sent by gameHandler) -->
+        <section id="left">
+            <!-- TODO add correct bg class -->
+            <div id="you" class="infocard points lightbg">
+                <p class="points"> You 
+                    <span id="points-you"> 2 </span>
+                </p>
+            </div>
+            <div id="opponent" class="infocard points darkbg">
+                <p class="points"> Opponent 
+                    <span id="points-opponent"> 2 </span>
+                </p>
             </div>
         </section>
 
-        <!-- TODO add points as innerHTML in flipzz.js (Sent by gameHandler) -->
-        <section id="left">
-            <div id="you" class="points"></div>
-            <div id="opponent" class="points"></div>
-        </section>
-
-        <section id="center-board">
-            <table>
-                <!-- Scriplet tags to embed JS in HTML-->
-                <% for (let i = 0; i < 8; i++) { %>
-                    <tr>
+        <section id="center">
+            <div id="board-wrapper">
+                <div id="board">
+                    <!-- Scriplet tags to embed JS in HTML-->
+                    <% for (let i = 0; i < 8; i++) { %>
                         <% for(let j = 0; j < 8; j++) { %>
-                            <td> 
-                                <div class="chip" data-pos=<%= (i*8)+j %>> </div>
-                            </td>
+                            <div class="chip" data-pos=<%= (i*8)+j %>> 
+                                <div></div>
+                            </div>
                         <% } %>
-                    </tr>
-                <% } %>
-            </table>
+                    <% } %>
+                </div>
+            </div>
         </section>
 
         <!-- TODO add time passed (game.js) and status as innerHTML (gameHandler sends to flipzz.js) -->
         <section id="right">
-            <div id="status">
-                <p id="turn"> Turn:  </p>
-                <p id="score-dark"> Your score: 2 </p>
-                <p id="score-light"> Your opponents score: 2 </p>
-                <p id="time-passed"> Time passed since game started: 0:00 </p>
-                <p id="message"> Still waiting for second player to join the game... </p>
+            <div id="status" class="infocard">
+                <p id="status-header"> Status </p>
+                <p id="status-body"> Waiting for second player to connect... </p>
+            </div>
+            <div id="clock" class="infocard">
+                <p id="time-passed"> Time passed <br> <span id="time">0:00</span> </p>
             </div>
         </section>
        

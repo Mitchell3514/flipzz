@@ -2,14 +2,14 @@
 
 const express = require('express');
 const router = express.Router();
-const stats = require("../public/assets/stats.json");				// JSON files don't have to be exported like JS files
-const { current } = require("../archetypes/connectionHandler");		// how many players online, sent to index.ejs
+const { getStats } = require("../archetypes/statsHandler");
+const { current } = require("../archetypes/connectionHandler");	// how many players online, sent to index.ejs
 
 console.log(current);
 
 /* GET home page. */
 router.get("/", (req, res) => {
-	const { games, flipped } = stats; 		// we extract games, flipped from stats.json
+	const { games, flipped } = getStats(); 		// we extract games, flipped from stats.json
 	// template + data = rendered HTML view
 	// param1: index.ejs file (our HTML template)
 	// param2: data for template

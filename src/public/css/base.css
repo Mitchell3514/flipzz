@@ -2,6 +2,8 @@
     --bgColor: lightblue;
     --tableColor: bisque;
     --popupColor: whitesmoke;
+    --chip-dark: #AB48E9;
+    --chip-light: #C694E9;
 }
 
 * {
@@ -9,14 +11,25 @@
     padding: 0;
 }
 
+.darkbg {
+    background-color: var(--chip-dark);
+}
+
+.lightbg {
+    background-color: var(--chip-light);
+}
+
 /* HEADER */
 section#top {
     width: 100vw;
-    max-height: 15vh;
+    position: relative;
 }
 
 #logo {
-    margin: 25px
+    padding: 25px;
+    padding-top: 35px;
+    text-align: center;
+    left: 50%
 }
 
 #logo img {
