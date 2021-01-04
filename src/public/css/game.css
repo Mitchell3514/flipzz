@@ -1,56 +1,131 @@
-/* GAME STATUS */
-#status {
-    margin: 10px;
-    background-color: var(--popupColor);
-    padding: 10px;
-    font-size: larger;
+main {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
 }
+
+/* LEFT (scores) */
+#left {
+    position: relative;
+    width: 30vw;
+}
+
+div.points {
+    /* positioning, more below */
+    position: absolute;
+    right: 10%;
+
+    /* sizing */
+    width: 50%;
+    height: 50px;
+
+    /* styling */
+    padding: 5px;
+    vertical-align: middle;
+    border-radius: 10px;
+    border: 1px solid black;
+    box-shadow: 2px 2px 4px slategray;
+}
+
+div.points span {
+    line-height: 50px;
+    display: inline-block;
+    height: 100%;
+    font-size: calc(1em + 1.25vw);
+}
+
+span.points:nth-child(odd) {
+    text-align: left;
+    margin-left: 5%;
+    width: 75%
+}
+span.points:nth-child(even) {
+    text-align: right;
+    right: 0%;
+    width: 15%;
+}
+
+/* positioning points */
+#you { top: 15%; }
+#opponent { bottom: 20%; }
+
 
 /* TABLE */
-#center-board {
-    margin: 2rem;
+#center {
+    height: 100%;
+    position: relative;
 }
 
-table {
-    display: table;
+#board-wrapper {
+    width: 40vw;
+    height: 40vw;
+}
+
+#board {
+    /* flex properties */
+    display: flex;
+    flex-wrap: wrap;
+    flex-flow: row wrap;
+
+    /* size */
+    width: 75%;
+    height: 75%;
+
+    /* positioning */
+    position: absolute;
+    top: 10%;
+    left: 12.5%;
+
+    /* styling */
     background-color: var(--tableColor);
-    border-collapse: separate;
-    border-spacing: 5px;
-    border-width: 4px;
+    border-radius: 5%;
+    overflow: hidden;
+    box-shadow: inset 0px 0px 0px 1px lightslategrey;
 }
 
-table, th, td {
-    border: 1px solid lightslategrey;
-}
-
-td > .chip.dark {
-    background-color: lightpink;
-}
-
-td > .chip.light {
-    background-color: indigo;
+.chip {
+    width: 100%;
+    margin: 0;
+    flex: 1 0 11%;
+    border: 1px solid slategray;
 }
 
 /* CHIPS */
-.chip {
-    height: 3rem;
-    width: 3rem;
-    padding: 5px;
+.chip div {
+    margin: 0;
+    height: 100%;
+    width: 100%;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 80%;
+    background-size: 95%;
 }
 
-.dark {
+.chip.dark div {
     background-image: url("../assets/dark.webp");
 }
 
-.light {
+.chip.light div {
     background-image: url("../assets/light.webp");
 }
 
-.placeable {
+.chip.placeable div {
     background-image: url("../assets/dark.webp");
     opacity: 0.3;
+}
+
+/* RIGHT info, time */
+#right {
+    width: 30vw;
+}
+
+/* GAME STATUS */
+#status {
+    background-color: var(--popupColor);
+    font-size: larger;
+    padding: 10px;
+    border-radius: 20px;
+    width: 80%;
+    position: relative;
+    overflow: wrap;
 }
 

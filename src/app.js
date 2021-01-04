@@ -16,6 +16,12 @@ const connectionHandler = new ConnectionHandler();
 
 const app = express();
 
+if (process.env.NODE_ENV === "dev") {
+	app.use((req, res, next) => {
+		res.set("Cache-Control", "no-store"); next(); 
+	});
+}
+
 // set express' static file path  (path.join works in all OS types)
 // uses this for EVERY request (GET, POST, PUT...)
 app.use(express.static(join(__dirname, "/public")));

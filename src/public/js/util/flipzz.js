@@ -14,8 +14,8 @@ let stopped = false;
 let gameID;
 const playerturn = document.querySelector('#turn');
 const gamestat = document.querySelector('#message');
-const scoredark = document.querySelector('#score-dark');
-const scorelight = document.querySelector('#score-light');
+const scoredark = document.querySelector('#points-you');
+const scorelight = document.querySelector('#points-opponent');
 const grids = document.querySelectorAll(".chip");               // all cell divs (to be clicked by user)
 
 
@@ -149,8 +149,8 @@ function mouseClick() { // the clicked element
 const firstFour = board.init();                             // array of Positions (first 4)
 for (const pos of firstFour) {setColor(pos);}                // color first 4
 for (const pos of board.canPlace(turn)) {setColor(pos);}    // color the placeable cells 
-scoredark.innerHTML = `Score dark: ${dark}`;
-scorelight.innerHTML = `Score light: ${light}`;
+scoredark.innerHTML = `${dark}`;
+scorelight.innerHTML = `${light}`;
 playerturn.innerHTML = `Turn: ${turn ? "light" : "dark"}`;  // dark = 0, light = 1
 
 
@@ -204,8 +204,8 @@ function place(pos) {
     totalflipped += amount;
     if (turn) {dark -= (amount-1), light += (amount) }  // if light had turn, assign light's points and subtract dark's points
     else { light -= (amount-1), dark += (amount) }
-    scoredark.innerHTML = `Score dark: ${dark}`;
-    scorelight.innerHTML = `Score light: ${light}`;
+    scoredark.innerHTML = `${dark}`;
+    scorelight.innerHTML = `${light}`;
 
     // switch turns and color placeable cells for next player
     switchTurn();
