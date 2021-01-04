@@ -1,7 +1,8 @@
+// join makes sure path works in all OS types
 const { join } = require("path");
 const fs = require("fs");
 const PATH = join(ROOT, "../stats.json");
-const { inspect: i } = require("util");
+const { inspect: i } = require("util");     //  "import inspect as i from util" met util inspect kan je objecten volledig laten zien als string
 const { log } = new (require("./logger"))({ prefix: "[StatsHandler]", color: "\x1b[34m" });
 
 // NOTE intentionally not made for multi threading
