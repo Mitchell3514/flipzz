@@ -9,5 +9,5 @@
     exports.Position = Position;
     // if client-side: exports = this.Position where this refers to Window, so it becomes a global property (can be accessed by client)
     // if server-side: exports is just module.exports
-})(typeof exports === "undefined" ? this.Classes || (this.Classes = {}) : exports)
+})(typeof exports === "undefined" ? this.Classes || (this.Classes = {}) : exports);
 // if classes is defined already, use that one

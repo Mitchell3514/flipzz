@@ -4,6 +4,7 @@
         "ecmaVersion": 2020
     },
     "env": {
+        "browser": true,
         "es6": true,
         "node": true
     },
@@ -12,5 +13,9 @@
     ],
     "rules": {
         "semi": "error"
+    },
+    "globals": {
+        "Classes": true,
+        "CFG": true
     }
 }
