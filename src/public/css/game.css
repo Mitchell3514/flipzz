@@ -2,11 +2,11 @@ main {
     display: flex;
     flex-flow: row wrap;
     max-width: 100vw;
-    justify-content: center;
+    justify-content: end;
 
     --bigfont: calc(.5em + 1.25vw);
-    --top: 15%;
-    --bottom: 20%;
+    --top: 20%;
+    --bottom: 25%;
 }
 
 .infocard {
@@ -20,7 +20,6 @@ main {
 
 /* LEFT (scores) */
 #left {
-    display: flex;
     flex: 1 1 auto;
     min-width: 10vw;
     position: relative;
@@ -29,7 +28,7 @@ main {
 div.points {
     /* positioning, more below */
     position: absolute;
-    right: 10%;
+    right: 0;
 
     /* sizing */
     height: 50px;
@@ -77,15 +76,15 @@ span.points:nth-child(even) {
 #center {
     display: flex;
     flex: 0 0 auto;
-    height: 100%;
     position: relative;
+    max-width: 100vw;
 }
 
 #board-wrapper {
     position: relative;
     margin: 0 auto;
-    width: 80vh;
-    height: 80vh;
+    width: min(80vh, 60vw);
+    height: min(80vh, 60vw);
 }
 
 #board {
@@ -146,7 +145,6 @@ span.points:nth-child(even) {
 
 /* RIGHT info, time */
 #right {
-    display: flex;
     flex: 1 1 auto;
 
     position: relative;
@@ -182,3 +180,56 @@ div#clock {
     background-color: #95F6BA;
 }
 
+@media only screen and (max-width: 950px) {
+    main {
+        flex-flow: row nowrap;
+    }
+
+    #center {
+        min-width: 100vw;
+        position: relative;
+    }
+
+    #board-wrapper {
+        width: 550px;
+        height: 550px;
+        margin: 0;
+        right: 0;
+        position: absolute;
+    }
+
+    #board {
+        margin: 0;
+        right: 0;
+        position: relative;
+    }
+
+    #left, #right {
+        text-align: center;
+    }
+
+    #left {
+        top: calc(var(--top) + 50px + .2 * 20vh);
+        position: absolute;
+        order: 0;
+        padding: 5px;
+    }
+
+    #right {
+        margin: 0;
+        position: absolute;
+        left: 0;
+        bottom: calc(var(--bottom) - .2 * (20vh + 50px));
+    }
+
+    #left div, #right div {
+        top: 0;
+        display: block;
+        position: relative;
+        margin: 5% 5%
+    }
+
+    p#status-body {
+        font-size: medium;
+    }
+}
