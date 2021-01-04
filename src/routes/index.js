@@ -2,15 +2,14 @@
 
 const express = require('express');
 const router = express.Router();
-const { join } = require("path"); 
-const stats = require(join(ROOT, "../stats.json"));	// eslint-ignore-line JSON files don't have to be exported like JS files
+const { getStats } = require("../archetypes/statsHandler");
 const { current } = require("../archetypes/connectionHandler");	// how many players online, sent to index.ejs
 
 console.log(current);
 
 /* GET home page. */
 router.get("/", (req, res) => {
-	const { games, flipped } = stats; 		// we extract games, flipped from stats.json
+	const { games, flipped } = getStats(); 		// we extract games, flipped from stats.json
 	// template + data = rendered HTML view
 	// param1: index.ejs file (our HTML template)
 	// param2: data for template
