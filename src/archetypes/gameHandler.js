@@ -10,15 +10,19 @@ function getName() {
     if (names.length) return Promise.resolve(names.splice(0, 1)[0]);
     return fetchNames();
 }
-
+let stop = false;
 function fetchNames() {
     return new Promise((resolve, reject) => {
+        if (stop) reject();
         https.get("https://api.fungenerators.com/name/generate.json?category=alien").on("response", (response) => {
             let str = "";
             response.on("data", data => str += data);
             response.once("end", () => {
                 try {
-                    const nameArray = JSON.parse(str).contents.names;
+                    const payload = JSON.parse(str);
+                    if (payload.error) return stop = true;
+                    const nameArray = payload?.content?.names;
+                    if (!nameArray) throw new Error(str);
                     const name = nameArray.splice(0, 1)[0];
                     names.push(...nameArray);
                     resolve(name);
@@ -45,7 +49,7 @@ function fetchNames() {
 
 function Game(id) {
     this.id = id;
-    getName().then(name => this.name = name);
+    getName().then(name => this.name = name).catch(() => this.name = "none");
     this.status = -1;
 
     this.board = new Board(CFG.boardsize, CFG.boardsize);
