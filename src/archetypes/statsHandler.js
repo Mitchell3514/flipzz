@@ -1,9 +1,9 @@
 // join makes sure path works in all OS types
 const { join } = require("path");
-const fs = require("fs");
+const fs = require("fs");               // filesystem
 const PATH = join(ROOT, "../stats.json");
-const { inspect: i } = require("util");     //  "import inspect as i from util" met util inspect kan je objecten volledig laten zien als string
-const { log } = new (require("./logger"))({ prefix: "[StatsHandler]", color: "\x1b[34m" });
+const { inspect: i } = require("util");     // (Node module) "import inspect as i from util" met util inspect kan je objecten volledig laten zien als string
+const { log } = new (require("./logger"))({ prefix: "[StatsHandler]", color: "\x1b[34m" }); // extract this.log from logger.js
 
 // NOTE intentionally not made for multi threading
 
@@ -11,7 +11,7 @@ let stats = null;
 let change = false;
 const defaultstats = { games: 0, flipped: 0 };
 
-function createStats() {
+function createStats() {        // updates stats
     stats = defaultstats;
     return stats;
 }
@@ -41,7 +41,7 @@ function getStats() {
 
 function writeStats() {
     if (stats === null) getStats();
-    fs.writeFile(PATH, JSON.stringify(stats), e => {
+    fs.writeFile(PATH, JSON.stringify(stats), e => {       // stats.json file gets overwritten
         if (e) console.log(e);
         log(`Stats file updated.`);
     });
