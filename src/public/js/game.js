@@ -4,7 +4,7 @@
 
 // TODO setInterval, 
 function timer() {
-    const timer = document.querySelector("#time-passed");
+    const timer = document.querySelector("#time");
     let timepassed = 
     timer.innerHTML = timepassed;
 }
