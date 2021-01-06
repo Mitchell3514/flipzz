@@ -77,9 +77,10 @@ function Game(id) {
             this.flipped += (flipped.length - 1); // -1 because of self-placement
             
             // player can place, see if next player can place
-            const canPlay = this.board.canPlace(+!color);       // array of all Positions where can be placed by other player
+            const canPlace = this.board.canPlace(+!color);       // array of all Positions where can be placed by other player
 
-            if (!canPlay.length) { // other player can't place - send who won
+            console.log(canPlace);
+            if (!canPlace.length) { // other player can't place - send who won
                 this.status++; // status 1 --> status 2
                 const winner = this.board.winner();
                 log(`[GameHandler] Game ${this.id} (${this.name}) has been won by ${winner}.`);
