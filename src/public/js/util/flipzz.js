@@ -22,6 +22,7 @@ const statusdiv = document.querySelector("div#status");
 const statusMessage = document.querySelector("p#status-body");
 const pointsPlayer = document.querySelector("#points-you");
 const pointsOpponent = document.querySelector("#points-opponent");
+const roomName = document.querySelector("#status-name");
 
 
 
@@ -49,8 +50,8 @@ socket.onmessage = function(event) {
     if (message.status !== undefined) gamestatus = message.status;
     switch(message.status) {
         case(-1):
-            gameID = message.id;
-            gameName = message.name;
+            if (message.name) roomName.innerHTML = `Room name: ${message.name}`;
+            else roomName.innerHTML = `Room ID: ${message.id}`;
             break;
 
         case(0):
