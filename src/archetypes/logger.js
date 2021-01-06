@@ -4,9 +4,9 @@ function logger({ color = "\x1b[37m", prefix = "[LOGGER]", background = "\x1b[40
     const error = "\x1b[31m";
 
     this.color = color;
-    this.log = (str) => console.log(`${background}${color}${prefix} ${reset}${background}${str}${reset}`);
-    this.warn = (str) => console.log(`${background}${color}${prefix} ${warn}${str}${reset}`)
-    this.error = (str) => console.log(`${background}${color}${prefix} ${error}${str}${reset}`);
+    this.log = (str) => process.stdout.write(`${background}${color}${prefix} ${reset}${background}${str}${reset}\n`);
+    this.warn = (str) => process.stdout.write(`${background}${color}${prefix} ${warn}${str}${reset}\n`)
+    this.error = (str) => process.stderr.write(`${background}${color}${prefix} ${error}${str}${reset}\n`);
 }
 
 module.exports = logger;
