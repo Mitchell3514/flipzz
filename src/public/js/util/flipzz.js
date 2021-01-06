@@ -3,8 +3,8 @@
 
 //TODO Status "Invalid move! Still your turn" should disappear again after next move.
 
-// For each client, we create a new WebSocket, so each player has its own ws connection with server
-const socket = new WebSocket("ws://localhost:3000");
+// @ts-ignore For each client, we create a new WebSocket, so each player has its own ws connection with server
+const socket = new WebSocket(`ws://${CFG.ADDRESS}:${CFG.PORT}`);
 /** @type {import("./Board").Board} */ // @ts-expect-error
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 // position, config and board get imported in game.ejs, BEFORE flipzz
@@ -50,11 +50,13 @@ socket.onmessage = function(event) {
     switch(message.status) {
         case(-1):
             gameID = message.id;
+            gameName = message.name;
             break;
 
         case(0):
             // LINK - ../../../views/game.ejs#players
             // TODO - set correct bg for the players
+            color = message.player;
             console.log("2 PLAYERS JOINED: GAME START");
             if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
             else updateStatus("Waiting for the opponent's move.");
@@ -67,14 +69,12 @@ socket.onmessage = function(event) {
             // case 1: This player's move has just been validated, turn switches
             // case 2: Other player's move has just been validated, now it's your turn
             if (message.valid) {
-                updateStatus("Waiting for the opponent's move.");
                 let validpos = message.position;                     // payload (pos id) sent back by server to BOTH clients
                 let newposition = validpos;                          // BOTH clients need to place to update board!!
                 place(newposition);
                 turn = message.turn;                            // NOTE change turn after placing!
-                if (turn === color) updatePlaceable();
-            } else {
-                updateStatus("Invalid move! Still your turn.");
+                if (turn === color) (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
+                else updateStatus("Waiting for the opponent's move.");
             }
             break;
 
