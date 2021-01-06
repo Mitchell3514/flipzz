@@ -3,11 +3,12 @@ global.ROOT = __dirname;
 
 // @ts-check
 const http = require("http");
-const createError = require('http-errors');
-const express = require('express');
-const { join } = require('path');
-const logger = require('morgan');
-const websocket = require('ws');
+const createError = require("http-errors");
+const express = require("express");
+const { join } = require("path");
+const logger = require("morgan");
+const websocket = require("ws");
+const { createHash } = require("crypto");
 
 // routers
 const indexRouter = require('./routes/index');
@@ -15,12 +16,6 @@ const { ConnectionHandler } = require("./archetypes/connectionHandler");
 const connectionHandler = new ConnectionHandler();
 
 const app = express();
-
-if (process.env.NODE_ENV === "dev") {
-	app.use((req, res, next) => {
-		res.set("Cache-Control", "no-store"); next(); 
-	});
-}
 
 // set express' static file path  (path.join works in all OS types)
 // uses this for EVERY request (GET, POST, PUT...)
@@ -31,6 +26,14 @@ app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger("dev"));
+
+app.use("/", (req, res, next) => {
+	const date = new Date();
+	const iphash = createHash("md5").update(req.ip).digest("hex");
+	console.log(`${date.getHours()}:${date.getMinutes()}:${date.getMinutes()} - ${iphash}`);
+	next();
+});
+
 app.use('/', indexRouter);		// route handler (middleware)
 
 // catch 404 and forward to error handler (middleware)
@@ -51,8 +54,8 @@ app.use(function (err, req, res, next) {
 });
 
 const port = process.argv[2] ?? process.env.PORT ?? 3000;
-const server = http.createServer(app).listen(port); // @ts-expect-error
-console.log(`Server started on http(s)://${server.address().address.replace("::", "localhost")}:${server.address().port}`);
+const server = http.createServer(app).listen(port); 
+console.log(`Server started on http(s)://${server.address()?.address?.replace("::", "localhost")}:${server.address()?.port}`);
 
 const wss = new websocket.Server({ server });
 
