@@ -74,7 +74,6 @@ span.points:nth-child(even) {
 
 /* TABLE */
 #center {
-    display: flex;
     flex: 0 0 auto;
     position: relative;
     max-width: 100vw;
@@ -106,14 +105,14 @@ span.points:nth-child(even) {
     background-color: var(--tableColor);
     border-radius: 5%;
     overflow: hidden;
-    box-shadow: inset 0px 0px 0px 1px lightslategrey;
+    box-shadow: inset 0px 0px 0px 2px lightslategrey;
 }
 
 .chip {
     width: 100%;
     margin: 0;
     flex: 1 0 11%;
-    border: 1px solid slategray;
+    border: 1px solid lightslategrey;
 }
 
 /* CHIPS */
@@ -154,6 +153,7 @@ span.points:nth-child(even) {
     display: inline-block;
     border-radius: 10px;
 
+    max-width: 80%; /* for margin without ruining flex */
     padding: 10px;
     text-align: center;
     font-size: var(--bigfont);
@@ -182,25 +182,20 @@ div#clock {
 
 @media only screen and (max-width: 950px) {
     main {
-        flex-flow: row nowrap;
+        flex-flow: row wrap;
     }
 
     #center {
-        min-width: 100vw;
-        position: relative;
+        flex: 1 0 100vw;
     }
 
     #board-wrapper {
-        width: 550px;
-        height: 550px;
-        margin: 0;
-        right: 0;
-        position: absolute;
+        width: 85vw;
+        height: 85vw;
+        margin: 0 auto;
     }
 
     #board {
-        margin: 0;
-        right: 0;
         position: relative;
     }
 
@@ -209,16 +204,15 @@ div#clock {
     }
 
     #left {
-        top: calc(var(--top) + 50px + .2 * 20vh);
-        position: absolute;
-        order: 0;
+        display: flex;
+        order: 1;
         padding: 5px;
     }
 
     #right {
+        order: 2;
         margin: 0;
-        position: absolute;
-        left: 0;
+        display: flex;
         bottom: calc(var(--bottom) - .2 * (20vh + 50px));
     }
 
@@ -226,7 +220,7 @@ div#clock {
         top: 0;
         display: block;
         position: relative;
-        margin: 5% 5%
+        margin: 2px auto;
     }
 
     p#status-body {
