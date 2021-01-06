@@ -38,12 +38,11 @@
                 this._getAt((this.x/2)*this.x + this.x/2) // SE
             ];
     
-            let d = 1;
             for (const toFill in toFills)
-                toFills[toFill].setColor(+[0,3].includes(Number(toFill)))   // method in Position.js
+                toFills[toFill].setColor(+[0,3].includes(Number(toFill)));   // method in Position.js
     
             return toFills;         // array of Positions
-        }
+        };
     
         this.canPlace = (color) => {
             const positions = [];
@@ -63,7 +62,7 @@
             for (const pos of this.board)
                 pos.color === 0 ? dark++ : pos.color === 1 ? light++ : null;
             return +(light > dark);
-        }
+        };
         
         // pos: Position object
         // color: 0 = dark, 1 = light
@@ -121,7 +120,7 @@
     }
     exports.Board = Board;
     // this refers to Window
-})(typeof exports === "undefined" ? 
+})(typeof exports === "undefined" ? // @ts-ignore
         this.Classes || (this.Classes = {}) 
         : exports
     , typeof exports === "undefined" ?

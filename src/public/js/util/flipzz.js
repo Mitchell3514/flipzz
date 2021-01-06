@@ -3,8 +3,8 @@
 
 //TODO Status "Invalid move! Still your turn" should disappear again after next move.
 
-// For each client, we create a new WebSocket, so each player has its own ws connection with server
-const socket = new WebSocket("ws://localhost:3000");
+// @ts-ignore For each client, we create a new WebSocket, so each player has its own ws connection with server
+const socket = new WebSocket(`ws://${CFG.ADDRESS}:${CFG.PORT}`);
 /** @type {import("./Board").Board} */ // @ts-expect-error
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 // position, config and board get imported in game.ejs, BEFORE flipzz
@@ -22,7 +22,6 @@ const statusdiv = document.querySelector("div#status");
 const statusMessage = document.querySelector("p#status-body");
 const pointsPlayer = document.querySelector("#points-you");
 const pointsOpponent = document.querySelector("#points-opponent");
-const grids = document.querySelectorAll(".chip");               // all cell divs (to be clicked by user)
 
 
 
@@ -30,7 +29,7 @@ socket.onopen = function() {
     console.log("CLIENT SENT HELLO TO SERVER...");
     let clientmessage = "Hello from the client";
     socket.send(JSON.stringify({string: clientmessage}));       // JSON object: attribute-value pairs
-}
+};
 
 
 /**
@@ -51,9 +50,13 @@ socket.onmessage = function(event) {
     switch(message.status) {
         case(-1):
             gameID = message.id;
+            gameName = message.name;
             break;
 
         case(0):
+            // LINK - ../../../views/game.ejs#players
+            // TODO - set correct bg for the players
+            color = message.player;
             console.log("2 PLAYERS JOINED: GAME START");
             if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
             else updateStatus("Waiting for the opponent's move.");
@@ -66,14 +69,12 @@ socket.onmessage = function(event) {
             // case 1: This player's move has just been validated, turn switches
             // case 2: Other player's move has just been validated, now it's your turn
             if (message.valid) {
-                updateStatus("Waiting for the opponent's move.");
                 let validpos = message.position;                     // payload (pos id) sent back by server to BOTH clients
                 let newposition = validpos;                          // BOTH clients need to place to update board!!
                 place(newposition);
                 turn = message.turn;                            // NOTE change turn after placing!
-                if (turn === color) updatePlaceable();
-            } else {
-                updateStatus("Invalid move! Still your turn.");
+                if (turn === color) (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
+                else updateStatus("Waiting for the opponent's move.");
             }
             break;
 
@@ -92,22 +93,22 @@ socket.onmessage = function(event) {
             console.log("NO KNOWN STATUS RECEIVED BY SERVER");
     }
 
-}
+};
 
   //server sends a close event only if the game was aborted from some side
 socket.onclose = function() {
     console.log("WEBSOCKET CLOSED");
-}
+};
 
 socket.onerror = function(event) {
     console.log(event);
-}
+};
 
 
 document.addEventListener("DOMContentLoaded", pageLoaded);
 
 function pageLoaded() {
-    console.log("PAGE FULLY LOADED")
+    console.log("PAGE FULLY LOADED");
     document.querySelector("#board").addEventListener("click", event => {
         mouseClick((/** @type {HTMLElement} */ (event.target)));
     });
@@ -124,7 +125,7 @@ function updateStatus(str) {
 function mouseClick(/** @type {HTMLElement} */ element) { // the clicked element
     if (gamestatus !== 1) return;
     // could be chip or its child in theory (in practice always child)
-    if (!element.classList.contains("chip")) element = element.parentElement
+    if (!element.classList.contains("chip")) element = element.parentElement;
     if (!element.classList.contains("chip")) return;   // not a chip
                                                     // dataset contains all attributes starting with data-.... (see data-pos in game.ejs)
     const posid = parseInt(element.dataset["pos"]);     // get pos-data from TD (numbers 0, 1, 2, .... 63)
@@ -166,7 +167,7 @@ const gameOver = () => {
     updateStatus(`Winner: ${light > dark ? "light" : light === dark ? "tie" : "dark"}`);
     stopped = true;
     //TODO add restart game button
-}
+};
 
 // Sends Position (id) to server (moves) --> server sends game update to client B
 function place(pos) {
@@ -182,8 +183,8 @@ function place(pos) {
 
     // Change score
     const amount = toChange.length;     // score is how much has just changed color
-    if (turn) {dark -= (amount-1), light += (amount) }  // if light had turn, assign light's points and subtract dark's points
-    else { light -= (amount-1), dark += (amount) }
+    if (turn) {dark -= (amount-1), light += (amount); }  // if light had turn, assign light's points and subtract dark's points
+    else { light -= (amount-1), dark += (amount); }
     pointsPlayer.innerHTML = `${dark}`;
     pointsOpponent.innerHTML = `${light}`;   
 }

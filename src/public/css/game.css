@@ -2,11 +2,11 @@ main {
     display: flex;
     flex-flow: row wrap;
     max-width: 100vw;
-    justify-content: center;
+    justify-content: end;
 
     --bigfont: calc(.5em + 1.25vw);
-    --top: 15%;
-    --bottom: 20%;
+    --top: 20%;
+    --bottom: 25%;
 }
 
 .infocard {
@@ -20,7 +20,6 @@ main {
 
 /* LEFT (scores) */
 #left {
-    display: flex;
     flex: 1 1 auto;
     min-width: 10vw;
     position: relative;
@@ -29,7 +28,7 @@ main {
 div.points {
     /* positioning, more below */
     position: absolute;
-    right: 10%;
+    right: 0;
 
     /* sizing */
     height: 50px;
@@ -75,17 +74,16 @@ span.points:nth-child(even) {
 
 /* TABLE */
 #center {
-    display: flex;
     flex: 0 0 auto;
-    height: 100%;
     position: relative;
+    max-width: 100vw;
 }
 
 #board-wrapper {
     position: relative;
     margin: 0 auto;
-    width: 80vh;
-    height: 80vh;
+    width: min(80vh, 60vw);
+    height: min(80vh, 60vw);
 }
 
 #board {
@@ -107,14 +105,14 @@ span.points:nth-child(even) {
     background-color: var(--tableColor);
     border-radius: 5%;
     overflow: hidden;
-    box-shadow: inset 0px 0px 0px 1px lightslategrey;
+    box-shadow: inset 0px 0px 0px 2px lightslategrey;
 }
 
 .chip {
     width: 100%;
     margin: 0;
     flex: 1 0 11%;
-    border: 1px solid slategray;
+    border: 1px solid lightslategrey;
 }
 
 /* CHIPS */
@@ -146,7 +144,6 @@ span.points:nth-child(even) {
 
 /* RIGHT info, time */
 #right {
-    display: flex;
     flex: 1 1 auto;
 
     position: relative;
@@ -156,6 +153,7 @@ span.points:nth-child(even) {
     display: inline-block;
     border-radius: 10px;
 
+    max-width: 80%; /* for margin without ruining flex */
     padding: 10px;
     text-align: center;
     font-size: var(--bigfont);
@@ -182,3 +180,50 @@ div#clock {
     background-color: #95F6BA;
 }
 
+@media only screen and (max-width: 950px) {
+    main {
+        flex-flow: row wrap;
+    }
+
+    #center {
+        flex: 1 0 100vw;
+    }
+
+    #board-wrapper {
+        width: 85vw;
+        height: 85vw;
+        margin: 0 auto;
+    }
+
+    #board {
+        position: relative;
+    }
+
+    #left, #right {
+        text-align: center;
+    }
+
+    #left {
+        display: flex;
+        order: 1;
+        padding: 5px;
+    }
+
+    #right {
+        order: 2;
+        margin: 0;
+        display: flex;
+        bottom: calc(var(--bottom) - .2 * (20vh + 50px));
+    }
+
+    #left div, #right div {
+        top: 0;
+        display: block;
+        position: relative;
+        margin: 2px auto;
+    }
+
+    p#status-body {
+        font-size: medium;
+    }
+}

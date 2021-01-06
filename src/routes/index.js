@@ -16,6 +16,14 @@ router.get("/", (req, res) => {
 	res.render("index", {connections: current, games, flipped }); // eslint-disable-line
 });
 
+// prevents caching
+router.use("/game", function nocache(req, res, next) {
+	res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+	res.header('Expires', '-1');
+	res.header('Pragma', 'no-cache');
+	next();
+});
+
 /* GET game page after pressing PLAY */
 // game.ejs is the HTML template to be rendered
 router.get("/game", (req, res) => {
