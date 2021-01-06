@@ -2,37 +2,8 @@
 const CFG = require("../public/js/util/config");
 const Board = require("../public/js/util/board").Board;     // object (function)
 const { updateStats } = require("./statsHandler") // eslint-disable-line
-const { log, error } = new (require("./logger"))({ prefix: "[GameHandler]", color: "\x1b[32m" });
-
-const https = require("https");
-const names = [];
-function getName() {
-    if (names.length) return Promise.resolve(names.splice(0, 1)[0]);
-    return fetchNames();
-}
-let stop = false;
-function fetchNames() {         // give each game a random name (retrieved from API)
-    return new Promise((resolve, reject) => {
-        if (stop) reject();
-        log(`Fetching random names.`);
-        https.get("https://api.fungenerators.com/name/generate.json?category=alien").on("response", (response) => {
-            let str = "";
-            response.on("data", data => str += data);
-            response.once("end", () => {
-                try {
-                    const payload = JSON.parse(str);
-                    if (payload.error) return stop = true;
-                    const nameArray = payload?.content?.names;
-                    if (!nameArray) throw new Error(str);
-                    const name = nameArray.splice(0, 1)[0];
-                    names.push(...nameArray);
-                    resolve(name);
-                } catch (e) { error(`Unable to resolve random names.\n${e}`); reject(e); }
-            });
-            response.once("close", () => { error(`Unable to fetch random names.`); reject(); });
-        });
-    });
-}
+const { log } = new (require("./logger"))({ prefix: "[GameHandler]", color: "\x1b[32m" });
+const { getName } = require("./randomName");
 
 /**
  * @typedef {import("./connectionHandler").ExtendedConnection} EC
@@ -50,9 +21,10 @@ function fetchNames() {         // give each game a random name (retrieved from 
 
 function Game(id) {
     this.id = id;
+    this.name = "";
     getName()
         .then(name => this.name = name)
-        .catch(() => this.name = "none")
+        .catch(() => {})
         .finally(() => log(`Game ${this.id} (${this.name}) has been initiated.`));
     this.status = -1;
 

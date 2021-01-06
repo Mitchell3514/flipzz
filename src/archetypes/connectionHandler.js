@@ -39,7 +39,7 @@ const ConnectionHandler = function ConnectionHandler() {
 		connection.on("message", (data) => {
 			if (!connection.game) connection.send(JSON.stringify({ error: true, message: "Game hasn't been initialized yet" }));
 			try {
-				const payload = JSON.parse(data.toString());		// turn client's JSON string into Object 
+				const payload = JSON.parse(data.toString()); // turn client's JSON string into Object 
 				if (typeof payload !== "object") throw new TypeError("Payload received by client is not an object");
 
 				// so far we only have payloads that should be handled by the game. (pos.id of moves)
