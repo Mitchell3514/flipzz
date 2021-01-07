@@ -3,9 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const { getStats } = require("../archetypes/statsHandler");
-const { current } = require("../archetypes/connectionHandler");	// how many players online, sent to index.ejs
-
-console.log(current);
+const { getCurrentConnections } = require("../archetypes/connectionHandler");	// how many players online, sent to index.ejs
 
 /* GET home page. */
 router.get("/", (req, res) => {
@@ -13,7 +11,7 @@ router.get("/", (req, res) => {
 	// template + data = rendered HTML view
 	// param1: index.ejs file (our HTML template)
 	// param2: data for template
-	res.render("index", {connections: current, games, flipped }); // eslint-disable-line
+	res.render("index", {connections: getCurrentConnections(), games, flipped }); // eslint-disable-line
 });
 
 // prevents caching

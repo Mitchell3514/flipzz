@@ -22,6 +22,7 @@ const statusdiv = document.querySelector("div#status");
 const statusMessage = document.querySelector("p#status-body");
 const pointsPlayer = document.querySelector("#points-you");
 const pointsOpponent = document.querySelector("#points-opponent");
+const roomName = document.querySelector("#status-name");
 
 
 
@@ -49,8 +50,8 @@ socket.onmessage = function(event) {
     if (message.status !== undefined) gamestatus = message.status;
     switch(message.status) {
         case(-1):
-            gameID = message.id;
-            gameName = message.name;
+            if (message.name) roomName.innerHTML = `Room name: ${message.name}`;
+            else roomName.innerHTML = `Room ID: ${message.id}`;
             break;
 
         case(0):
@@ -70,16 +71,19 @@ socket.onmessage = function(event) {
             // case 2: Other player's move has just been validated, now it's your turn
             if (message.valid) {
                 let validpos = message.position;                     // payload (pos id) sent back by server to BOTH clients
-                let newposition = validpos;                          // BOTH clients need to place to update board!!
+                let newposition = validpos; //TODO useless variable?                         // BOTH clients need to place to update board!!
                 place(newposition);
                 turn = message.turn;                            // NOTE change turn after placing!
-                if (turn === color) (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
+                if (turn === color) (updatePlaceable(), updateStatus("It's your turn!"));
                 else updateStatus("Waiting for the opponent's move.");
+            } else {
+                if (turn === color) (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
             }
             break;
 
         case(2):
             console.log("GAME ENDED! Restart game?");
+            place(message.position);
             gameOver();
             // TODO  add restart game button to innerHTML game.ejs in gameOver()
             break;
@@ -162,7 +166,7 @@ function setColor(pos) {
     }
 }
 
-const gameOver = () => {
+const gameOver = () => { // TODO change to "you won" or "you lost" like messages
     console.log("GAME OVER");
     updateStatus(`Winner: ${light > dark ? "light" : light === dark ? "tie" : "dark"}`);
     stopped = true;

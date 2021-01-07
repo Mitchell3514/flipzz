@@ -10,6 +10,7 @@ const { log, warn } = new (require("./logger"))({ prefix: "[ConnectionHandler]",
 
  // current is used in index.ejs, required by routes/index (how many players online)
 let current = 0;
+const getCurrentConnections = () => current;
 
 // to see what game we're connected to client-side
 let gameID = 0;
@@ -63,6 +64,6 @@ const ConnectionHandler = function ConnectionHandler() {
 
 module.exports = {
 	ConnectionHandler,
-	current,
+	getCurrentConnections,
 };
 
