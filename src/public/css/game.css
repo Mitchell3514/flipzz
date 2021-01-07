@@ -1,7 +1,10 @@
+
+/* TODO assign different status to tiles etc. (JS: add class */
+
 main {
     display: flex;
     flex-flow: row wrap;
-    max-width: 100vw;
+    /* max-width: 100vw; */
     justify-content: end;
 
     --bigfont: calc(.5em + 1.25vw);

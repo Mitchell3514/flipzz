@@ -1,3 +1,44 @@
+/* TODO use :hover for full rules? (image) */
+/* TODO Pseudo-elements ::after and ::before */
+/* TODO display:grid and position:absolute) */
+/* TODO 1 CSS animation */
+
+
+/* To center text vert. and hor. within main */
+main {
+  display: flex;
+  flex-flow: row wrap;  
+  /* max-width: 100vw;
+  max-height: 100vw; */
+  justify-content: center;
+  align-items: center;
+
+  --bigfont: calc(.5em + 1.25vw);
+  --top: 20%;
+  --bottom: 25%;
+}
+
+/* TODO alert players if their screen is below 1366x768 */
+/* MEDIA QUERY */
+@media (min-width: 70em) {
+  /* Increase the global font size on larger screens or windows
+     for better readability (larger than 70em) */
+  body {
+    font-size: 130%;
+  }
+}
+
+/* this pseudo-class refers to HTML element: local CSS variables to easily change properties */
+:root {
+  --darkColor: rgb(179, 51, 238);
+  --lightColor: rgb(201, 150, 248);
+  --borderColor: rgb(93, 70, 241);
+  --activeBorderColor: white;
+  --borderThickness: 3px;
+  --visitedColor: gray;
+  --gameFont: "Fira Sans"
+}
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -6,6 +47,112 @@ body {
 a {
   color: #00B7FF;
 }
+
+
+/* Selects top logo */
+#logo {
+  max-height: 100%;
+  transform: scale(1.2);
+}
+
+/* Selects board image div */
+#board {
+  max-height: 30%;
+  margin: 0.5px;
+  transform: scale(0.4);
+  position: relative;
+  left: 1px;
+}
+
+
+/* Whitespace: selects nested elements (descr under logo) */
+section h1 {
+  padding: 2px;
+  font: 40px var(--gameFont);
+  position: relative;
+  left: 370px;
+}
+
+/* Selects id (how to play, rules) */
+
+#left {
+  font-family: monospace;
+}
+
+#how-to-play {
+  padding: 2px;
+  margin: 2px;
+  position: relative;
+  left: 70px;
+  transform: scale(0.7);
+}
+
+/* all buttons */
+button {
+  border: var(--borderThickness) dashed var(--borderColor);
+  background-color: var(--lightColor);
+  padding: 20px;
+}
+
+#rules-button {
+  transform: scale(1.6);
+}
+
+#play-button {
+  transform: scale(2);
+  position: relative;
+  left: 670px;
+  top: 85px;
+}
+
+/* pseudo-classes indicate a state/type of the element */
+button:hover {
+  border: var(--borderThickness) dashed var(--borderColor);
+}
+
+/* while it's clicked on */
+button:active {
+  border-color: var(--activeBorderColor);
+}
+
+button:visited {
+  color: var(--visitedColor);
+}
+
+
+/* Selects id (game stats) */
+#right {
+  padding: 2px;
+  position: relative;
+  left: 900px;
+  top: 100px;
+}
+
+.statistics {
+  margin: 4px;
+  padding: 15px;
+  max-width: 70%;
+  /* all counts are right-aligned */
+  white-space: pre;
+  font-family: monospace;
+  border: var(--borderThickness) solid var(--borderColor);
+  text-align: left;
+  font-size: 120%;
+}
+
+#total-flipped {
+  background-color: rgb(53, 248, 112);
+}
+
+#players-online {
+  background-color: fuchsia;
+}
+
+#games-completed {
+  background-color: rgb(59, 235, 241);
+}
+
+
 
 .pop-up {
   position: absolute;

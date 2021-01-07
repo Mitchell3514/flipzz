@@ -15,12 +15,7 @@
 
         <section id="decoration-top">
             <div id="logo">
-                <span id="F" class="chip"> </span>
-                <span id="L" class="chip"> </span>
-                <span id="I" class="chip"> </span>
-                <span id="P" class="chip"> </span>
-                <span id="darkz" class="chip"> </span>
-                <span id="lightz" class="chip"> </span>
+                <img id="logo" src="/assets/logo_cropped.webp" alt="Logo">
             </div>
             <h1> TWO PLAYER BOARD GAME: <br> FLIP AS MANY PIECES AS POSSIBLE! </h1>
         </section>
@@ -28,16 +23,19 @@
         <section id="left">
             <h3> REVERSI RULES </h3>
             <div id="how-to-play">
-            </div>
             <!--ShowRules method is in index.js (public) folder-->
-            <button onclick="showRules()" type="submit">FULL RULES</button>
+            <button id="rules-button" onclick="showRules()" type="submit">FULL RULES</button>
+            </div>
+            <div id="board"> 
+                <img src="/assets/board.webp" alt="board">
+            </div>
         </section>
 
 
         <!--Enter game screen-->
         <section id="center">
             <form action="/game" method="get">
-                <button type="submit">PLAY</button>
+                <button id="play-button" type="submit">PLAY</button>
               </form>
         </section>
         <br>
