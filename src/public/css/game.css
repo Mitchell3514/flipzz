@@ -90,7 +90,7 @@ span.points:nth-child(even) {
 }
 
 #board {
-    /* flex properties */
+    /* flex properties TODO set to grid because they force us to */
     display: flex;
     flex-wrap: wrap;
     flex-flow: row wrap;
