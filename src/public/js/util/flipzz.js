@@ -20,9 +20,24 @@ let gamestatus;
 const statusdiv = document.querySelector("div#status");
 /** @type {HTMLSpanElement} */
 const statusMessage = document.querySelector("p#status-body");
-const pointsPlayer = document.querySelector("#points-you");
-const pointsOpponent = document.querySelector("#points-opponent");
+const pointsLight = document.querySelector("#points-light");
+const pointsDark = document.querySelector("#points-dark");
+let pointsPlayer;
+let pointsOpponent;
 const roomName = document.querySelector("#status-name");
+
+
+function setPlayerType() {
+    if (color == 1) {
+        pointsPlayer = pointsLight;
+        pointsOpponent = pointsDark;
+    } else {
+        pointsPlayer = pointsDark;
+        pointsOpponent = pointsLight;
+    }
+}
+
+setPlayerType();
 
 
 
@@ -48,6 +63,7 @@ socket.onmessage = function(event) {
     if (message.error) return console.error(`Received error from server: ${message.message}\nOur payload was: ${message.payload}`);
     
     if (message.status !== undefined) gamestatus = message.status;
+
     switch(message.status) {
         case(-1):
             if (message.name) roomName.innerHTML = `Room name: ${message.name}`;
@@ -56,7 +72,8 @@ socket.onmessage = function(event) {
 
         case(0):
             // LINK - ../../../views/game.ejs#players
-            // TODO - set correct bg for the players
+            // TODO - set correct bg for the players --> if light, add "You" to upper div
+            // 0 is dark, 1 is light
             color = message.player;
             console.log("2 PLAYERS JOINED: GAME START");
             if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
@@ -71,12 +88,11 @@ socket.onmessage = function(event) {
             // case 2: Other player's move has just been validated, now it's your turn
             if (message.valid) {
                 let validpos = message.position;                     // payload (pos id) sent back by server to BOTH clients
-                let newposition = validpos; //TODO useless variable?                         // BOTH clients need to place to update board!!
-                place(newposition);
-                turn = message.turn;                            // NOTE change turn after placing!
+                place(validpos);                                       // BOTH clients need to place to update board!!
+                turn = message.turn;                                  // change turn after placing!
                 if (turn === color) (updatePlaceable(), updateStatus("It's your turn!"));
                 else updateStatus("Waiting for the opponent's move.");
-            } else {
+            } else {            //invalid move
                 if (turn === color) (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
             }
             break;

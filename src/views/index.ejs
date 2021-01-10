@@ -15,31 +15,46 @@
 
         <section id="decoration-top">
             <div id="logo">
-                <img id="logo" src="/assets/logo_cropped.webp" alt="Logo">
+                <img id="logoimg" src="/assets/logo_cropped.webp" alt="Logo">
             </div>
             <h1> TWO PLAYER BOARD GAME: <br> FLIP AS MANY PIECES AS POSSIBLE! </h1>
         </section>
 
+        
         <section id="left">
-            <h3> REVERSI RULES </h3>
+
+            <div id="left-chips">
+                <img id="left-chips-img" src="/assets/chipsside.webp" alt="Chips">
+            </div>
+            
             <div id="how-to-play">
+                <h3> REVERSI RULES </h3>
+                &#8594 Each player is assigned a color: dark or light. <br>
+                &#8594 Surround your opponent's pieces to flip them over to your color. <br>
+                &#8594 The player with the most pieces on the board at the end of the game is the winner! <br>
+            </div>
+
             <!--ShowRules method is in index.js (public) folder-->
             <button id="rules-button" onclick="showRules()" type="submit">FULL RULES</button>
-            </div>
+
             <div id="board"> 
                 <img src="/assets/board.webp" alt="board">
             </div>
+
         </section>
 
 
         <!--Enter game screen-->
         <section id="center">
             <form action="/game" method="get">
-                <button id="play-button" type="submit">PLAY</button>
+                <button id="play-button" type="submit">PLAY!</button>
               </form>
         </section>
-        <br>
+
+        
         <section id="right">
+
+            <div id="stats"> 
             <div id="total-flipped" class="statistics">   
                 <%= flipped %> pieces flipped in total </div>       <!-- Escaped template tags-->
 
@@ -49,15 +64,24 @@
 
             <div id="games-completed" class="statistics">   
                  <%= games %> games completed </div>
+            </div>
+                 
+        <div id="right-chips">
+            <img id="right-chips-img" src="/assets/chipsside.webp" alt="Chips">
+        </div>
+
         </section>
 
-        <br> 
 
-        <div id="popup" class="hidden"> 
-            <p> You must place the piece so that an opponents piece, <br> or a row of opponents pieces, is flanked by your pieces. <br> All of the opponents pieces between your pieces are then turned over to become your color. <br> The object of the game is to own more pieces than your opponent when the game is over. </p>
+        <div id="popup" class="hidden pop-up"> 
+            <p> You must place your piece so that an opponent's piece, <br> 
+                or a row of opponents pieces, is flanked by your pieces. <br> 
+                All of the opponent's pieces between your pieces are then turned over to become your color. <br> 
+                The object of the game is to own more pieces than your opponent when the game is over. </p>
             <br>
-            <button onclick="showRules()" type="submit"> HIDE RULES AGAIN </button>
+            <button onclick="showRules()" id="hide-button" type="submit"> HIDE RULES AGAIN </button>
         </div>
+
 
         <script src="js/index.js"> </script>
     </main>

@@ -17,50 +17,59 @@
         <section id="top">
             <div id="logo">
                 <a href="./">
-                    <img src="/assets/logo_cropped.webp" alt="Logo">
+                    <!-- alt is alternate text for image, if not loaded -->
+                    <img id=logoimg src="/assets/logo_cropped.webp" alt="Logo">  
                 </a>
             </div>
         </section>
     </header>
 
     <main>
+
         <section id="left">
-            <!-- ANCHOR[id=players] -->
-            <div id="you" class="infocard points lightbg">
-                <p class="points"> You: 
-                    <span id="points-you"> 2 </span>
+            <!-- ANCHOR[id=players] YOU: /OPPONENT: DEPENDS ON PLAYER TYPE ASSIGNED: flipzz.js add innerHTML if light/dark -->
+            <div id="player-light" class="infocard points lightbg">
+                <p class="points"> You:
+                    <span id="points-light"> 2 </span>
                 </p>
             </div>
-            <div id="opponent" class="infocard points darkbg">
+
+            <div id="player-dark" class="infocard points darkbg">
                 <p class="points"> Opponent: 
-                    <span id="points-opponent"> 2 </span>
+                    <span id="points-dark"> 2 </span>
                 </p>
             </div>
+
         </section>
 
         <section id="center">
             <div id="board-wrapper">
+
                 <div id="board">
-                    <!-- Scriplet tags to embed JS in HTML-->
+                    <!-- Scriplet tags to embed JS in HTML: i = rows, j = columns-->
                     <% for (let i = 0; i < 8; i++) { %>
                         <% for(let j = 0; j < 8; j++) { %>
+                            <!-- data attribute to store data within HTML: for useful but not essential info -->
                             <div class="chip" data-pos=<%= (i*8)+j %>> 
                                 <div></div>
                             </div>
                         <% } %>
                     <% } %>
                 </div>
+
             </div>
         </section>
 
         <section id="right">
+
             <div id="status" class="infocard">
                 <p id="status-name"></p>
                 <p id="status-header"> Status </p>
                 <p id="status-body"> Waiting for second player to connect... </p>
             </div>
+
             <!-- ANCHOR[id=timer]  -->
-            <div id="clock" class="infocard">
+            <div id="timer" class="infocard">
                 <p id="time-passed"> Time passed: <br> <span id="time">0:00</span> </p>
             </div>
         </section>

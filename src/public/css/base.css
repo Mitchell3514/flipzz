@@ -1,46 +1,100 @@
 
-/* this pseudo-class refers to HTML element: local CSS variables to easily change properties */
+/* this pseudo-class refers to HTML element: global CSS variables to easily change properties (can be accessed by all DOM elements */
 :root {
     --bgColor: lightblue;
     --tableColor: bisque;
     --popupColor: whitesmoke;
-    --chip-dark: #AB48E9;
-    --chip-light: #C694E9;
+    --darkColor: #AB48E9;
+    --lightColor: #C694E9;
+    --activeBorderColor: white;
+    --borderThickness: 3px;
+    --visitedColor: gray;
+    --gameFont: 'monospace';
+    --bigfont: calc(.5em + 1.25vw);
+    --top: 20%;
+    --bottom: 25%;
 }
 
+
+
+/* MEDIA QUERY: alert is added in app.js */
+    /* Increase the global font size on larger screens or windows
+       for better readability */
+@media (max-width: 320px) {
+    body {
+      font-size: 130%;
+    }
+  }
+  
+
+/* selects all */
 * {
     margin: 0;
     padding: 0;
+    font-family: monospace;
 }
 
 html, main, header, body {
+  /* 100/100 of viewports width and height occupied */
     max-width: 100vw;
+    max-height: 100vh;
+    /* makes sure user sees ... when screen size is is not large enough */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+/* all buttons */
+button {
+    border: var(--borderThickness) dashed var(--darkColor);
+    background-color: var(--lightColor);
+    padding: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+
+  
+  /* pseudo-classes indicate a state/type of the element */
+  button:hover {
+    border: var(--borderThickness) var(--borderColor);
+  }
+  
+  /* while it's clicked on */
+  button:active {
+    border-color: var(--activeBorderColor);
+  }
+  
+  button:visited {
+    color: var(--visitedColor);
+  }
+
+
 .darkbg {
-    background-color: var(--chip-dark);
+    background-color: var(--darkColor);
 }
 
 .lightbg {
-    background-color: var(--chip-light);
+    background-color: var(--lightColor);
 }
 
 /* HEADER */
-section#top {
+/* section#top {
     width: 100vw;
     position: relative;
-}
+} */
 
+/* selects div */
 #logo {
     padding: 25px;
     padding-top: 35px;
     text-align: center;
     left: 50%
 }
-
-#logo img {
+/* 
+selects image */
+#logoimg {
     max-width: 100vw;
     max-height: 10vh;
+    transform: scale(1.4);
 }
 
 /* BODY */

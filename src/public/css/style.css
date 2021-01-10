@@ -1,172 +1,228 @@
 /* TODO use :hover for full rules? (image) */
-/* TODO Pseudo-elements ::after and ::before */
-/* TODO display:grid and position:absolute) */
-/* TODO 1 CSS animation */
+/* TODO Pseudo-elements ::after and ::before --> use absolute positioning (child elements)!! */
+/* TODO display:grid (left, center, right) 
 
-
-/* To center text vert. and hor. within main */
-main {
-  display: flex;
-  flex-flow: row wrap;  
-  /* max-width: 100vw;
-  max-height: 100vw; */
-  justify-content: center;
-  align-items: center;
-
+/* this pseudo-class refers to HTML element: global CSS variables to easily change properties (can be accessed by all DOM elements */
+:root {
+  --bgColor: lightblue;
+  --tableColor: bisque;
+  --popupColor: whitesmoke;
+  --darkColor: #AB48E9;
+  --lightColor: #C694E9;
+  --activeBorderColor: white;
+  --borderThickness: 3px;
+  --visitedColor: gray;
+  --gameFont: 'monospace';
   --bigfont: calc(.5em + 1.25vw);
   --top: 20%;
   --bottom: 25%;
 }
 
-/* TODO alert players if their screen is below 1366x768 */
-/* MEDIA QUERY */
-@media (min-width: 70em) {
-  /* Increase the global font size on larger screens or windows
-     for better readability (larger than 70em) */
-  body {
-    font-size: 130%;
+
+main {
+  display: flex;
+  flex-flow: row wrap;  
+
+  /* display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr, 2fr, 2fr, 2fr, 1fr; */
+
+  /* center text vertically and horizontally within an element */
+  justify-content: center;
+  align-items: center;
+
+}
+
+/* animation-name */
+@keyframes rotate {
+  50% {
+    transform: rotate3d(0, 1, 0, 180deg);
+  }
+  100% {
+    transform: rotate3d(0, 1, 0, 360deg);
   }
 }
 
-/* this pseudo-class refers to HTML element: local CSS variables to easily change properties */
-:root {
-  --darkColor: rgb(179, 51, 238);
-  --lightColor: rgb(201, 150, 248);
-  --borderColor: rgb(93, 70, 241);
-  --activeBorderColor: white;
-  --borderThickness: 3px;
-  --visitedColor: gray;
-  --gameFont: "Fira Sans"
-}
 
-body {
+/* body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px "Monoton";
+} */
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    LEFT                                    */
+/* -------------------------------------------------------------------------- */
+
+#left-chips {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  animation: rotate 3s linear infinite;
 }
 
-a {
-  color: #00B7FF;
+
+#left {
+  /* flex: 1 1 auto; */
+  position: relative;
 }
 
+/* Selects id of rules div */
+#how-to-play {
+  padding: 5px;
+  margin: 2px;
+  position: relative;       
+  right: 250px;
+  top: 160px;
+  width: 20vw;
+  /* for some reason it doesn't let me use var(--gameFont)?? */
+  font: 15px 'monospace';
+  border: var(--borderThickness) dashed var(--darkColor);
+}
 
-/* Selects top logo */
-#logo {
-  max-height: 100%;
-  transform: scale(1.2);
+h3 {
+  text-align: center;
+}
+
+/* 
+the general button CSS rule can be found in base.css */
+#rules-button {
+  cursor: help;
+  transform: scale(1);
+  position: relative;
+  top: 140px;
 }
 
 /* Selects board image div */
 #board {
-  max-height: 30%;
   margin: 0.5px;
   transform: scale(0.4);
   position: relative;
-  left: 1px;
+  right: 400px;
 }
 
 
-/* Whitespace: selects nested elements (descr under logo) */
+
+/* -------------------------------------------------------------------------- */
+/*                                    CENTER                                  */
+/* -------------------------------------------------------------------------- */
+
+/* for the central elements, we used absolute positioning, to keep distance relative to viewport. (nearest absolutely positioned ancestor) */
+
+/* Selects top logo: overwrites base.css */
+#logo { 
+  transform: scale(1.2);
+  position: absolute;
+  top: 10px;
+  left: 40vw;
+}
+
+
+/* selects <h1> nested in <section> (description under logo) */
 section h1 {
   padding: 2px;
-  font: 40px var(--gameFont);
-  position: relative;
-  left: 370px;
-}
-
-/* Selects id (how to play, rules) */
-
-#left {
-  font-family: monospace;
-}
-
-#how-to-play {
-  padding: 2px;
-  margin: 2px;
-  position: relative;
-  left: 70px;
-  transform: scale(0.7);
-}
-
-/* all buttons */
-button {
-  border: var(--borderThickness) dashed var(--borderColor);
-  background-color: var(--lightColor);
-  padding: 20px;
-}
-
-#rules-button {
-  transform: scale(1.6);
+  font: 30px 'monospace';
+  text-align: center;
+  /* it will use viewport as closest ancestor, if no parent positioned using absolute! */
+  position: absolute;
+  top: 150px;
+  right: 25vw;
 }
 
 #play-button {
-  transform: scale(2);
-  position: relative;
-  left: 670px;
-  top: 85px;
-}
-
-/* pseudo-classes indicate a state/type of the element */
-button:hover {
-  border: var(--borderThickness) dashed var(--borderColor);
-}
-
-/* while it's clicked on */
-button:active {
-  border-color: var(--activeBorderColor);
-}
-
-button:visited {
-  color: var(--visitedColor);
+  transform: scale(1.6);
+  position: absolute;
+  left: 690px;
+  top: 500px;
+  font-size: larger;
 }
 
 
-/* Selects id (game stats) */
-#right {
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    RIGHT                                   */
+/* -------------------------------------------------------------------------- */
+
+
+#right-chips {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  animation: rotate 3s linear infinite;
+}
+
+/* Selects div containing all 3 game stats */
+#stats {
   padding: 2px;
-  position: relative;
-  left: 900px;
-  top: 100px;
+  position: absolute;
+  right: 15vw;
+  bottom: 3vw;
 }
 
+/* Selects all 3 separate divs of game stats (class) */
 .statistics {
   margin: 4px;
-  padding: 15px;
-  max-width: 70%;
-  /* all counts are right-aligned */
-  white-space: pre;
+  padding: 10px;
+  width: 25vw;
+  height: 2vw;
+  border-radius: 15px;
+  justify-content: center;
   font-family: monospace;
-  border: var(--borderThickness) solid var(--borderColor);
-  text-align: left;
-  font-size: 120%;
-}
+  font-size: 1.4em;
+  border: var(--borderThickness) solid black;
+  }
+
+  /* absolute positioning makes sense here, since pseudo-element ::after adds a child to the div, so distance relative to div (which is also abs positioned) */
+.statistics::after {
+  background-color: rgb(243, 227, 137);
+  color: black;
+  position: absolute;
+  right: 15px;
+  content: "as of now";
+  font-size: smaller;
+  padding-left: 2px;
+  padding-right: 2px;
+} 
 
 #total-flipped {
-  background-color: rgb(53, 248, 112);
+  background: linear-gradient(fuchsia, pink, fuchsia);
 }
 
 #players-online {
-  background-color: fuchsia;
+  background: linear-gradient(aqua, pink, aqua);
 }
 
 #games-completed {
-  background-color: rgb(59, 235, 241);
+  background: linear-gradient(lightgreen, pink, lightgreen);
 }
 
 
-
+/* div: full rules text + hide button */
 .pop-up {
   position: absolute;
-  left: 10vw;
-  top: 20vh;
-  width: 20vw;
+  right: 20vw;
+  top: 35vh;
+  width: 30vw;
   height: 20vh;
-  background-color: #de4771;
+  background-color: #33f594;
   box-shadow: 3px 3px 5px #555;
 }
+/* 
+relative to absolutely positioned ancestor: div */
+#hide-button {
+  position: absolute;
+  top: 120px;
+  transform: scale(0.8);
+}
 
+/* 
+relative to absolutely positioned ancestor: div */
 .pop-up p {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-align: center;
+  width: 30vw;
 }

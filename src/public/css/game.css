@@ -1,19 +1,37 @@
 
 /* TODO assign different status to tiles etc. (JS: add class */
+/* TODO Grid instead of flexbox for board!! (see lecture)
+/* TODO display:grid (left, center, right) and position:absolute */
+/* TODO CSS animation: chips flashing? */
+/* TODO https://codepen.io/nocni_sovac/pen/poyabaB */
 
-main {
-    display: flex;
-    flex-flow: row wrap;
-    /* max-width: 100vw; */
-    justify-content: end;
-
+/* this pseudo-class refers to HTML element: global CSS variables to easily change properties (can be accessed by all DOM elements */
+:root {
+    --bgColor: lightblue;
+    --tableColor: bisque;
+    --popupColor: whitesmoke;
+    --darkColor: #AB48E9;
+    --lightColor: #C694E9;
+    --activeBorderColor: white;
+    --borderThickness: 3px;
+    --visitedColor: gray;
+    --gameFont: 'monospace';
     --bigfont: calc(.5em + 1.25vw);
     --top: 20%;
     --bottom: 25%;
 }
 
+
+main {
+    display: flex;
+    flex-flow: row wrap;
+
+    justify-content: end;
+
+}
+
 .infocard {
-    border: 1px solid gray;
+    border: var(--borderThickness) solid black;
     box-shadow: 2px 2px 4px slategray;
 }
 
@@ -43,7 +61,7 @@ div.points {
     white-space: nowrap;
     vertical-align: middle;
     border-radius: 10px;
-    border: 1px solid black;
+    border: var(--borderThickness) solid black;
 }
 
 /* Text positioning */
@@ -68,8 +86,14 @@ span.points:nth-child(even) {
 }
 
 /* positioning points */
-#you { top: var(--top); }
-#opponent { bottom: var(--bottom); }
+#player-light { 
+    top: var(--top); 
+    background-color: var(--lightColor);
+}
+#player-dark {
+     bottom: var(--bottom); 
+     background-color: var(--darkColor);
+    }
 
 /* -------------------------------------------------------------------------- */
 /*                                   CENTER                                   */
@@ -176,7 +200,7 @@ p#status-body {
     font-size: calc(var(--bigfont) - .35em);
 }
 
-div#clock {
+div#timer {
     position: absolute;
     bottom: var(--bottom);
 
