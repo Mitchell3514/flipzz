@@ -2,17 +2,12 @@
 /* this pseudo-class refers to HTML element: global CSS variables to easily change properties (can be accessed by all DOM elements */
 :root {
     --bgColor: lightblue;
-    --tableColor: bisque;
     --popupColor: whitesmoke;
     --darkColor: #AB48E9;
     --lightColor: #C694E9;
     --activeBorderColor: white;
-    --borderThickness: 3px;
     --visitedColor: gray;
     --gameFont: 'monospace';
-    --bigfont: calc(.5em + 1.25vw);
-    --top: 20%;
-    --bottom: 25%;
 }
 
 
