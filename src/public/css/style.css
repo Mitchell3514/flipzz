@@ -1,6 +1,5 @@
-/* TODO use :hover for full rules? (image) */
-/* TODO Pseudo-elements ::after and ::before --> use absolute positioning (child elements)!! */
-/* TODO display:grid (left, center, right) 
+
+/* TODO display:grid (stats?) 
 
 /* this pseudo-class refers to HTML element: global CSS variables to easily change properties (can be accessed by all DOM elements */
 :root {
