@@ -60,7 +60,8 @@ socket.onmessage = function(event) {
         case(0):
             gamestatus = 1;
             console.log("2 PLAYERS JOINED: GAME START");
-            startTimer();
+            // @ts-ignore
+            startTimer(); // eslint-disable-line
 
             // init board
             for (const pos of board.init()) 
@@ -94,6 +95,7 @@ socket.onmessage = function(event) {
         case(2):
             console.log("GAME ENDED! Restart game?");
 
+            // @ts-ignore
             stopTimer(); // eslint-disable-line
             place(message.position);
             gameOver();
@@ -104,6 +106,7 @@ socket.onmessage = function(event) {
         case(3):
             console.log("GAME ABORTED");
 
+            // @ts-ignore
             stopTimer(); // eslint-disable-line
             updateStatus("The other player has left the game :(");
 
@@ -118,6 +121,8 @@ socket.onmessage = function(event) {
   //server sends a close event only if the game was aborted from some side
 socket.onclose = function() {
     console.log("WEBSOCKET CLOSED");
+
+    updateStatus("Disconnected from server, try refreshing the page.");
 };
 
 socket.onerror = function(event) {
