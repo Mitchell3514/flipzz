@@ -1,21 +1,5 @@
 
-/* TODO display:grid (stats?) 
-
-/* this pseudo-class refers to HTML element: global CSS variables to easily change properties (can be accessed by all DOM elements */
-:root {
-  --bgColor: lightblue;
-  --tableColor: bisque;
-  --popupColor: whitesmoke;
-  --darkColor: #AB48E9;
-  --lightColor: #C694E9;
-  --activeBorderColor: white;
-  --borderThickness: 3px;
-  --visitedColor: gray;
-  --gameFont: 'monospace';
-  --bigfont: calc(.5em + 1.25vw);
-  --top: 20%;
-  --bottom: 25%;
-}
+/* TODO display:grid (stats?)  */
 
 
 main {
@@ -75,7 +59,7 @@ main {
   top: 160px;
   width: 20vw;
   /* for some reason it doesn't let me use var(--gameFont)?? */
-  font: 15px 'monospace';
+  font: 15px monospace;
   border: var(--borderThickness) dashed var(--darkColor);
 }
 

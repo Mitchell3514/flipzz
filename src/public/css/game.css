@@ -3,17 +3,19 @@
 /* TODO CSS animation: chips flashing? */
 /* TODO https://codepen.io/nocni_sovac/pen/poyabaB */
 
-main {
-    display: flex;
-    flex-flow: row wrap;
-
-    justify-content: end;
-
+:root {
     --bigfont: calc(.5em + 1.25vw);
     --top: 20%;
     --bottom: 25%;
     --borderThickness: 3px;
     --tableColor: bisque;
+}
+
+main {
+    display: flex;
+    flex-flow: row wrap;
+
+    justify-content: end;
 }
 
 .infocard {
