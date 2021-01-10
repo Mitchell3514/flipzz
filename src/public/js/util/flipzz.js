@@ -4,7 +4,7 @@
 //TODO Status "Invalid move! Still your turn" should disappear again after next move.
 
 // @ts-ignore For each client, we create a new WebSocket, so each player has its own ws connection with server
-const socket = new WebSocket(`ws://${CFG.ADDRESS}:${CFG.PORT}`);
+const socket = new WebSocket(document.location.origin.replace("http", "ws"));
 /** @type {import("./Board").Board} */ // @ts-expect-error
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 // position, config and board get imported in game.ejs, BEFORE flipzz
@@ -13,7 +13,6 @@ let light = 2;
 let turn = 0;
 let stopped = false;
 let color;
-let gameID;
 let gamestatus;
 
 /** @type {HTMLDivElement} */
