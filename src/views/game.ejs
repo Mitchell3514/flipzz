@@ -27,15 +27,16 @@
     <main>
 
         <section id="left">
-            <!-- ANCHOR[id=players] YOU: /OPPONENT: DEPENDS ON PLAYER TYPE ASSIGNED: flipzz.js add innerHTML if light/dark -->
             <div id="player-light" class="infocard points lightbg">
-                <p class="points"> You:
+                <p class="points"> 
+                    <span id="info-light"> You: </span>
                     <span id="points-light"> 2 </span>
                 </p>
             </div>
 
             <div id="player-dark" class="infocard points darkbg">
-                <p class="points"> Opponent: 
+                <p class="points"> 
+                    <span id="info-dark"> Opponent: </span>
                     <span id="points-dark"> 2 </span>
                 </p>
             </div>
@@ -69,7 +70,10 @@
 
             <!-- ANCHOR[id=timer]  -->
             <div id="timer" class="infocard">
-                <p id="time-passed"> Time passed: <br> <span id="time">0:00</span> </p>
+                <p id="time-passed"> Time passed: <br> 
+                    <span id="minutes">00</span> :
+                    <span id="seconds">00</span>
+                 </p>
             </div>
         </section>
        

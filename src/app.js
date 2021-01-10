@@ -27,6 +27,7 @@ app.set('view engine', 'ejs');
 
 app.use(logger("dev"));
 
+// log ip hash (just in to be sure)
 app.use("/", (req, res, next) => {
 	const date = new Date();
 	const iphash = createHash("md5").update(req.ip).digest("hex");

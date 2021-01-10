@@ -4,17 +4,39 @@
 
 // LINK - ../../views/game.ejs#timer
 // TODO setInterval, 
+
+let idinterval;   // used to clear interval
+let minute = 0;
+let second = 0;
+
 function timer() {
-    const timer = document.querySelector("#time");
-    let timepassed = 
-    timer.innerHTML = timepassed;
+ idinterval = setInterval(() => { updateTime(); }, 1000);
 }
 
-// TODO after game has finished, the PLAY AGAIN button must show up (see game.ejs)
-
-function restartGame() {
-    // ???
+function updateTime() {
+  if ((second + 1) == 61) {
+    second = 0;
+    minute++;
+  }
+  if (minute == 60) {
+    minute = 0;
+  }
+  document.getElementById('minutes').innerHTML = returnData(minute);
+  document.getElementById('seconds').innerHTML = returnData(second);
 }
+
+function returnData(input) {
+  return input > 10 ? input : `0${input}`;      // if digit below 10, add 0 in front
+}
+
+function stopTimer() {
+  clearInterval(idinterval);
+}
+
+// to be called in flipzz?
+timer();
+stopTimer();
+
 
 
 /* MEDIA QUERY */

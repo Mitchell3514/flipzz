@@ -12,7 +12,7 @@ let dark = 2;
 let light = 2;
 let turn = 0;
 let stopped = false;
-let color;
+let color;                    // 0 is dark, 1 is light
 let gamestatus;
 
 /** @type {HTMLDivElement} */
@@ -21,22 +21,10 @@ const statusdiv = document.querySelector("div#status");
 const statusMessage = document.querySelector("p#status-body");
 const pointsLight = document.querySelector("#points-light");
 const pointsDark = document.querySelector("#points-dark");
-let pointsPlayer;
+let pointsPlayer;       // defined in function setPlayerType(), either light or dark
 let pointsOpponent;
 const roomName = document.querySelector("#status-name");
 
-
-function setPlayerType() {
-    if (color == 1) {
-        pointsPlayer = pointsLight;
-        pointsOpponent = pointsDark;
-    } else {
-        pointsPlayer = pointsDark;
-        pointsOpponent = pointsLight;
-    }
-}
-
-setPlayerType();
 
 
 
@@ -70,11 +58,10 @@ socket.onmessage = function(event) {
             break;
 
         case(0):
-            // LINK - ../../../views/game.ejs#players
-            // TODO - set correct bg for the players --> if light, add "You" to upper div
-            // 0 is dark, 1 is light
-            color = message.player;
+            color = message.player;         // 0 is dark, 1 is light
+            setPlayerType();
             console.log("2 PLAYERS JOINED: GAME START");
+            // startTimer();
             if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
             else updateStatus("Waiting for the opponent's move.");
             gamestatus = 1;
@@ -133,6 +120,25 @@ function pageLoaded() {
     });
 }
 
+
+function setPlayerType() {
+    const infoLight = document.querySelector("#info-light");
+    const infoDark = document.querySelector("#info-dark");
+    if (color === 1) {
+        pointsPlayer = pointsLight;        
+        pointsOpponent = pointsDark;
+        infoLight.innerHTML = "You:";
+        infoDark.innerHTML = "Opponent:";
+    } else {
+        pointsPlayer = pointsDark;
+        pointsOpponent = pointsLight;
+        infoLight.innerHTML = "Opponent:";
+        infoDark.innerHTML = "You:";
+    }
+}
+
+
+
 function updateStatus(str) { 
     statusdiv.style.opacity = "0"; 
     setTimeout(() => {
@@ -185,7 +191,8 @@ const gameOver = () => { // TODO change to "you won" or "you lost" like messages
     console.log("GAME OVER");
     updateStatus(`Winner: ${light > dark ? "light" : light === dark ? "tie" : "dark"}`);
     stopped = true;
-    //TODO add restart game button
+    // stopTimer();
+  // TODO after game has finished, the PLAY AGAIN button must show up (hidden in game.ejs)s
 };
 
 // Sends Position (id) to server (moves) --> server sends game update to client B
@@ -214,3 +221,4 @@ function updatePlaceable() {
     for (const pos of placeable)
         setColor(pos);
 }
+

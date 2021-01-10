@@ -11,8 +11,8 @@
 
 
 
-/* MEDIA QUERY: alert is added in app.js */
-    /* Increase the global font size on larger screens or windows
+/* MEDIA QUERY: alert is added in index.js and game.js */
+    /* Increase the global font size smaller than 320px
        for better readability */
 @media (max-width: 320px) {
   body {
