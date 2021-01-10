@@ -26,7 +26,7 @@ function updateTime() {
 }
 
 function returnData(input) {
-  return input > 10 ? input : `0${input}`;      // if digit below 10, add 0 in front
+  return input > 9 ? input : `0${input}`;      // if digit below 10, add 0 in front
 }
 
 function stopTimer() {
