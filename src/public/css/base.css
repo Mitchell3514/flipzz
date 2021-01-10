@@ -63,11 +63,11 @@ button:visited {
 
 
 .darkbg {
-    background-color: var(--darkColor);
+    background-color: var(--darkColor) !important;
 }
 
 .lightbg {
-    background-color: var(--lightColor);
+    background-color: var(--lightColor) !important;
 }
 
 /* HEADER */

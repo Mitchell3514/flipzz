@@ -8,8 +8,8 @@ const socket = new WebSocket(document.location.origin.replace("http", "ws"));
 /** @type {import("./Board").Board} */ // @ts-expect-error
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 // position, config and board get imported in game.ejs, BEFORE flipzz
-let dark = 2;
-let light = 2;
+let darkpoints = 2;
+let lightpoints = 2;
 let turn = 0;
 let stopped = false;
 let color;                    // 0 is dark, 1 is light
@@ -19,10 +19,9 @@ let gamestatus;
 const statusdiv = document.querySelector("div#status");
 /** @type {HTMLSpanElement} */
 const statusMessage = document.querySelector("p#status-body");
-const pointsLight = document.querySelector("#points-light");
-const pointsDark = document.querySelector("#points-dark");
+const pointsYou = document.querySelector("#points-you");
+const pointsOpponent = document.querySelector("#points-opponent");
 let pointsPlayer;       // defined in function setPlayerType(), either light or dark
-let pointsOpponent;
 const roomName = document.querySelector("#status-name");
 
 
@@ -55,16 +54,26 @@ socket.onmessage = function(event) {
         case(-1):
             if (message.name) roomName.innerHTML = `Room name: ${message.name}`;
             else roomName.innerHTML = `Room ID: ${message.gameID}`;
+            
             break;
 
         case(0):
+            gamestatus = 1;
+            console.log("2 PLAYERS JOINED: GAME START");
+            startTimer();
+
+            // init board
+            for (const pos of board.init()) 
+                setColor(pos); // set board to init position
+
+            // parse data
             color = message.player;         // 0 is dark, 1 is light
             setPlayerType();
-            console.log("2 PLAYERS JOINED: GAME START");
-            // startTimer();
+
+            // change status
             if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
             else updateStatus("Waiting for the opponent's move.");
-            gamestatus = 1;
+
             break;
 
         case(1):
@@ -78,21 +87,26 @@ socket.onmessage = function(event) {
                 turn = message.turn;                                  // change turn after placing!
                 if (turn === color) (updatePlaceable(), updateStatus("It's your turn!"));
                 else updateStatus("Waiting for the opponent's move.");
-            } else {            //invalid move
-                if (turn === color) (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
-            }
+            } else (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
+            
             break;
 
         case(2):
             console.log("GAME ENDED! Restart game?");
+
+            stopTimer(); // eslint-disable-line
             place(message.position);
             gameOver();
             // TODO  add restart game button to innerHTML game.ejs in gameOver()
+
             break;
 
         case(3):
             console.log("GAME ABORTED");
+
+            stopTimer(); // eslint-disable-line
             updateStatus("The other player has left the game :(");
+
             break;
         
         default:
@@ -122,19 +136,11 @@ function pageLoaded() {
 
 
 function setPlayerType() {
-    const infoLight = document.querySelector("#info-light");
-    const infoDark = document.querySelector("#info-dark");
-    if (color === 1) {
-        pointsPlayer = pointsLight;        
-        pointsOpponent = pointsDark;
-        infoLight.innerHTML = "You:";
-        infoDark.innerHTML = "Opponent:";
-    } else {
-        pointsPlayer = pointsDark;
-        pointsOpponent = pointsLight;
-        infoLight.innerHTML = "Opponent:";
-        infoDark.innerHTML = "You:";
-    }
+    const bg = ["darkbg", "lightbg"];
+    const youDIV = document.querySelector("div#you");
+    const opponentDIV = document.querySelector("div#opponent");
+    youDIV.classList.add(bg[color]);
+    opponentDIV.classList.add(bg[color^1]);
 }
 
 
@@ -162,12 +168,6 @@ function mouseClick(/** @type {HTMLElement} */ element) { // the clicked element
         socket.send(JSON.stringify({position: posid}));          // send OBJECT with Position id propery to server --> connectionHandler calls gameHandler --> verifies
     }       
 }
-    
-
-const firstFour = board.init();                             // array of Positions (first 4)
-for (const pos of firstFour) {setColor(pos);}                // color first 4
-pointsPlayer.innerHTML = `${dark}`;
-pointsOpponent.innerHTML = `${light}`;
 
 
 // CSS: adds the colored piece to the board
@@ -189,7 +189,7 @@ function setColor(pos) {
 
 const gameOver = () => { // TODO change to "you won" or "you lost" like messages
     console.log("GAME OVER");
-    updateStatus(`Winner: ${light > dark ? "light" : light === dark ? "tie" : "dark"}`);
+    updateStatus(`Winner: ${lightpoints > darkpoints ? "light" : lightpoints === darkpoints ? "tie" : "dark"}`);
     stopped = true;
     // stopTimer();
   // TODO after game has finished, the PLAY AGAIN button must show up (hidden in game.ejs)s
@@ -209,10 +209,10 @@ function place(pos) {
 
     // Change score
     const amount = toChange.length;     // score is how much has just changed color
-    if (turn) {dark -= (amount-1), light += (amount); }  // if light had turn, assign light's points and subtract dark's points
-    else { light -= (amount-1), dark += (amount); }
-    pointsPlayer.innerHTML = `${dark}`;
-    pointsOpponent.innerHTML = `${light}`;   
+    if (turn) {darkpoints -= (amount-1), lightpoints += (amount); }  // if light had turn, assign light's points and subtract dark's points
+    else { lightpoints -= (amount-1), darkpoints += (amount); }
+    pointsPlayer.innerHTML = `${darkpoints}`;
+    pointsOpponent.innerHTML = `${lightpoints}`;   
 }
 
 function updatePlaceable() {
