@@ -11,7 +11,11 @@ router.get("/", (req, res) => {
 	// template + data = rendered HTML view
 	// param1: index.ejs file (our HTML template)
 	// param2: data for template
-	res.render("index", {connections: getCurrentConnections(), games, flipped }); // eslint-disable-line
+	res.render("index", {
+		connections: getCurrentConnections(),
+		games,
+		flipped,
+	});
 });
 
 // prevents caching
@@ -25,7 +29,9 @@ router.use("/game", function nocache(req, res, next) {
 /* GET game page after pressing PLAY */
 // game.ejs is the HTML template to be rendered
 router.get("/game", (req, res) => {
-	res.render("game");
+	res.render("game", {
+		singleplayer: req.query?.single == "true",
+	});
 });
 
 module.exports = router;
