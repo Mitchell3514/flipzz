@@ -11,7 +11,6 @@ const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 let darkpoints = 2;
 let lightpoints = 2;
 let turn = 0;
-let stopped = false;
 let color;                    // 0 is dark, 1 is light
 let gamestatus;
 
@@ -21,7 +20,6 @@ const statusdiv = document.querySelector("div#status");
 const statusMessage = document.querySelector("p#status-body");
 const pointsYou = document.querySelector("#points-you");
 const pointsOpponent = document.querySelector("#points-opponent");
-let pointsPlayer;       // defined in function setPlayerType(), either light or dark
 const roomName = document.querySelector("#status-name");
 
 
@@ -149,7 +147,7 @@ function setPlayerType() {
 }
 
 
-
+// this way the animation loads
 function updateStatus(str) { 
     statusdiv.style.opacity = "0"; 
     setTimeout(() => {
@@ -195,7 +193,6 @@ function setColor(pos) {
 const gameOver = () => { // TODO change to "you won" or "you lost" like messages
     console.log("GAME OVER");
     updateStatus(`Winner: ${lightpoints > darkpoints ? "light" : lightpoints === darkpoints ? "tie" : "dark"}`);
-    stopped = true;
     // stopTimer();
   // TODO after game has finished, the PLAY AGAIN button must show up (hidden in game.ejs)s
 };
@@ -216,8 +213,8 @@ function place(pos) {
     const amount = toChange.length;     // score is how much has just changed color
     if (turn) {darkpoints -= (amount-1), lightpoints += (amount); }  // if light had turn, assign light's points and subtract dark's points
     else { lightpoints -= (amount-1), darkpoints += (amount); }
-    pointsPlayer.innerHTML = `${darkpoints}`;
-    pointsOpponent.innerHTML = `${lightpoints}`;   
+    pointsYou.innerHTML = `${color ? lightpoints : darkpoints}`;
+    pointsOpponent.innerHTML = `${color ? darkpoints : lightpoints}`;   
 }
 
 function updatePlaceable() {
