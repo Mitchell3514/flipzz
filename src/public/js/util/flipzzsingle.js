@@ -16,8 +16,6 @@ let lightpoints = 2;
 let turn = Math.round(Math.random());
 const color = Math.round(Math.random());                    // 0 is dark, 1 is light
 
-/** @type {HTMLDivElement} */
-const statusdiv = document.querySelector("div#status");
 /** @type {HTMLSpanElement} */
 const statusMessage = document.querySelector("p#status-body");
 const pointsYou = document.querySelector("#points-you");
