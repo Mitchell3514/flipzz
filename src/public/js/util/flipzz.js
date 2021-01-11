@@ -3,7 +3,7 @@
 
 
 const EASTERtoclick = document.querySelector("div#opponent"); // NOTE Easter egg
-
+const singleplayer = (new URLSearchParams(document.location.search)).get("single") === "true";
 
 
 //TODO Status "Invalid move! Still your turn" should disappear again after next move.
@@ -23,17 +23,16 @@ let gamestatus;
 const statusdiv = document.querySelector("div#status");
 /** @type {HTMLSpanElement} */
 const statusMessage = document.querySelector("p#status-body");
+const boardDIV = document.querySelector("div#board");
 const pointsYou = document.querySelector("#points-you");
 const pointsOpponent = document.querySelector("#points-opponent");
 const roomName = document.querySelector("#status-name");
 
 
-
-
 socket.onopen = function() {
     console.log("CLIENT SENT HELLO TO SERVER...");
-    let clientmessage = "Hello from the client";
-    socket.send(JSON.stringify({string: clientmessage}));       // JSON object: attribute-value pairs
+    const payload = { type: 0, single: singleplayer };
+    socket.send(JSON.stringify(payload));       // JSON object: attribute-value pairs
 };
 
 
@@ -102,7 +101,8 @@ socket.onmessage = function(event) {
             // @ts-ignore
             stopTimer(); // eslint-disable-line
             place(message.position);
-            gameOver();
+            gameOver(message.winner);
+            boardDIV.removeEventListener("click", mouseClick);
             // TODO  add restart game button to innerHTML game.ejs in gameOver()
 
             break;
@@ -110,9 +110,10 @@ socket.onmessage = function(event) {
         case(3):
             console.log("GAME ABORTED");
 
-            // @ts-ignore
+            clearPlaceable(); // @ts-ignore
             stopTimer(); // eslint-disable-line
             updateStatus("The other player has left the game :(");
+            boardDIV.removeEventListener("click", mouseClick);
 
             break;
         
@@ -138,9 +139,7 @@ document.addEventListener("DOMContentLoaded", pageLoaded);
 
 function pageLoaded() {
     console.log("PAGE FULLY LOADED");
-    document.querySelector("#board").addEventListener("click", event => {
-        mouseClick((/** @type {HTMLElement} */ (event.target)));
-    });
+    boardDIV.addEventListener("click", mouseClick);
 }
 
 
@@ -162,7 +161,8 @@ function updateStatus(str) {
     }, 500);
 }
 
-function mouseClick(/** @type {HTMLElement} */ element) { // the clicked element
+function mouseClick(/** @type {any} */ event) { // the clicked element
+    let element = event.target;
     if (gamestatus !== 1) return;
     // could be chip or its child in theory (in practice always child)
     if (!element.classList.contains("chip")) element = element.parentElement;
@@ -196,9 +196,9 @@ function setColor(pos) {
     }
 }
 
-const gameOver = () => { // TODO change to "you won" or "you lost" like messages
+const gameOver = (winner) => { // TODO change to "you won" or "you lost" like messages
     console.log("GAME OVER");
-    updateStatus(`Winner: ${lightpoints > darkpoints ? "light" : lightpoints === darkpoints ? "tie" : "dark"}`);
+    updateStatus(winner^color ? "You lost... better luck next time!" : "Congratulations! You won :)");
     // stopTimer();
   // TODO after game has finished, the PLAY AGAIN button must show up (hidden in game.ejs)s
 };
@@ -209,7 +209,7 @@ function place(pos) {
     if (!toChange.length) return;                   // nothing flipped
 
     // remove placeable signs
-    document.querySelectorAll(".placeable").forEach(el => el.classList.remove("placeable"));
+    clearPlaceable();
 
     // Color all positions that have just been flipped (and the 1 placed)
     for (const pos of toChange) 
@@ -221,6 +221,11 @@ function place(pos) {
     else { lightpoints -= (amount-1), darkpoints += (amount); }
     pointsYou.innerHTML = `${color ? lightpoints : darkpoints}`;
     pointsOpponent.innerHTML = `${color ? darkpoints : lightpoints}`;   
+}
+
+function clearPlaceable() {
+    document.querySelectorAll(".placeable")
+        .forEach(el => el.classList.remove("placeable"));
 }
 
 function updatePlaceable() {
@@ -236,5 +241,7 @@ function updatePlaceable() {
 /*                                  EASTEREGG                                 */
 /* -------------------------------------------------------------------------- */
 function EASTERfunc() {window.location.href = (window.location.href + "?single=true").replace("??", "?"); }
-EASTERtoclick.classList.add("clickable");
-EASTERtoclick.addEventListener("click", EASTERfunc);
+if (!singleplayer) {
+    EASTERtoclick.classList.add("clickable");
+    EASTERtoclick.addEventListener("click", EASTERfunc);
+}
