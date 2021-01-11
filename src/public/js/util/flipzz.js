@@ -54,6 +54,7 @@ socket.onmessage = function(event) {
 
     switch(message.status) {
         case(-1):
+            console.log("RECEIVED GAME INFORMATION");
             if (message.name) roomName.innerHTML = `Room name: ${message.name}`;
             else roomName.innerHTML = `Room ID: ${message.gameID}`;
             
