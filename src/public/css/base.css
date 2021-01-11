@@ -88,7 +88,10 @@ selects image */
 #logoimg {
     max-width: 100vw;
     max-height: 10vh;
-    transform: scale(1.4);
+}
+
+@media only screen and (min-width: 950px) {
+    #logoimg { transform: scale(1.4); }
 }
 
 /* BODY */
@@ -100,4 +103,8 @@ body {
 /* UTILITY (pop-ups) */
 .hidden {
     display: none;
+}
+
+.clickable {
+    cursor: grab;
 }

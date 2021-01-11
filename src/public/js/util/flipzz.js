@@ -1,6 +1,11 @@
 // @ts-check
 // NO REQUIRES ON THE CLIENT SIDE!
 
+
+const EASTERtoclick = document.querySelector("div#opponent"); // NOTE Easter egg
+
+
+
 //TODO Status "Invalid move! Still your turn" should disappear again after next move.
 
 // @ts-ignore For each client, we create a new WebSocket, so each player has its own ws connection with server
@@ -73,6 +78,7 @@ socket.onmessage = function(event) {
             if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
             else updateStatus("Waiting for the opponent's move.");
 
+            EASTERtoclick.removeEventListener("click", EASTERfunc); // NOTE easter egg code
             break;
 
         case(1):
@@ -224,3 +230,11 @@ function updatePlaceable() {
         setColor(pos);
 }
 
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  EASTEREGG                                 */
+/* -------------------------------------------------------------------------- */
+function EASTERfunc() {window.location.href = (window.location.href + "?single=true").replace("??", "?"); }
+EASTERtoclick.classList.add("clickable");
+EASTERtoclick.addEventListener("click", EASTERfunc);

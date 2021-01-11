@@ -1,5 +1,11 @@
 // @ts-check
-// NO REQUIRES ON THE CLIENT SIDE!
+
+
+/* -------------------------------------------------------------------------- */
+/*                    EASTER EGG CODE - NOT TO BE LOOKED AT                   */
+/*                    ‼ MIGHT CAUSE SERIOUS EYE IRRITATION                    */
+/* -------------------------------------------------------------------------- */
+
 
 
 /** @type {import("./Board").Board} */ // @ts-expect-error
@@ -109,7 +115,7 @@ function botplace() {
         const position = placeable[Math.floor(Math.random() & placeable.length)];
         console.log(`Bot placing ${position.id}`);
         place(position.id);
-    }, (Math.random() * 2.5 + .5)*1000);
+    }, (Math.random() * 1.5 + .5)*1000);
 }
 
 // CSS: adds the colored piece to the board
