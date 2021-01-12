@@ -63,11 +63,11 @@ button:visited {
 
 
 .darkbg {
-    background-color: var(--darkColor);
+    background-color: var(--darkColor) !important;
 }
 
 .lightbg {
-    background-color: var(--lightColor);
+    background-color: var(--lightColor) !important;
 }
 
 /* HEADER */
@@ -88,7 +88,10 @@ selects image */
 #logoimg {
     max-width: 100vw;
     max-height: 10vh;
-    transform: scale(1.4);
+}
+
+@media only screen and (min-width: 950px) {
+    #logoimg { transform: scale(1.4); }
 }
 
 /* BODY */
@@ -100,4 +103,8 @@ body {
 /* UTILITY (pop-ups) */
 .hidden {
     display: none;
+}
+
+.clickable {
+    cursor: grab;
 }

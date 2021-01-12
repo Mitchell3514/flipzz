@@ -1,11 +1,13 @@
 // @ts-check
 const Game = require("./gameHandler");
+const AIGame = require("./gameAI");
+const { connect } = require("../routes");
 const { log, warn } = new (require("./logger"))({ prefix: "[ConnectionHandler]", color: "\x1b[36m" });
 
 /** Adding extra attributes to connection (websocket)
  * @typedef ExtendedConnection
  * @property {number} id Way to identify the connection for the game
- * @property {Game} game Game object for the connection
+ * @property {Game|AIGame} game Game object for the connection
  */
 
  // current is used in index.ejs, required by routes/index (how many players online)
@@ -13,12 +15,11 @@ let current = 0;
 const getCurrentConnections = () => current;
 
 // to see what game we're connected to client-side
-let gameID = 0;
-function newGame() { return new Game(gameID++); }
+function newGame(single) { return single ? new AIGame() : new Game(); }
 
 const ConnectionHandler = function ConnectionHandler() {
-	/** @type {Game} */
-	this.waiting = newGame();
+	this.waiting = newGame(false);
+	this.single = newGame(true);
 	this.connID = 0;
 
 	// connection is websocket + extra attributes
@@ -27,24 +28,35 @@ const ConnectionHandler = function ConnectionHandler() {
 		connection.id = this.connID++;
 		log(`New connection assigned ID of ${connection.id}`);
 
-		let game = this.waiting;
-		if (!game.addPlayer(connection)) {
-			game = newGame();				// add player to a new game, if full
-			game.addPlayer(connection);
-			this.waiting = game;			// again, wait for 2nd player
-		}
-		connection.game = game;				// each connection mapped to a game
-		if (game.isFull()) this.waiting = newGame();		// if 2 players added, create new game
-
 		// data: JSON string received by client --> status change: position id of move in format: {position: pos.id}
 		connection.on("message", (data) => {
-			if (!connection.game) connection.send(JSON.stringify({ error: true, message: "Game hasn't been initialized yet" }));
 			try {
-				const payload = JSON.parse(data.toString()); // turn client's JSON string into Object 
+				const payload = JSON.parse(data.toString());
 				if (typeof payload !== "object") throw new TypeError("Payload received by client is not an object");
 
+				// TYPE=0 is 'join game' payload
+				if (payload.type === 0 && !connection.game) {
+					if (payload.single === true) {
+						connection.game = this.single;
+						this.single = newGame(true);
+						connection.game.addPlayer(connection);
+					} else {
+						let game = this.waiting;
+						if (!game.addPlayer(connection)) {
+							game = newGame(); // add player to a new game, if full
+							game.addPlayer(connection);
+							this.waiting = game; // again, wait for 2nd player
+						}
+						connection.game = game;	// each connection mapped to a game
+						if (game.isFull()) this.waiting = newGame();	// if 2 players added, create new game
+					}
+					return;
+				}
+
 				// so far we only have payloads that should be handled by the game. (pos.id of moves)
-				if (connection.game && !connection.game.handle(connection.id, payload)) throw new Error("Unknown payload"); // if con assigned to a game, gameHandler called
+				if (connection.game) {
+					if (!connection.game.handle(connection.id, payload)) throw new Error("Invalid game payload."); // if con assigned to a game, gameHandler called
+				} else throw new Error("Did not understand intention");
 			} catch(e) {
 				warn(`Could not parse following payload: ${data.toString()}`);
 				connection.send(JSON.stringify({ error: true, message: e.message, payload: data })); 

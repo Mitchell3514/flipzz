@@ -21,6 +21,7 @@ main {
 .infocard {
     border: var(--borderThickness) solid black;
     box-shadow: 2px 2px 4px slategray;
+    background-color: var(--popupColor);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -74,14 +75,12 @@ span.points:nth-child(even) {
 }
 
 /* positioning points */
-#player-light { 
+#you { 
     top: var(--top); 
-    background-color: var(--lightColor);
 }
-#player-dark {
-     bottom: var(--bottom); 
-     background-color: var(--darkColor);
-    }
+#opponent {
+    bottom: var(--bottom); 
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                   CENTER                                   */
@@ -241,4 +240,31 @@ div#timer {
     p#status-body {
         font-size: medium;
     }
+}
+
+
+
+/* Easter egg */
+#opponent.clickable:hover {
+    background-color: palevioletred;
+    text-align: center;
+}
+#opponent.clickable:hover::after {
+    content:'Play against bot';
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: larger;
+    height: 100%; 
+    width: 100%;
+    left: 0;
+    top: 0;
+    background-color: rgba(255, 255, 255, .2);
+}
+#opponent.clickable:hover span#info-opponent {
+    visibility: hidden;
+}
+#opponent.clickable:hover span#points-opponent {
+    visibility: hidden;
 }

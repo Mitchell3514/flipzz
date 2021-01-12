@@ -1,6 +1,11 @@
 // @ts-check
 // NO REQUIRES ON THE CLIENT SIDE!
 
+
+const EASTERtoclick = document.querySelector("div#opponent"); // NOTE Easter egg
+const singleplayer = (new URLSearchParams(document.location.search)).get("single") === "true";
+
+
 //TODO Status "Invalid move! Still your turn" should disappear again after next move.
 
 // @ts-ignore For each client, we create a new WebSocket, so each player has its own ws connection with server
@@ -8,10 +13,9 @@ const socket = new WebSocket(document.location.origin.replace("http", "ws"));
 /** @type {import("./Board").Board} */ // @ts-expect-error
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
 // position, config and board get imported in game.ejs, BEFORE flipzz
-let dark = 2;
-let light = 2;
+let darkpoints = 2;
+let lightpoints = 2;
 let turn = 0;
-let stopped = false;
 let color;                    // 0 is dark, 1 is light
 let gamestatus;
 
@@ -19,19 +23,16 @@ let gamestatus;
 const statusdiv = document.querySelector("div#status");
 /** @type {HTMLSpanElement} */
 const statusMessage = document.querySelector("p#status-body");
-const pointsLight = document.querySelector("#points-light");
-const pointsDark = document.querySelector("#points-dark");
-let pointsPlayer;       // defined in function setPlayerType(), either light or dark
-let pointsOpponent;
+const boardDIV = document.querySelector("div#board");
+const pointsYou = document.querySelector("#points-you");
+const pointsOpponent = document.querySelector("#points-opponent");
 const roomName = document.querySelector("#status-name");
-
-
 
 
 socket.onopen = function() {
     console.log("CLIENT SENT HELLO TO SERVER...");
-    let clientmessage = "Hello from the client";
-    socket.send(JSON.stringify({string: clientmessage}));       // JSON object: attribute-value pairs
+    const payload = { type: 0, single: singleplayer };
+    socket.send(JSON.stringify(payload));       // JSON object: attribute-value pairs
 };
 
 
@@ -53,18 +54,31 @@ socket.onmessage = function(event) {
 
     switch(message.status) {
         case(-1):
+            console.log("RECEIVED GAME INFORMATION");
             if (message.name) roomName.innerHTML = `Room name: ${message.name}`;
             else roomName.innerHTML = `Room ID: ${message.gameID}`;
+            
             break;
 
         case(0):
+            gamestatus = 1;
+            console.log("2 PLAYERS JOINED: GAME START");
+            // @ts-ignore
+            startTimer(); // eslint-disable-line
+
+            // init board
+            for (const pos of board.init()) 
+                setColor(pos); // set board to init position
+
+            // parse data
             color = message.player;         // 0 is dark, 1 is light
             setPlayerType();
-            console.log("2 PLAYERS JOINED: GAME START");
-            // startTimer();
+
+            // change status
             if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
             else updateStatus("Waiting for the opponent's move.");
-            gamestatus = 1;
+
+            EASTERtoclick.removeEventListener("click", EASTERfunc); // NOTE easter egg code
             break;
 
         case(1):
@@ -78,21 +92,30 @@ socket.onmessage = function(event) {
                 turn = message.turn;                                  // change turn after placing!
                 if (turn === color) (updatePlaceable(), updateStatus("It's your turn!"));
                 else updateStatus("Waiting for the opponent's move.");
-            } else {            //invalid move
-                if (turn === color) (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
-            }
+            } else (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
+            
             break;
 
         case(2):
             console.log("GAME ENDED! Restart game?");
+
+            // @ts-ignore
+            stopTimer(); // eslint-disable-line
             place(message.position);
-            gameOver();
+            gameOver(message.winner);
+            boardDIV.removeEventListener("click", mouseClick);
             // TODO  add restart game button to innerHTML game.ejs in gameOver()
+
             break;
 
         case(3):
             console.log("GAME ABORTED");
+
+            clearPlaceable(); // @ts-ignore
+            stopTimer(); // eslint-disable-line
             updateStatus("The other player has left the game :(");
+            boardDIV.removeEventListener("click", mouseClick);
+
             break;
         
         default:
@@ -104,6 +127,8 @@ socket.onmessage = function(event) {
   //server sends a close event only if the game was aborted from some side
 socket.onclose = function() {
     console.log("WEBSOCKET CLOSED");
+
+    updateStatus("Disconnected from server, try refreshing the page.");
 };
 
 socket.onerror = function(event) {
@@ -115,30 +140,20 @@ document.addEventListener("DOMContentLoaded", pageLoaded);
 
 function pageLoaded() {
     console.log("PAGE FULLY LOADED");
-    document.querySelector("#board").addEventListener("click", event => {
-        mouseClick((/** @type {HTMLElement} */ (event.target)));
-    });
+    boardDIV.addEventListener("click", mouseClick);
 }
 
 
 function setPlayerType() {
-    const infoLight = document.querySelector("#info-light");
-    const infoDark = document.querySelector("#info-dark");
-    if (color === 1) {
-        pointsPlayer = pointsLight;        
-        pointsOpponent = pointsDark;
-        infoLight.innerHTML = "You:";
-        infoDark.innerHTML = "Opponent:";
-    } else {
-        pointsPlayer = pointsDark;
-        pointsOpponent = pointsLight;
-        infoLight.innerHTML = "Opponent:";
-        infoDark.innerHTML = "You:";
-    }
+    const bg = ["darkbg", "lightbg"];
+    const youDIV = document.querySelector("div#you");
+    const opponentDIV = document.querySelector("div#opponent");
+    youDIV.classList.add(bg[color]);
+    opponentDIV.classList.add(bg[color^1]);
 }
 
 
-
+// this way the animation loads
 function updateStatus(str) { 
     statusdiv.style.opacity = "0"; 
     setTimeout(() => {
@@ -147,7 +162,8 @@ function updateStatus(str) {
     }, 500);
 }
 
-function mouseClick(/** @type {HTMLElement} */ element) { // the clicked element
+function mouseClick(/** @type {any} */ event) { // the clicked element
+    let element = event.target;
     if (gamestatus !== 1) return;
     // could be chip or its child in theory (in practice always child)
     if (!element.classList.contains("chip")) element = element.parentElement;
@@ -162,12 +178,6 @@ function mouseClick(/** @type {HTMLElement} */ element) { // the clicked element
         socket.send(JSON.stringify({position: posid}));          // send OBJECT with Position id propery to server --> connectionHandler calls gameHandler --> verifies
     }       
 }
-    
-
-const firstFour = board.init();                             // array of Positions (first 4)
-for (const pos of firstFour) {setColor(pos);}                // color first 4
-pointsPlayer.innerHTML = `${dark}`;
-pointsOpponent.innerHTML = `${light}`;
 
 
 // CSS: adds the colored piece to the board
@@ -187,10 +197,9 @@ function setColor(pos) {
     }
 }
 
-const gameOver = () => { // TODO change to "you won" or "you lost" like messages
+const gameOver = (winner) => { // TODO change to "you won" or "you lost" like messages
     console.log("GAME OVER");
-    updateStatus(`Winner: ${light > dark ? "light" : light === dark ? "tie" : "dark"}`);
-    stopped = true;
+    updateStatus(winner^color ? "You lost... better luck next time!" : "Congratulations! You won :)");
     // stopTimer();
   // TODO after game has finished, the PLAY AGAIN button must show up (hidden in game.ejs)s
 };
@@ -201,7 +210,7 @@ function place(pos) {
     if (!toChange.length) return;                   // nothing flipped
 
     // remove placeable signs
-    document.querySelectorAll(".placeable").forEach(el => el.classList.remove("placeable"));
+    clearPlaceable();
 
     // Color all positions that have just been flipped (and the 1 placed)
     for (const pos of toChange) 
@@ -209,10 +218,15 @@ function place(pos) {
 
     // Change score
     const amount = toChange.length;     // score is how much has just changed color
-    if (turn) {dark -= (amount-1), light += (amount); }  // if light had turn, assign light's points and subtract dark's points
-    else { light -= (amount-1), dark += (amount); }
-    pointsPlayer.innerHTML = `${dark}`;
-    pointsOpponent.innerHTML = `${light}`;   
+    if (turn) {darkpoints -= (amount-1), lightpoints += (amount); }  // if light had turn, assign light's points and subtract dark's points
+    else { lightpoints -= (amount-1), darkpoints += (amount); }
+    pointsYou.innerHTML = `${color ? lightpoints : darkpoints}`;
+    pointsOpponent.innerHTML = `${color ? darkpoints : lightpoints}`;   
+}
+
+function clearPlaceable() {
+    document.querySelectorAll(".placeable")
+        .forEach(el => el.classList.remove("placeable"));
 }
 
 function updatePlaceable() {
@@ -222,3 +236,13 @@ function updatePlaceable() {
         setColor(pos);
 }
 
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  EASTEREGG                                 */
+/* -------------------------------------------------------------------------- */
+function EASTERfunc() {window.location.href = (window.location.href + "?single=true").replace("??", "?"); }
+if (!singleplayer) {
+    EASTERtoclick.classList.add("clickable");
+    EASTERtoclick.addEventListener("click", EASTERfunc);
+}

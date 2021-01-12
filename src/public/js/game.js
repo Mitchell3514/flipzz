@@ -3,39 +3,24 @@
 // Configures everything that has not to do with the game
 
 
+const timeSPAN = document.querySelector("span#time");
+const date = new Date(Date.UTC(0, 0, 0, 0, 0, 0, 0));
 let idinterval;   // used to clear interval
-let minute = 0;
-let second = 0;
+let seconds = 0;
 
-function timer() {
- idinterval = setInterval(() => { updateTime(); }, 1000);
+function startTimer() { // eslint-disable-line
+	idinterval = setInterval(() => { updateTime(); }, 1000);
 }
 
 function updateTime() {
-  if ((second + 1) == 61) {
-    second = 0;
-    minute++;
-  }
-  if (minute == 60) {
-    minute = 0;
-  }
-  document.getElementById('minutes').innerHTML = returnData(minute);
-  document.getElementById('seconds').innerHTML = returnData(second);
+	date.setUTCSeconds(seconds === 61 ? seconds = 1 : seconds++);
+	let h = date.getUTCHours() > 0 ? 3 : 0;
+	timeSPAN.innerHTML = date.toJSON().substr(14 - h, 5 + h);
 }
 
-function returnData(input) {
-  return input > 9 ? input : `0${input}`;      // if digit below 10, add 0 in front
+function stopTimer() { // eslint-disable-line
+    clearInterval(idinterval);
 }
-
-function stopTimer() {
-  clearInterval(idinterval);
-}
-
-// to be called in flipzz?
-timer();
-stopTimer();
-
-
 
 /* MEDIA QUERY */
 // alert users if their screen width is below 320px (phone width)
@@ -43,11 +28,8 @@ var mediaQueryList = window.matchMedia('(max-width: 500px)');
 mediaQueryList.addListener(screenTest);
 
 function screenTest(e) {
-  if (e.matches) {
-    /* the viewport is 320 pixels wide or less */
-    alert("This page may look better on a larger device!"); 
-  } else {
-    /* the viewport is more than than 320 pixels wide */
-	return;
-  }
+    if (e.matches) {
+		/* the viewport is 320 pixels wide or less */
+		alert("This page may look better on a larger device!"); 
+    }
 }
