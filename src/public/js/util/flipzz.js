@@ -2,11 +2,9 @@
 // NO REQUIRES ON THE CLIENT SIDE!
 
 
-const EASTERtoclick = document.querySelector("div#opponent"); // NOTE Easter egg
+const EASTERtoclick = document.querySelector("div#opponent"); // NOTE Easter egg: play against bot ;)
 const singleplayer = (new URLSearchParams(document.location.search)).get("single") === "true";
 
-
-//TODO Status "Invalid move! Still your turn" should disappear again after next move.
 
 // @ts-ignore For each client, we create a new WebSocket, so each player has its own ws connection with server
 const socket = new WebSocket(document.location.origin.replace("http", "ws"));
@@ -32,7 +30,7 @@ const roomName = document.querySelector("#status-name");
 socket.onopen = function() {
     console.log("CLIENT SENT HELLO TO SERVER...");
     const payload = { type: 0, single: singleplayer };
-    socket.send(JSON.stringify(payload));       // JSON object: attribute-value pairs
+    socket.send(JSON.stringify(payload));             // JSON object: attribute-value pairs
 };
 
 
@@ -84,8 +82,9 @@ socket.onmessage = function(event) {
         case(1):
             console.log("NEW MOVE VALIDATED BY SERVER");
             // SENT TO BOTH CLIENTS --> { status: 1, valid: true, turn: 0/1  }
-            // case 1: This player's move has just been validated, turn switches
-            // case 2: Other player's move has just been validated, now it's your turn
+                // case 1: This player's move has just been validated, turn switches
+                // case 2: Other player's move has just been validated, now it's your turn
+            // If INVALID, only sent to THIS client
             if (message.valid) {
                 let validpos = message.position;                     // payload (pos id) sent back by server to BOTH clients
                 place(validpos);                                       // BOTH clients need to place to update board!!
@@ -93,29 +92,23 @@ socket.onmessage = function(event) {
                 if (turn === color) (updatePlaceable(), updateStatus("It's your turn!"));
                 else updateStatus("Waiting for the opponent's move.");
             } else (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
-            
             break;
 
         case(2):
             console.log("GAME ENDED! Restart game?");
-
             // @ts-ignore
             stopTimer(); // eslint-disable-line
             place(message.position);
             gameOver(message.winner);
             boardDIV.removeEventListener("click", mouseClick);
-            // TODO  add restart game button to innerHTML game.ejs in gameOver()
-
             break;
 
         case(3):
             console.log("GAME ABORTED");
-
             clearPlaceable(); // @ts-ignore
             stopTimer(); // eslint-disable-line
             updateStatus("The other player has left the game :(");
             boardDIV.removeEventListener("click", mouseClick);
-
             break;
         
         default:
@@ -148,12 +141,12 @@ function setPlayerType() {
     const bg = ["darkbg", "lightbg"];
     const youDIV = document.querySelector("div#you");
     const opponentDIV = document.querySelector("div#opponent");
-    youDIV.classList.add(bg[color]);
+    youDIV.classList.add(bg[color]);                // index 0 is dark, index 1 is light
     opponentDIV.classList.add(bg[color^1]);
 }
 
 
-// this way the animation loads
+// by setting a delay, the animation loads
 function updateStatus(str) { 
     statusdiv.style.opacity = "0"; 
     setTimeout(() => {
@@ -197,12 +190,13 @@ function setColor(pos) {
     }
 }
 
-const gameOver = (winner) => { // TODO change to "you won" or "you lost" like messages
+const gameOver = (winner) => { 
     console.log("GAME OVER");
     updateStatus(winner^color ? "You lost... better luck next time!" : "Congratulations! You won :)");
     // stopTimer();
   // TODO after game has finished, the PLAY AGAIN button must show up (hidden in game.ejs)s
 };
+
 
 // Sends Position (id) to server (moves) --> server sends game update to client B
 function place(pos) {
@@ -223,6 +217,7 @@ function place(pos) {
     pointsYou.innerHTML = `${color ? lightpoints : darkpoints}`;
     pointsOpponent.innerHTML = `${color ? darkpoints : lightpoints}`;   
 }
+
 
 function clearPlaceable() {
     document.querySelectorAll(".placeable")

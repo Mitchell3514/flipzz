@@ -9,7 +9,7 @@ let idinterval;   // used to clear interval
 let seconds = 0;
 
 function startTimer() { // eslint-disable-line
-	idinterval = setInterval(() => { updateTime(); }, 1000);
+	idinterval = setInterval(() => { updateTime(); }, 1000);		// interval id needed to clear interval
 }
 
 function updateTime() {

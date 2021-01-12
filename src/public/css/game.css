@@ -77,10 +77,25 @@ span.points:nth-child(even) {
 /* positioning points */
 #you { 
     top: var(--top); 
+    position: absolute; 
 }
 #opponent {
     bottom: var(--bottom); 
 }
+
+
+ /* absolute positioning makes sense here, since pseudo-element ::before adds a child, so distance relative to parent (which is also abs positioned) */
+#you::before {
+    content: " \27BE";
+    padding-left: 2px;
+    padding-right: 2px;
+    color: black;
+    position: absolute;
+    right: 130px;
+    bottom: 22px;
+    transform: scale(3.4);
+}
+
 
 /* -------------------------------------------------------------------------- */
 /*                                   CENTER                                   */
