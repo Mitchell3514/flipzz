@@ -2,8 +2,6 @@
 
 // Configures everything that has not to do with the game
 
-// LINK - ../../views/game.ejs#timer
-// TODO setInterval, 
 
 let idinterval;   // used to clear interval
 let minute = 0;
