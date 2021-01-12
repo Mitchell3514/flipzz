@@ -54,8 +54,9 @@
                     <% for (let i = 0; i < 8; i++) { %>
                         <% for(let j = 0; j < 8; j++) { %>
                             <!-- data attribute to store data within HTML: for useful but not essential info -->
+                            <!-- NOTE why is there another div inside? -->
                             <div class="chip" data-pos=<%= (i*8)+j %>> 
-                                <div></div>
+                                <div></div>       
                             </div>
                         <% } %>
                     <% } %>

@@ -1,7 +1,4 @@
 
-/* TODO display:grid (stats?)  */
-
-
 main {
   display: flex;
   flex-flow: row wrap;  

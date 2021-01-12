@@ -1,8 +1,4 @@
 
-/* TODO Grid instead of flexbox for board? 
-/* TODO CSS animation: chips flashing? */
-/* TODO https://codepen.io/nocni_sovac/pen/poyabaB */
-
 :root {
     --bigfont: calc(.5em + 1.25vw);
     --top: 20%;
@@ -84,9 +80,10 @@ span.points:nth-child(even) {
 }
 
 
+/* adding css arrow symbol */
  /* absolute positioning makes sense here, since pseudo-element ::before adds a child, so distance relative to parent (which is also abs positioned) */
 #you::before {
-    content: " \27BE";
+    content: " \27BE";          
     padding-left: 2px;
     padding-right: 2px;
     color: black;
@@ -116,10 +113,13 @@ span.points:nth-child(even) {
 }
 
 #board {
-    /* flex properties TODO set to grid because they force us to */
-    display: flex;
-    flex-wrap: wrap;
-    flex-flow: row wrap;
+    display: grid;
+    grid-template-rows: repeat(8, calc(100%/8));
+    grid-template-columns: repeat(8, calc(100%/8));
+    /* grid-template-rows: repeat(8, 1fr);
+    grid-template-columns: repeat(8, 1fr); */
+    grid-row-gap: 0px;
+    grid-column-gap: 0px;
 
     /* size */
     width: 75%;
