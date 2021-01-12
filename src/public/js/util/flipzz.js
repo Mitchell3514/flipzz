@@ -1,7 +1,7 @@
 // @ts-check
 // NO REQUIRES ON THE CLIENT SIDE!
 
-
+const clickSound = new Audio("../assets/clicksound.mp3");
 const EASTERtoclick = document.querySelector("div#opponent"); // NOTE Easter egg: play against bot ;)
 const singleplayer = (new URLSearchParams(document.location.search)).get("single") === "true";
 
@@ -203,6 +203,7 @@ function place(pos) {
     const toChange = board.place(pos, turn);        // array of Positions sthat hould change color (just placed + flipped)
     if (!toChange.length) return;                   // nothing flipped
 
+    clickSound.play();
     // remove placeable signs
     clearPlaceable();
 
