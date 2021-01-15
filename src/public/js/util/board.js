@@ -61,7 +61,7 @@
             let dark = 0;
             for (const pos of this.board)
                 pos.color === 0 ? dark++ : pos.color === 1 ? light++ : null;
-            return +(light > dark);
+            return light === dark ? -1 : +(light > dark);
         };
         
         // pos: Position object
