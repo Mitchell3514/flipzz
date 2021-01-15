@@ -1,4 +1,3 @@
-const Game = require("./gameHandler");
 const GameHandler = require("./gameHandler");
 const { log, warn } = new (require("./logger"))({ prefix: "[AIGame]", color: "\x1b[32m" });
 
@@ -16,9 +15,6 @@ function GameAI() {
     };
 
     this.handle = (/** @type {number} */ id, data) => {
-        if (id !== this.player.id) return;
-        if (this.turn !== +!this.ai) return;
-
         const result = GameHandler.prototype.handle.call(this, id, data);
         return result ? (this.act(), true) : false;
     };

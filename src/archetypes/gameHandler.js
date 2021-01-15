@@ -115,7 +115,6 @@ Game.prototype.handle = function(/** @type {number} */ id, data) {
         // player can place, see if next player can place
         const canPlace = this.board.canPlace(+!color);       // array of all Positions where can be placed by other player
 
-        console.log(canPlace);
         if (!canPlace.length) { // other player can't place - send who won
             this.status++; // status 1 --> status 2
             const winner = this.board.winner();
