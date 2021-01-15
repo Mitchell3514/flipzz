@@ -1,5 +1,5 @@
 const GameHandler = require("./gameHandler");
-const { log, warn } = new (require("./logger"))({ prefix: "[AIGame]", color: "\x1b[32m" });
+const { log } = new (require("./logger"))({ prefix: "[AIGame]", color: "\x1b[32m" });
 
 function GameAI() { 
     GameHandler.call(this, true)
