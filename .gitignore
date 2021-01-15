@@ -5,3 +5,4 @@ dist
 stats.json
 brains/
 data/
+.idea
