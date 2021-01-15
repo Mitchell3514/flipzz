@@ -1,5 +1,5 @@
 const GameHandler = require("./gameHandler");
-const { log } = new (require("./logger"))({ prefix: "[AIGame]", color: "\x1b[32m" });
+const { log, warn } = new (require("./logger"))({ prefix: "[AIGame]", color: "\x1b[32m" });
 
 function GameAI() { 
     GameHandler.call(this, true)
@@ -30,6 +30,7 @@ function GameAI() {
         setTimeout(() => {
             const possibilities = this.board.canPlace(this.ai);
             const pos = possibilities[Math.floor(Math.random() * possibilities.length)];
+            if (!pos) return warn(`GameAI [${this.id}] did not see a move.`)
             GameHandler.prototype.handle.call(this, GameAI.aID, { position: pos.id });
         }, ((Math.random() * 1.5) + .5)*1000);
     };
