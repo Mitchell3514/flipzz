@@ -1,3 +1,5 @@
+
+
 function logger({ color = "\x1b[37m", prefix = "[LOGGER]", background = "\x1b[40m" } = {}) {
     const reset = "\x1b[0m";
     const warn = "\x1b[33m";

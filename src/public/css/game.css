@@ -257,6 +257,14 @@ div#timer {
     }
 }
 
+/* play again button  */
+#play-again {
+    transform: scale(1.5);
+    position: relative;
+    left: 260px;
+    top: 340px;
+}
+
 
 
 /* Easter egg */

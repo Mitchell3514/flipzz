@@ -55,7 +55,6 @@
                     <% for (let i = 0; i < 8; i++) { %>
                         <% for(let j = 0; j < 8; j++) { %>
                             <!-- data attribute to store data within HTML: for useful but not essential info -->
-                            <!-- NOTE why is there another div inside? -->
                             <div class="chip" data-pos=<%= (i*8)+j %>> 
                                 <div></div>       
                             </div>
@@ -73,13 +72,24 @@
                 <p id="status-body"> Waiting for second player to connect... </p>
             </div>
 
-            <!-- ANCHOR[id=timer]  -->
             <div id="timer" class="infocard">
                 <p id="time-passed"> Time passed: <br> 
                     <span id="time">00:00</span>
                  </p>
             </div>
+
+            
+        <div id="play-again" class="hidden">
+
+            <form action="/game" method="get">
+                <button id="play-again-button" type="submit">PLAY AGAIN!</button>
+              </form>
+
+        </div>
+        
+
         </section>
+
        
 
     </main>

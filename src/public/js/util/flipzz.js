@@ -25,6 +25,7 @@ const pointsYou = document.querySelector("#points-you");
 const pointsOpponent = document.querySelector("#points-opponent");
 const roomName = document.querySelector("#status-name");
 const clickSound = new Audio("../assets/clicksound.mp3");
+const playAgainButton = document.querySelector("#play-again");
 
 
 socket.onopen = function() {
@@ -101,6 +102,7 @@ socket.onmessage = function(event) {
             place(message.position);
             gameOver(message.winner);
             boardDIV.removeEventListener("click", mouseClick);
+            playAgainButton.classList.remove("hidden");             //play again button shows up
             break;
 
         case(3):
@@ -109,6 +111,7 @@ socket.onmessage = function(event) {
             stopTimer(); // eslint-disable-line
             updateStatus("The other player has left the game :(");
             boardDIV.removeEventListener("click", mouseClick);
+            playAgainButton.classList.remove("hidden");         
             break;
         
         default:
@@ -194,8 +197,6 @@ const gameOver = (winner) => {
     console.log("GAME OVER");
     if (winner === -1) updateStatus("It's a tie!");
     else updateStatus(winner^color ? "You lost... better luck next time!" : "Congratulations! You won :)");
-    // stopTimer();
-  // TODO after game has finished, the PLAY AGAIN button must show up (hidden in game.ejs)s
 };
 
 

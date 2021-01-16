@@ -4,7 +4,7 @@ global.ROOT = __dirname;
 // @ts-check
 const http = require("http");
 const createError = require("http-errors");
-const express = require("express");
+const express = require("express");				// express: this node.js framework sends HTTP responses for us 
 const { join } = require("path");
 const logger = require("morgan");
 const websocket = require("ws");
@@ -17,11 +17,12 @@ const connectionHandler = new ConnectionHandler();
 
 const app = express();
 
-// set express' static file path  (path.join works in all OS types)
+// set express' static file path to send HTTP responses  (path.join works in all OS types)
 // uses this for EVERY request (GET, POST, PUT...)
+// Express will always look for routes/index 
 app.use(express.static(join(__dirname, "/public")));
 
-// view engine setup: views directory contains all templates
+// view engine setup: views directory containing all EJS templates
 app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -35,7 +36,7 @@ app.use("/", (req, res, next) => {
 	next();
 });
 
-app.use('/', indexRouter);		// route handler (middleware)
+app.use('/', indexRouter);		// route handler (middleware) --> routes/index
 
 // catch 404 and forward to error handler (middleware)
 app.use(function (req, res, next) {

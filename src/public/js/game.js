@@ -8,6 +8,8 @@ const date = new Date(Date.UTC(0, 0, 0, 0, 0, 0, 0));
 let idinterval;   // used to clear interval
 let seconds = 0;
 
+
+
 function startTimer() { // eslint-disable-line
 	idinterval = setInterval(() => { updateTime(); }, 1000);		// interval id needed to clear interval
 }
@@ -23,7 +25,7 @@ function stopTimer() { // eslint-disable-line
 }
 
 /* MEDIA QUERY */
-// alert users if their screen width is below 320px (phone width)
+// alert users if their screen width is below 500px 
 var mediaQueryList = window.matchMedia('(max-width: 500px)');
 mediaQueryList.addListener(screenTest);
 
