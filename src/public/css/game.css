@@ -29,6 +29,7 @@ button#soundbutton, img#soundIcon {
     position: fixed;
     top: 0;
     right: 0;
+    padding: 10px;
 }
 
 /* -------------------------------------------------------------------------- */
