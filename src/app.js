@@ -31,9 +31,8 @@ app.use(logger("dev"));
 
 // log ip hash (just in to be sure)
 app.use("/", (req, res, next) => {
-	const date = new Date();
 	const iphash = createHash("md5").update(req.ip).digest("hex");
-	log(`${date.getHours()}:${date.getMinutes()}:${date.getMinutes()} - ${iphash}`);
+	log(`${new Date().toJSON().substring(11,19)} - ${iphash}`);
 	next();
 });
 
