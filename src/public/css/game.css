@@ -257,8 +257,8 @@ div#timer {
     }
 }
 
-/* play again button  */
-#play-again {
+/* selects play again button class  */
+.play-again-button {
     transform: scale(1.5);
     position: relative;
     left: 260px;

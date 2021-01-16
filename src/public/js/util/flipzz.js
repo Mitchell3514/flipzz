@@ -25,7 +25,7 @@ const boardDIV = document.querySelector("div#board");
 const pointsYou = document.querySelector("#points-you");
 const pointsOpponent = document.querySelector("#points-opponent");
 const roomName = document.querySelector("#status-name");
-const playAgainButton = document.querySelector("#play-again");
+const playAgainButton = document.querySelector("#play-again-button");       // hidden button
 
 
 socket.onopen = function() {
@@ -82,7 +82,7 @@ socket.onmessage = function(event) {
 
         case(1):
             console.log("NEW MOVE VALIDATED BY SERVER");
-            // SENT TO BOTH CLIENTS --> { status: 1, valid: true, turn: 0/1  }
+            // IF VALID: SENT TO BOTH CLIENTS --> { status: 1, valid: true, turn: 0/1  }
                 // case 1: This player's move has just been validated, turn switches
                 // case 2: Other player's move has just been validated, now it's your turn
             // If INVALID, only sent to THIS client
@@ -92,7 +92,7 @@ socket.onmessage = function(event) {
                 turn = message.turn;                                  // change turn after placing!
                 if (turn === color) (updatePlaceable(), updateStatus("It's your turn!"));
                 else updateStatus("Waiting for the opponent's move.");
-            } else (updatePlaceable(), updateStatus("Invalid move! Still your turn."));
+            } else if (turn == color) (updatePlaceable(), updateStatus("Invalid move! Still your turn."));  // if no turn, ignore invalid move.
             break;
 
         case(2):
