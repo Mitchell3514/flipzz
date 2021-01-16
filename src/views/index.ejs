@@ -39,7 +39,7 @@
             </div>
 
             <!--ShowRules method is in index.js (public) folder-->
-            <button id="rules-button" onclick="showRules()" type="submit">FULL RULES</button>
+            <button id="rules-button" class="btn" onclick="showRules()" type="submit">FULL RULES</button>
 
             <div id="board"> 
                 <img src="/assets/board.webp" alt="board">
@@ -51,7 +51,7 @@
         <!--Enter game screen-->
         <section id="center">
             <form action="/game" method="get">
-                <button id="play-button" type="submit">PLAY!</button>
+                <button id="play-button" class="btn" type="submit">PLAY!</button>
               </form>
         </section>
 
@@ -82,7 +82,7 @@
                 All of the opponent's pieces between your pieces are then turned over to become your color. <br> 
                 The object of the game is to own more pieces than your opponent when the game is over. </p>
             <br>
-            <button onclick="showRules()" id="hide-button" type="submit"> HIDE RULES AGAIN </button>
+            <button onclick="showRules()" class="btn" id="hide-button" type="submit"> HIDE RULES AGAIN </button>
         </div>
 
 

@@ -21,6 +21,17 @@ main {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                                   HEADER                                   */
+/* -------------------------------------------------------------------------- */
+
+/* sound button */
+button#soundbutton, img#soundIcon {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+/* -------------------------------------------------------------------------- */
 /*                                    LEFT                                    */
 /* -------------------------------------------------------------------------- */
 
@@ -209,6 +220,18 @@ div#timer {
     background-color: #95F6BA;
 }
 
+/* selects play again button class  */
+.play-again-button {
+    transform: scale(1.5);
+    position: relative;
+    left: 260px;
+    top: 340px;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 MEDIA QUERY                                */
+/* -------------------------------------------------------------------------- */
+
 @media only screen and (max-width: 950px) {
     main {
         flex-flow: row wrap;
@@ -257,17 +280,13 @@ div#timer {
     }
 }
 
-/* selects play again button class  */
-.play-again-button {
-    transform: scale(1.5);
-    position: relative;
-    left: 260px;
-    top: 340px;
-}
 
 
 
-/* Easter egg */
+/* -------------------------------------------------------------------------- */
+/*                         SINGLEPLAYER / EASTEREGG                           */
+/* -------------------------------------------------------------------------- */
+
 #opponent.clickable:hover {
     background-color: palevioletred;
     text-align: center;

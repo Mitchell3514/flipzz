@@ -39,25 +39,28 @@ html, main, header, body {
 
 /* all buttons */
 button {
+    cursor: pointer;
+}
+
+button.btn {
     border: var(--borderThickness) dashed var(--darkColor);
     background-color: var(--lightColor);
     padding: 20px;
     border-radius: 15px;
-    cursor: pointer;
 }
 
   
 /* pseudo-classes indicate a state/type of the element */
-button:hover {
+button.btn:hover {
     border: var(--borderThickness) var(--borderColor);
 }
 
 /* while it's clicked on */
-button:active {
+button.btn:active {
     border-color: var(--activeBorderColor);
 }
 
-button:visited {
+button.btn:visited {
     color: var(--visitedColor);
 }
 
@@ -102,7 +105,7 @@ body {
 
 /* UTILITY (pop-ups, play again button) */
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .clickable {

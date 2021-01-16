@@ -25,6 +25,9 @@
                     <img id=logoimg src="/assets/logo_cropped.webp" alt="Logo">  
                 </a>
             </div>
+            <button id="soundButton" type="button" onclick="setSound()"> 
+                <img id="soundIcon" src="./assets/volume.svg">
+            </button>
         </section>
     </header>
 
@@ -78,16 +81,12 @@
                  </p>
             </div>
 
-            
-        <div id="play-again" class="play-again-button">
-
-            <form action="/game" method="get">
-                <button id="play-again-button" class="hidden" type="submit">PLAY AGAIN!</button>
-              </form>
-
-        </div>
+            <div id="play-again" class="play-again-button hidden">
+                <form action="/game" method="get">
+                    <button class="btn" id="play-again-button" type="submit">PLAY AGAIN!</button>
+                </form>
+            </div>
         
-
         </section>
 
        

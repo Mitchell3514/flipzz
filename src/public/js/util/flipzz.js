@@ -2,7 +2,14 @@
 // NO REQUIRES ON THE CLIENT SIDE!
 
 const EASTERtoclick = document.querySelector("div#opponent"); // NOTE Easter egg: play against bot ;)
-const singleplayer = (new URLSearchParams(document.location.search)).get("single") === "true";
+
+/* -------------------------------------------------------------------------- */
+/*                                 URL PARAMS                                 */
+/* -------------------------------------------------------------------------- */
+const params = new URLSearchParams(document.location.search);
+const singleplayer = params.get("single") === "true";
+let volume = params.get("silent") === "true" ? 0 : 2;
+
 
 
 // @ts-ignore For each client, we create a new WebSocket, so each player has its own ws connection with server
@@ -24,8 +31,10 @@ const boardDIV = document.querySelector("div#board");
 const pointsYou = document.querySelector("#points-you");
 const pointsOpponent = document.querySelector("#points-opponent");
 const roomName = document.querySelector("#status-name");
-const playAgainButton = document.querySelector("#play-again-button");       // hidden button
+const playAgainButton = document.querySelector("#play-again");       // hidden button
 const clickSound = new Audio("../assets/clicksound.mp3");
+/** @type {HTMLImageElement} */
+const soundIconIMG = document.querySelector("#soundIcon");
 
 
 socket.onopen = function() {
@@ -235,6 +244,15 @@ function updatePlaceable() {
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                                SOUND TOGGLE                                */
+/* -------------------------------------------------------------------------- */
+function setSound(change = true) { 
+    if (change) volume - 1 < 0 ? volume = 2 : volume -= 1;
+    clickSound.volume = volume/10;
+    soundIconIMG.src = `./assets/volume_${["off", "low", "full"][volume]}.svg`;
+}
+setSound(false);
 
 /* -------------------------------------------------------------------------- */
 /*                                  EASTEREGG                                 */
