@@ -111,6 +111,7 @@ socket.onmessage = function(event) {
             stopTimer(); // eslint-disable-line
             updateStatus("The other player has left the game :(");
             boardDIV.removeEventListener("click", mouseClick);
+            playAgainButton.classList.remove("hidden");         
             break;
         
         default:
