@@ -1,7 +1,7 @@
 {
   "name": "flippz",
   "version": "0.1.0",
-  "description": "Othello's time has come; introducing Flippz. A refreshed online multiplayer experience for a game that never gets old.",
+  "description": "Reversi- 's time has come; introducing Flippz. A refreshed online multiplayer experience for a game that never gets old.",
   "main": "dist/app.js",
   "scripts": {
     "build": "gulp build && echo You can now run the server with \"node ./dist/app.js\"",

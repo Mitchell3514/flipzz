@@ -25,6 +25,7 @@ const boardDIV = document.querySelector("div#board");
 const pointsYou = document.querySelector("#points-you");
 const pointsOpponent = document.querySelector("#points-opponent");
 const roomName = document.querySelector("#status-name");
+const playAgainButton = document.querySelector("#play-again");
 
 
 socket.onopen = function() {
@@ -101,6 +102,7 @@ socket.onmessage = function(event) {
             place(message.position);
             gameOver(message.winner);
             boardDIV.removeEventListener("click", mouseClick);
+            playAgainButton.classList.remove("hidden");             //play again button shows up
             break;
 
         case(3):
@@ -193,8 +195,6 @@ function setColor(pos) {
 const gameOver = (winner) => { 
     console.log("GAME OVER");
     updateStatus(winner^color ? "You lost... better luck next time!" : "Congratulations! You won :)");
-    // stopTimer();
-  // TODO after game has finished, the PLAY AGAIN button must show up (hidden in game.ejs)s
 };
 
 

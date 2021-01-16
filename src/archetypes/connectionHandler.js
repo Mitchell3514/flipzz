@@ -3,16 +3,19 @@ const Game = require("./gameHandler");
 const AIGame = require("./gameAI");
 const { connect } = require("../routes");
 const { log, warn } = new (require("./logger"))({ prefix: "[ConnectionHandler]", color: "\x1b[36m" });
+// extract the functions this.log and this.warn of the newly created Logger object.
+// = new Logger(({ prefix: "[ConnectionHandler]", color: "\x1b[36m" }))
 
 /** Adding extra attributes to connection (websocket)
+ * Letting TypeScript know what is happening
  * @typedef ExtendedConnection
  * @property {number} id Way to identify the connection for the game
  * @property {Game|AIGame} game Game object for the connection
  */
 
- // current is used in index.ejs, required by routes/index (how many players online)
+
 let current = 0;
-const getCurrentConnections = () => current;
+const getCurrentConnections = () => current;	 // required by routes/index (how many players online)
 
 // to see what game we're connected to client-side
 function newGame(single) { return single ? new AIGame() : new Game(); }
