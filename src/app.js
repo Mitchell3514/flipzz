@@ -57,7 +57,10 @@ app.use(function (err, req, res, next) {
 const port = parseInt(process.argv[2] ?? process.env.PORT ?? 3000);
 if (isNaN(port)) throw new TypeError("Port is not of type number");
 
-const server = http.createServer(app).listen(port); 
+let server;
+try {
+	server = http.createServer(app).listen(port);
+} catch (e) { console.log(e); process.exit(1); }
 console.log(`Server started on http(s)://${server.address()?.address?.replace("::", "localhost")}:${server.address()?.port}`);
 
 const wss = new websocket.Server({ server });
