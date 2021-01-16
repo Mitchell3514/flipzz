@@ -5,13 +5,9 @@
   "main": "dist/app.js",
   "scripts": {
     "build": "gulp build && echo You can now run the server with \"node ./dist/app.js\"",
-
-
-    "run": "gulp build && node -r dotenv/config dist/app.js || echo H̸̨̢̧̹͙̜̯̟͋̈́͒̈͘͠e̶̪̭͚̻͈͖̞͎̫̫̬̽̓̅͒̂̈́̅̔̐̈́͜l̵̛̮̗̲̼͑̈́̌̏̋̆͠p̵̧͂̎̎̋͆ ̸̯̖̺̱͍̃m̵̧͔͂͌̽̈́̽̂̕ȩ̸̡͈̺̹̮̭͎͉̫̳̿̈́͑ͅ ̵̡͍͈̗̦̫̮̱͚̬͈̍̍͛̂f̷̡̛̠͔̥͔͓͓̌̄̅̉͌̒͑͝ẳ̵͎͈̰̖̺̭̥̥͔̩̻͈̫͎̌̈̓̇͑̈́̂̈͘͠͠ͅt̴͇́̀̽̿ḧ̴̢̢̹̹̳͓͊͠e̴̡̮͉̳̬̳̙̪̼̻̫̫̮̔̓̔̆̿̽͘͜r̶̠̞̀̈́͆́̿͗̃̊̈́̎,̶̱͇͙̟͔̬̯͉̼͑ ̷̢͖̦̤̥͉͇͙̮̼̯̺̙̃̎͗̓f̸̹̦̙̭͎̲̯̥͇̙̪͉͍͓͍̾ò̴̢̪̱͙̠͍͕͈̈́̉̐̕͠r̸̛̠̮͖͉̝̩͉̞̲͋͐̔̿̃͌͐̇̌̓̓̾̓͘͜ ̸̧̨̰͉̲̭̹̪̩̦̎̓͜͝ͅI̵̛̯̭̗͙̭̬͇̣̲̳͖̞̺̤͐͑ ̴̡̳͎̠̜̲̮̱̦͇͇͙̯̟̀͊̓́͐ͅḧ̵̛̛̻͓̳͚͔͍̣͈̲̩͔̜̟̱́̓̀́̓̓͘͝ą̷̛̰͎͖̣̜͇̟͈̩̔̈́͊̉̃̓̀̍̽̌͆̆͘v̷̱̟̮̦̖̮̘͎̞̙͚͎̠͐ȩ̵̦͓̺̱̟̤̮̤̜̹̹̈́̂̃̈͌̾̐̃̋̚ͅ ̶̯͓̳̹̓̌̓͋́͂͐͑̉̈͋̋̕͝c̷̢̩̰̺͕͙̥͎͓̄͛̅͑͊r̵̠͕̲̟̰͋̈́̎̈́̾ä̵̳̯̳͙͍̫́̄̇͌̔̄̀̍͆́̃̕͠͝s̷̘̥̎h̵̲̟͇́̀́e̷͔͍̓́̃͛̇͂̇̀̕ḑ̷̨̡̨̣͙̱̤͎̲͙͕̜̙͉̊̑̔̿̈́̾̍̕.̶̰̮̘̤͈͉̿̄̍̍͋̈́́̚͘̚",
-
-
-    "dev": "echo Building files... && gulp build && echo Starting gulp livewatch and server. && concurrently \" gulp dev \" \" nodemon \"",
-    "start": "npm run run",
+    "start": "npm run build && node -r dotenv/config dist/app.js",
+    "dev": "echo Building files... && npm run build && echo Starting gulp livewatch and server. && concurrently \" gulp dev \" \" nodemon \"",
+    "run": "node -r dotenv/config dist/app.js",
     "test": "echo to be made && exit 0"
   },
   "repository": {

@@ -62,9 +62,8 @@
             <div id="total-flipped" class="statistics">   
                 <%= flipped %> pieces flipped in total </div>       <!-- Escaped template tags-->
 
-
-            <div id="players-online" class="statistics"> 
-                 <%= connections %> current players </div>
+            <div id="players-online" class="statistics">
+                 <%= connections %> current player<%=(connections-1) ? "s" : ""%> </div>
 
             <div id="games-completed" class="statistics">   
                  <%= games %> games completed </div>

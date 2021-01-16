@@ -58,7 +58,10 @@ app.use(function (err, req, res, next) {
 const port = parseInt(process.argv[2] ?? process.env.PORT ?? 3000);
 if (isNaN(port)) throw new TypeError("Port is not of type number");
 
-const server = http.createServer(app).listen(port); 
+let server;
+try {
+	server = http.createServer(app).listen(port);
+} catch (e) { console.log(e); process.exit(1); }
 console.log(`Server started on http(s)://${server.address()?.address?.replace("::", "localhost")}:${server.address()?.port}`);
 
 const wss = new websocket.Server({ server });
@@ -68,5 +71,13 @@ wss.on("connection", function connection(ws) {
 	connectionHandler.handle(ws);
 });
 
-
-
+function end() {
+	console.log("Received stopcode");
+	if (server.listening) {
+		console.log("Shutting down server");
+		server.close((err) => err ? process.exit(1) : null);
+		process.exit(0);
+	}
+}
+process.on('SIGINT', end);
+process.on('SIGTERM', end);
