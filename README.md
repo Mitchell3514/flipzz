@@ -55,9 +55,13 @@ The following NPM scripts (use with `npm run [name]`) are available upon downloa
  - Nadine - https://github.com/katycatxnadine
  - Mitchell - https://github.com/Mitchell3514
 
+## Credits
+ - [Volume Icons](https://iconscout.com/icon-pack/ui-elements-1) by [Vaadin Icons](https://iconscout.com/contributors/vaadin-icons)
+
 
 [liveURL]: http://mitchells.work:3000/
 [Express debug documentation]: https://expressjs.com/en/guide/debugging.html
 [GitHub ZIP link]: https://github.com/Mitchell3514/flippz/archive/main.zip
 [random name API]: http://the-one-api.dev
 [nvm]: https://github.com/nvm-sh/nvm
+
