@@ -1,7 +1,6 @@
 // @ts-check
 // NO REQUIRES ON THE CLIENT SIDE!
 
-const clickSound = new Audio("../assets/clicksound.mp3");
 const EASTERtoclick = document.querySelector("div#opponent"); // NOTE Easter egg: play against bot ;)
 const singleplayer = (new URLSearchParams(document.location.search)).get("single") === "true";
 
@@ -26,6 +25,7 @@ const pointsYou = document.querySelector("#points-you");
 const pointsOpponent = document.querySelector("#points-opponent");
 const roomName = document.querySelector("#status-name");
 const playAgainButton = document.querySelector("#play-again-button");       // hidden button
+const clickSound = new Audio("../assets/clicksound.mp3");
 
 
 socket.onopen = function() {
