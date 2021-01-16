@@ -86,7 +86,7 @@ Game.prototype.addPlayer = function(/** @type {EC & import("ws")} */ connection)
     if (color === null) return false;
 
     this._send(color, { gameID: this.id, name: this.name });
-    log(`Connection ${connection.id} has been added to Game ${this.id} (${this.name}).`);
+    log(`Connection ${connection.id} has been added to Game ${this.id} (${this.name}) as ${["black", "white"][color]}.`);
     if (this.isFull()) this._start();
     return true;
 };
@@ -115,11 +115,10 @@ Game.prototype.handle = function(/** @type {number} */ id, data) {
         // player can place, see if next player can place
         const canPlace = this.board.canPlace(+!color);       // array of all Positions where can be placed by other player
 
-        console.log(canPlace);
         if (!canPlace.length) { // other player can't place - send who won
             this.status++; // status 1 --> status 2
             const winner = this.board.winner();
-            log(`[GameHandler] Game ${this.id} (${this.name}) has been won by ${winner}.`);
+            log(`[GameHandler] Game ${this.id} (${this.name}) has been won by ${winner === -1 ? "no one" : ["black", "white"][winner]}.`);
 
             // ---------- IF GAME COMPLETED --------------------------------------
             this._updateStats({ flipped: this.flipped });

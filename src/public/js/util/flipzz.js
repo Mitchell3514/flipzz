@@ -194,7 +194,8 @@ function setColor(pos) {
 
 const gameOver = (winner) => { 
     console.log("GAME OVER");
-    updateStatus(winner^color ? "You lost... better luck next time!" : "Congratulations! You won :)");
+    if (winner === -1) updateStatus("It's a tie!");
+    else updateStatus(winner^color ? "You lost... better luck next time!" : "Congratulations! You won :)");
 };
 
 

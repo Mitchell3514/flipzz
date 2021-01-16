@@ -1,4 +1,3 @@
-const Game = require("./gameHandler");
 const GameHandler = require("./gameHandler");
 const { log, warn } = new (require("./logger"))({ prefix: "[AIGame]", color: "\x1b[32m" });
 
@@ -22,9 +21,6 @@ function GameAI() {
 
 // calls act 
     this.handle = (/** @type {number} */ id, data) => {
-        if (id !== this.player.id) return;
-        if (this.turn !== +!this.ai) return;
-
         const result = GameHandler.prototype.handle.call(this, id, data);
         return result ? (this.act(), true) : false;
     };
@@ -42,6 +38,7 @@ function GameAI() {
         setTimeout(() => {
             const possibilities = this.board.canPlace(this.ai);
             const pos = possibilities[Math.floor(Math.random() * possibilities.length)];        // pick a random position
+            if (!pos) return warn(`GameAI [${this.id}] did not see a move.`)
             GameHandler.prototype.handle.call(this, GameAI.aID, { position: pos.id });
         }, ((Math.random() * 1.5) + .5)*1000);
     };

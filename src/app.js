@@ -55,7 +55,9 @@ app.use(function (err, req, res, next) {
 	next();
 });
 
-const port = process.argv[2] ?? process.env.PORT ?? 3000;
+const port = parseInt(process.argv[2] ?? process.env.PORT ?? 3000);
+if (isNaN(port)) throw new TypeError("Port is not of type number");
+
 const server = http.createServer(app).listen(port); 
 console.log(`Server started on http(s)://${server.address()?.address?.replace("::", "localhost")}:${server.address()?.port}`);
 
