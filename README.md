@@ -41,7 +41,8 @@ The repository comes with a `.env.example` file which showcases the possible set
  - `DEBUG` - If set to `*` Express will log every step in handling a request. Set to anything else for normal production logs. See [Express debug documentation] for more information and other variables.
  - `PORT` - The port to use if none is given as a parameter when running the server. Default is `3000`.
  - `APITOKEN` - Your token to access the [random name API] with. This allows the server to fetch random names to use as room names, instead of showing a numerical ID. This setting is especially optional, but nonetheless recommended for a fun experience.
-- `NODE_ENV` - If set to `DEV` any server error when requesting a page will be rendered client-side. 
+ - `NODE_ENV` - If set to `DEV` any server error when requesting a page will be rendered client-side. 
+ Setting it to `PROD` will log IPs without hashing it to more easily block malicious requests.
 
 ## Scripts
 The following NPM scripts (use with `npm run [name]`) are available upon download:

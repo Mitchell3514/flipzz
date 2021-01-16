@@ -9,6 +9,7 @@ const { join } = require("path");
 const logger = require("morgan");
 const websocket = require("ws");
 const { createHash } = require("crypto");
+const { log, warn } = new (require("./archetypes/logger"))({ color: "\x1b[35m", prefix: "Server" });
 
 // routers
 const indexRouter = require('./routes/index');
@@ -32,7 +33,7 @@ app.use(logger("dev"));
 app.use("/", (req, res, next) => {
 	const date = new Date();
 	const iphash = createHash("md5").update(req.ip).digest("hex");
-	console.log(`${date.getHours()}:${date.getMinutes()}:${date.getMinutes()} - ${iphash}`);
+	log(`${date.getHours()}:${date.getMinutes()}:${date.getMinutes()} - ${iphash}`);
 	next();
 });
 
@@ -47,7 +48,10 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
 	// set locals, only providing error in development
 	res.locals.message = err.message;
-	res.locals.error = req.app.get('env') === 'development' ? err : {};
+	res.locals.error = process.env.NODE_ENV === "DEV" ? err : {};
+
+	// log real IP because this is probably an attack
+	if (process.env.NODE_ENV === "PROD") warn(req.ip);
 
 	// render the error page
 	res.status(err.status || 500);
