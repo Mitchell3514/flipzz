@@ -67,5 +67,13 @@ wss.on("connection", function connection(ws) {
 	connectionHandler.handle(ws);
 });
 
-
-
+function end() {
+	console.log("Received stopcode");
+	if (server.listening) {
+		console.log("Shutting down server");
+		server.close((err) => err ? process.exit(1) : null);
+		process.exit(0);
+	}
+}
+process.on('SIGINT', end);
+process.on('SIGTERM', end);
