@@ -48,7 +48,7 @@ function writeStats() {
     });
 }
 
-// setInterval(() => change ??= (writeStats(), false), 5e3) NOTE ES2021 syntax to re-enable later
+// setInterval(() => change &&= (writeStats(), false), 5e3) NOTE ES2021 syntax to re-enable later
 setInterval(() => { if (change) change = (writeStats(), false) }, 5e3)
 writeStats();
 
