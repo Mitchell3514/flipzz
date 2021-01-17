@@ -29,9 +29,7 @@ router.use("/game", function nocache(req, res, next) {
 /* GET game page after pressing PLAY */
 // game.ejs is the HTML template to be rendered
 router.get("/game", (req, res) => {
-	res.render("game", {
-		singleplayer: req.query?.single == "true",
-	});
+	res.render("game");
 });
 
 module.exports = router;
