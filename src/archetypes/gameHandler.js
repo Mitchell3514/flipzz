@@ -13,10 +13,11 @@ const { getName } = require("./randomName");
 
 /**
  * Status codes:
- * -1   Game aborted { status: -1}
- *  0   Game started  { status: 0, player: 0/1, turn: 0/1 } 
- *  1   Game continuing/move { status: 1, valid: true, turn: 0/1  } else {status: 1, valid: false}
- *  2   Game ended { status: 2, valid: true, position: number, winner: 0/1  }
+ * -1   info    { gameID: number, name: string }
+ *  0   start   { player: 0|1, turn: 0|1 } 
+ *  1   move    { valid: boolean, position: number, turn: 0|1, message?: string  }
+ *  2   end     { valid: true, position: number, winner: 0|1  }
+ *  3   stop    { message: string }
  */
 
 let id = 0;
@@ -143,7 +144,7 @@ Game.prototype.handle = function(/** @type {number} */ id, data) {
         // next player's turn - send data
         this.turn = +!this.turn;
         // ------------IF VALID MOVE-------------------------------------------------
-        this._send(2, { valid: true, turn: this.turn, ...payload });         // 2 = send to both: valid + next turn + payload (pos id validated)
+        this._send(2, { turn: this.turn, ...payload });         // 2 = send to both: valid + next turn + payload (pos id validated)
     } else {
         // ----------IF INVALID MOVE-------------------------------------------------
         this._send(color, { valid: false, reason: "Invalid move." });                    // sent to (color =) 0/1, player (conn) who sent move
