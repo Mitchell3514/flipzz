@@ -221,6 +221,7 @@ div#timer {
     background-color: #95F6BA;
 }
 
+
 /* selects play again button class  */
 .play-again-button {
     transform: scale(1.5);
@@ -233,6 +234,8 @@ div#timer {
 /*                                 MEDIA QUERY                                */
 /* -------------------------------------------------------------------------- */
 
+
+/* adapt to smaller screens */
 @media only screen and (max-width: 950px) {
     main {
         flex-flow: row wrap;
@@ -305,6 +308,8 @@ div#timer {
     top: 0;
     background-color: rgba(255, 255, 255, .2);
 }
+
+/* get rid of all old content */
 #opponent.clickable:hover span#info-opponent {
     visibility: hidden;
 }

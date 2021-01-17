@@ -91,6 +91,8 @@ Game.prototype.addPlayer = function(/** @type {EC & import("ws")} */ connection)
     return true;
 };
 
+// Prototype constructor: share functions + inheritance (GameAI and GameHandler)
+
 // HANDLES A MESSAGE FROM CLIENT: a move (position id)
 // id: connection.id
 // data: payload as JSON object (position id of move sent by client) sent by connectionHandler
