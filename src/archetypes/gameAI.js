@@ -3,8 +3,8 @@ const { log, warn } = new (require("./logger"))({ prefix: "[AIGame]", color: "\x
 
 function GameAI() { 
 
-    // Prototype design pattern allows inheritance between GameHandler and GameAI!
-        // gameHandler methods are re-used, but modified.
+    // Prototype design pattern allows inheritance and sharing of functions between GameHandler and GameAI!
+        // gameHandler methods are re-used (shared), but modified.
 
     GameHandler.call(this, true)
 

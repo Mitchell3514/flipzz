@@ -16,10 +16,11 @@ function createStats() {        // updates stats
     return stats;
 }
 
+// called by GameHandler:   this._updateStats({ flipped: this.flipped });  <-- JSON object 
 function updateStats(/** @type {Object} */ obj) {
     log(`Updating stats: ${i(obj)}`);
     Object.keys(obj)
-        .forEach(key => 
+        .forEach(key =>         // key = array value
             (typeof stats[key] === "number" ? stats[key] += obj[key] : stats[key] = obj[key])
             && (change = true)
         );
@@ -29,7 +30,7 @@ function getStats() {
     try {
         if (stats === null) {
             log("Retrieving stats...");
-            stats = require(PATH)
+            stats = require(PATH)           // filesystem
         };
     } catch(e) {
         log("Failed retrieving, now creating stats...")
@@ -41,7 +42,7 @@ function getStats() {
 
 function writeStats() {
     if (stats === null) getStats();
-    fs.writeFile(PATH, JSON.stringify(stats), e => {       // stats.json file gets overwritten
+    fs.writeFile(PATH, JSON.stringify(stats), e => {       // stats.json file gets overwritten by stringified JSON object
         if (e) console.log(e);
         log(`Stats file updated.`);
     });
