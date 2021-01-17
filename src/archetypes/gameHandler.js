@@ -9,7 +9,7 @@ const { getName } = require("./randomName");
  * @typedef {import("./connectionHandler").ExtendedConnection} EC
  */
 
- // SENDS DATA TO CONNECTIONS (is game full?)
+ // SENDS REVEVANT DATA TO CONNECTIONS (is game full?)
 
 /**
  * Status codes:

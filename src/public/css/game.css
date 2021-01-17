@@ -24,7 +24,7 @@ main {
 /*                                   HEADER                                   */
 /* -------------------------------------------------------------------------- */
 
-/* sound button */
+/* sound button fixed: always relative to viewport, always visible */
 button#soundbutton, img#soundIcon {
     position: fixed;
     top: 0;
@@ -291,6 +291,7 @@ div#timer {
 /*                         SINGLEPLAYER / EASTEREGG                           */
 /* -------------------------------------------------------------------------- */
 
+/* pseudo-element hover */
 #opponent.clickable:hover {
     background-color: palevioletred;
     text-align: center;

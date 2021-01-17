@@ -17,7 +17,7 @@ const { log, warn } = new (require("./logger"))({ prefix: "[ConnectionHandler]",
 let current = 0;
 const getCurrentConnections = () => current;	 // required by routes/index (how many players online)
 
-// to see what game we're connected to client-side: if single player, new Game, else new AIGame
+// to see what game we're connected to on client-side: if single player, new AI Game, else new normal Game
 function newGame(single) { return single ? new AIGame() : new Game(); }
 
 const ConnectionHandler = function ConnectionHandler() {
@@ -34,15 +34,15 @@ const ConnectionHandler = function ConnectionHandler() {
 		// data: JSON string received by client --> status change: position id of move in format: {position: pos.id}
 		connection.on("message", (data) => {
 			try {
-				const payload = JSON.parse(data.toString());
+				const payload = JSON.parse(data.toString());	// payload is stringified JSON object sent by flipzz.js
 				if (typeof payload !== "object") throw new TypeError("Payload received by client is not an object");
 
 				// TYPE=0 is 'join game' payload
 				if (payload.type === 0 && !connection.game) {
 					if (payload.single === true) {
-						connection.game = this.single;
+						connection.game = this.single;			// connection assigned new AIGame (singleplayer)
 						this.single = newGame(true);
-						connection.game.addPlayer(connection);
+						connection.game.addPlayer(connection);	// 
 					} else {
 						let game = this.waiting;
 						if (!game.addPlayer(connection)) {

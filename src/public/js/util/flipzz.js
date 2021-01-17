@@ -6,8 +6,8 @@ const EASTERtoclick = document.querySelector("div#opponent"); // NOTE Easter egg
 /* -------------------------------------------------------------------------- */
 /*                                 URL PARAMS                                 */
 /* -------------------------------------------------------------------------- */
-const params = new URLSearchParams(document.location.search);
-const singleplayer = params.get("single") === "true";
+const params = new URLSearchParams(document.location.search);       // info about current URL
+const singleplayer = params.get("single") === "true";               // single player mode: http://localhost:3000/game?single=true
 let volume = params.get("silent") === "true" ? 0 : 2;
 
 
@@ -15,7 +15,7 @@ let volume = params.get("silent") === "true" ? 0 : 2;
 // @ts-ignore For each client, we create a new WebSocket, so each player has its own ws connection with server
 const socket = new WebSocket(document.location.origin.replace("http", "ws"));
 /** @type {import("./Board").Board} */ // @ts-expect-error
-const board = new Classes.Board(CFG.boardsize, CFG.boardsize);
+const board = new Classes.Board(CFG.boardsize, CFG.boardsize);      // global property: Window.Classes {Position, Board}
 // position, config and board get imported in game.ejs, BEFORE flipzz
 let darkpoints = 2;
 let lightpoints = 2;
@@ -87,7 +87,7 @@ socket.onmessage = function(event) {
             if (message.turn === color) (updateStatus("It's your turn!"), updatePlaceable());
             else updateStatus("Waiting for the opponent's move.");
 
-            EASTERtoclick.removeEventListener("click", EASTERfunc); // NOTE easter egg code
+            EASTERtoclick.removeEventListener("click", EASTERfunc); // NOTE easter egg code (will add single=true to URL)
             break;
 
         case(1):
@@ -172,10 +172,10 @@ function mouseClick(/** @type {any} */ event) { // the clicked element
     let element = event.target;
     if (gamestatus !== 1) return;
     // could be chip or its child in theory (in practice always child)
-    if (!element.classList.contains("chip")) element = element.parentElement;
+    if (!element.classList.contains("chip")) element = element.parentElement;       // if the inner div was clicked on
     if (!element.classList.contains("chip")) return;   // not a chip
                                                     // dataset contains all attributes starting with data-.... (see data-pos in game.ejs)
-    const posid = parseInt(element.dataset["pos"]);     // get pos-data from TD (numbers 0, 1, 2, .... 63)
+    const posid = parseInt(element.dataset["pos"]);     // get data-pos info from div (numbers 0, 1, 2, .... 63)
 
     if (isNaN(posid)) return;
     else {
@@ -250,7 +250,9 @@ function updatePlaceable() {
 
 let playing = false;
 let temp;
+
 async function playClickSound() { // @ts-ignore
+    // non-blocking --> parallel sound
     if (playing) return ((temp = clickSound.cloneNode()).volume = clickSound.volume, temp.play());
     clickSound.play();
     playing = true;
@@ -258,17 +260,17 @@ async function playClickSound() { // @ts-ignore
 }
 
 function setSound(change = true) { 
-    if (change) volume - 1 < 0 ? volume = 2 : volume -= 1;
+    if (change) volume - 1 < 0 ? volume = 2 : volume -= 1;      // lower volume 
     clickSound.volume = volume/10;
-    soundIconIMG.src = `./assets/volume_${["off", "low", "full"][volume]}.svg`;
+    soundIconIMG.src = `./assets/volume_${["off", "low", "full"][volume]}.svg`;     // 0 = off, 1 = low, 2 = full (.svg image to dislay)
 }
 setSound(false);
 
 /* -------------------------------------------------------------------------- */
 /*                                  EASTEREGG                                 */
 /* -------------------------------------------------------------------------- */
-function EASTERfunc() {window.location.href = (window.location.href + "?single=true").replace("??", "?"); }
-if (!singleplayer) {
+function EASTERfunc() {window.location.href = (window.location.href + "?single=true").replace("??", "?"); } // add single=true to URL 
+if (!singleplayer) {            // enable button if not single player mode 
     EASTERtoclick.classList.add("clickable");
     EASTERtoclick.addEventListener("click", EASTERfunc);
 }
