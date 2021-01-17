@@ -214,8 +214,7 @@ function place(pos) {
     const toChange = board.place(pos, turn);        // array of Positions sthat hould change color (just placed + flipped)
     if (!toChange.length) return;                   // nothing flipped
 
-    clickSound.play();
-    // remove placeable signs
+    playClickSound();
     clearPlaceable();
 
     // Color all positions that have just been flipped (and the 1 placed)
@@ -245,8 +244,18 @@ function updatePlaceable() {
 
 
 /* -------------------------------------------------------------------------- */
-/*                                SOUND TOGGLE                                */
+/*                                    SOUND                                   */
 /* -------------------------------------------------------------------------- */
+
+let playing = false;
+let temp;
+async function playClickSound() { // @ts-ignore
+    if (playing) return ((temp = clickSound.cloneNode()).volume = clickSound.volume, temp.play());
+    clickSound.play();
+    playing = true;
+    setTimeout(() => playing = false, 1.2e3);
+}
+
 function setSound(change = true) { 
     if (change) volume - 1 < 0 ? volume = 2 : volume -= 1;
     clickSound.volume = volume/10;
