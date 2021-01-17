@@ -100,7 +100,7 @@ span.points:nth-child(even) {
     padding-right: 2px;
     color: black;
     position: absolute;
-    right: 130px;
+    right: 150%;
     bottom: 22px;
     transform: scale(3.4);
 }
@@ -246,21 +246,26 @@ div#timer {
     }
 
     #board-wrapper {
-        width: 85vw;
-        height: 85vw;
+        width: max(50vh);
+        height: max(50vh);
+        padding-bottom: 5vh;
         margin: 0 auto;
     }
 
     #board {
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
         position: relative;
     }
 
     #left, #right {
         text-align: center;
+        flex: 1 0 100vw;
     }
 
     #left {
-        display: flex;
         order: 1;
         padding: 5px;
     }
@@ -268,15 +273,20 @@ div#timer {
     #right {
         order: 2;
         margin: 0;
-        display: flex;
         bottom: calc(var(--bottom) - .2 * (20vh + 50px));
     }
 
     #left div, #right div {
         top: 0;
-        display: block;
+        display: inline-block;
         position: relative;
-        margin: 2px auto;
+    }
+
+    #left div:first-child, #right div:first-child {
+        margin: 0 5vw 0 auto;
+    }
+    #left div:last-child, #right div:last-child {
+        margin: 0 auto 0 5vw;
     }
 
     p#status-body {

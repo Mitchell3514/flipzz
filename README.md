@@ -8,9 +8,9 @@ First of all, make sure you're using **npm v14 or higher.** We recommend using [
 
 ### Download
 You can either download the code directly as a ZIP file [here][GitHub ZIP link], or use the command below:
- ```
+```
 git clone https://github.com/Mitchell3514/flippz.git
- ```
+```
 After succesfully downloading (and extracting) the files, run `npm i` to download the required packages.
 
 > It may take a while for webp to download and build. If you are facing issues with npm not understanding the lock-file, make sure you're using npm v14. If you are still having issues, then try upgrading to the latest npm version (currently 15).
