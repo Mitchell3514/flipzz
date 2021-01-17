@@ -39,8 +39,9 @@ socket.onopen = function() {
  * Status codes:
  * -1   Game aborted { status: -1}
  *  0   Game started  { status: 0, player: 0/1, turn: 0/1 } 
- *  1   Game continuing/move { status: 1, valid: true, turn: 0/1  } else {status: 1, valid: false}
+ *  1   Game move { status: 1, valid: true, turn: 0/1  } else {status: 1, valid: false}
  *  2   Game ended { status: 2, valid: true, position: number, winner: 0/1  }
+ *  3   Game aborted
  */
 
 socket.onmessage = function(event) {

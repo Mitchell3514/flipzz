@@ -17,7 +17,7 @@ const { log, warn } = new (require("./logger"))({ prefix: "[ConnectionHandler]",
 let current = 0;
 const getCurrentConnections = () => current;	 // required by routes/index (how many players online)
 
-// to see what game we're connected to client-side
+// to see what game we're connected to client-side: if single player, new Game, else new AIGame
 function newGame(single) { return single ? new AIGame() : new Game(); }
 
 const ConnectionHandler = function ConnectionHandler() {

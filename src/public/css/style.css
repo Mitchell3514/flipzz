@@ -3,10 +3,6 @@ main {
   display: flex;
   flex-flow: row wrap;  
 
-  /* display: grid;
-  grid-template-rows: auto;
-  grid-template-columns: 1fr, 2fr, 2fr, 2fr, 1fr; */
-
   /* center text vertically and horizontally within an element */
   justify-content: center;
   align-items: center;
@@ -24,28 +20,18 @@ main {
 }
 
 
-/* body {
-  padding: 50px;
-  font: 14px "Monoton";
-} */
-
-
 /* -------------------------------------------------------------------------- */
 /*                                    LEFT                                    */
 /* -------------------------------------------------------------------------- */
-
+/* 
+position fixed is ALWAYS relative to viewport: will always be visible */
 #left-chips {
-  position: fixed;
+  position: fixed;    
   left: 10px;
   top: 10px;
   animation: rotate 3s linear infinite;
 }
 
-
-#left {
-  /* flex: 1 1 auto; */
-  position: relative;
-}
 
 /* Selects id of rules div */
 #how-to-play {
@@ -55,7 +41,6 @@ main {
   right: 250px;
   top: 160px;
   width: 20vw;
-  /* for some reason it doesn't let me use var(--gameFont)?? */
   font: 15px monospace;
   border: var(--borderThickness) dashed var(--darkColor);
 }

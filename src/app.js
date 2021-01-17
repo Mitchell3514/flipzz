@@ -10,6 +10,7 @@ const logger = require("morgan");
 const websocket = require("ws");
 const { createHash } = require("crypto");
 const { log, warn } = new (require("./archetypes/logger"))({ color: "\x1b[35m", prefix: "Server" });
+// extracting the functions this.log and this.warn from the newly created Logger object
 
 // routers
 const indexRouter = require('./routes/index');
@@ -20,7 +21,7 @@ const app = express();
 
 // set express' static file path to send HTTP responses  (path.join works in all OS types)
 // uses this for EVERY request (GET, POST, PUT...)
-// Express will always look for routes/index 
+// Express will always look for routes/index file first
 app.use(express.static(join(__dirname, "/public")));
 
 // view engine setup: views directory containing all EJS templates
@@ -29,7 +30,7 @@ app.set('view engine', 'ejs');
 
 app.use(logger("dev"));
 
-// log ip hash (just in to be sure)
+// log ip hash (just to be sure)
 app.use("/", (req, res, next) => {
 	const iphash = createHash("md5").update(req.ip).digest("hex");
 	log(`${new Date().toJSON().substring(11,19)} - ${iphash}`);
