@@ -16,7 +16,8 @@ function createStats() {        // updates stats
     return stats;
 }
 
-// called by GameHandler:   this._updateStats({ flipped: this.flipped });  <-- JSON object 
+// called by GameHandler:   this._updateStats({ flipped: this.flipped });  <-- JSON objec// 
+//         this._updateStats({ games: 1 }); 
 function updateStats(/** @type {Object} */ obj) {
     log(`Updating stats: ${i(obj)}`);
     Object.keys(obj)
