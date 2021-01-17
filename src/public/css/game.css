@@ -221,13 +221,16 @@ div#timer {
     background-color: #95F6BA;
 }
 
+/* selects play again button class */
+div.play-again-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
 
-/* selects play again button class  */
-.play-again-button {
-    transform: scale(1.5);
-    position: relative;
-    left: 260px;
-    top: 340px;
+div.play-again-button button {
+    font-size: calc(var(--bigfont) - .35em);
+    padding: 10px;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -287,6 +290,10 @@ div#timer {
     }
     #left div:last-child, #right div:last-child {
         margin: 0 auto 0 5vw;
+    }
+
+    div#play-again {
+        transform: none;
     }
 
     p#status-body {
