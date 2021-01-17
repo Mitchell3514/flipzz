@@ -13,7 +13,7 @@ let volume = params.get("silent") === "true" ? 0 : 2;
 
 
 // @ts-ignore For each client, we create a new WebSocket, so each player has its own ws connection with server
-const socket = new WebSocket(document.location.origin.replace("http", "ws"));
+const socket = new WebSocket(document.location.origin.replace("http", "ws"));       // URL changes to "ws://localhost:3000";
 /** @type {import("./Board").Board} */ // @ts-expect-error
 const board = new Classes.Board(CFG.boardsize, CFG.boardsize);      // global property: Window.Classes {Position, Board}
 // position, config and board get imported in game.ejs, BEFORE flipzz

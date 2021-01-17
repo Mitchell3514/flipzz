@@ -3,18 +3,18 @@ const { log, warn } = new (require("./logger"))({ prefix: "[AIGame]", color: "\x
 
 function GameAI() { 
 
-    // Prototype design pattern allows inheritance and sharing of functions between GameHandler and GameAI!
+    // ---------------- Prototype design pattern: share functions + inheritance (GameAI and GameHandler)----------------//
         // gameHandler methods are re-used (shared), but modified.
 
-    GameHandler.call(this, true)
+    GameHandler.call(this, true)        // gameHandler functions used/shared. (this = gameHandler function, single = true)
 
     //server adds itself as 2nd player
     this.addPlayer = (connection) => {
         log(`Starting in singleplayer mode with ${connection.id}`);
-        GameHandler.prototype.addPlayer.call(this, { id: GameAI.aID });
+        GameHandler.prototype.addPlayer.call(this, { id: GameAI.aID });     // shared function: called with this connection
         GameHandler.prototype.addPlayer.call(this, connection);
-        this.player = { id: connection.id };
-        this.ai = +(this.light.id === GameAI.aID);
+        this.player = { id: connection.id };            // player sent by connectionhandler
+        this.ai = +(this.light.id === GameAI.aID);      // 0, so AI is dark.
         if (this.turn === this.ai) this.act();
         return true;
     };
