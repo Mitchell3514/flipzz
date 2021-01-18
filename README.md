@@ -52,10 +52,9 @@ The following NPM scripts (use with `npm run [name]`) are available upon downloa
  - `run` - this starts the server pre-loading the settings from the .env file.
 
 ## Authors
-<div class="github-card" data-github="katycatxnadine" data-width="400" data-height="" data-theme="default"></div>
-<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
-<div class="github-card" data-github="Mitchell3514" data-width="400" data-height="" data-theme="default"></div>
-<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+ - Nadine - https://github.com/katycatxnadine
+ - Mitchell - https://github.com/Mitchell3514
+
 ## Credits
  - [Volume Icons](https://iconscout.com/icon-pack/ui-elements-1) by [Vaadin Icons](https://iconscout.com/contributors/vaadin-icons)
 
