@@ -1,4 +1,4 @@
-# flippz
+# flipzz
 Othello's time has come; introducing Flippz. A refreshed online multiplayer experience for a game that never gets old. You can see the live version of this repository [here][liveURL].
 
 > This is a small 4 week project for Delft University of Technology's Web and Database technology classes.
