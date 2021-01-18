@@ -40,7 +40,7 @@ Replace `PORT#` with the desired port to run on or leave it out to default to th
 The repository comes with a `.env.example` file which showcases the possible settings there are. In order to change them, first create a new file named `.env` or rename the example file as such. Then these settings are at your disposal:
  - `DEBUG` - If set to `*` Express will log every step in handling a request. Set to anything else for normal production logs. See [Express debug documentation] for more information and other variables.
  - `PORT` - The port to use if none is given as a parameter when running the server. Default is `3000`.
- - `APITOKEN` - Your token to access the [random name API] with. This allows the server to fetch random names to use as room names, instead of showing a numerical ID. This setting is especially optional, but nonetheless recommended for a fun experience.
+ - `APITOKEN` - Your token to access the [random name API] with. This allows the server to fetch random names to use as room names, instead of showing a numerical ID. This setting is particularly optional, but nonetheless recommended for a fun experience.
  - `NODE_ENV` - If set to `DEV` any server error when requesting a page will be rendered client-side. 
  Setting it to `PROD` will log IPs without hashing it to more easily block malicious requests.
 
