@@ -1,7 +1,6 @@
 // @ts-check
 const Game = require("./gameHandler");
 const AIGame = require("./gameAI");
-const { connect } = require("../routes");
 const { log, warn } = new (require("./logger"))({ prefix: "[ConnectionHandler]", color: "\x1b[36m" });
 // extract the functions this.log and this.warn of the newly created Logger object.
 // = new Logger(({ prefix: "[ConnectionHandler]", color: "\x1b[36m" }))
