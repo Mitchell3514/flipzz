@@ -126,7 +126,7 @@ Game.prototype.handle = function(/** @type {number} */ id, data) {
 
         //  array of Positions where color has changed
         const flipped = this.board.place(data.position, color); // update board: (pos.id, color)
-        this.flipped += (flipped.length - 1); // -1 because of self-placement, only add the new chips to score!
+        this.flipped += (flipped.length - 1); // -1 because of self-placement, only add the flipped chips to amount flipped!
         
         // player can place, see if next player can place
         const canPlace = this.board.canPlace(+!color);       // array of all Positions where can be placed by other player

@@ -14,7 +14,7 @@ function GameAI() {
         GameHandler.prototype.addPlayer.call(this, { id: GameAI.aID });     // shared function: called with this connection
         GameHandler.prototype.addPlayer.call(this, connection);
         this.player = { id: connection.id };            // player sent by connectionhandler
-        this.ai = +(this.light.id === GameAI.aID);      // 0, so AI is dark.
+        this.ai = +(this.light.id === GameAI.aID); 
         if (this.turn === this.ai) this.act();
         return true;
     };

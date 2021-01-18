@@ -17,7 +17,7 @@ function createStats() {        // updates stats
 }
 
 // called by GameHandler:   this._updateStats({ flipped: this.flipped });  <-- JSON objec// 
-//         this._updateStats({ games: 1 }); 
+//                          this._updateStats({ games: 1 }; 
 function updateStats(/** @type {Object} */ obj) {
     log(`Updating stats: ${i(obj)}`);
     Object.keys(obj)
@@ -31,7 +31,7 @@ function getStats() {
     try {
         if (stats === null) {
             log("Retrieving stats...");
-            stats = require(PATH)           // filesystem
+            stats = require(PATH) // filesystem
         };
     } catch(e) {
         log("Failed retrieving, now creating stats...")
@@ -43,7 +43,7 @@ function getStats() {
 
 function writeStats() {
     if (stats === null) getStats();
-    fs.writeFile(PATH, JSON.stringify(stats), e => {       // stats.json file gets overwritten by stringified JSON object
+    fs.writeFile(PATH, JSON.stringify(stats), e => {  // stats.json file gets overwritten by stringified JSON object
         if (e) console.log(e);
         log(`Stats file updated.`);
     });
