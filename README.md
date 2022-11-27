@@ -52,7 +52,7 @@ The following NPM scripts (use with `npm run [name]`) are available upon downloa
  - `run` - this starts the server pre-loading the settings from the .env file.
 
 ## Authors
- - Nadine - https://github.com/katycatxnadine
+ - Nadine - https://github.com/nadinekuo
  - Mitchell - https://github.com/Mitchell3514
 
 ## Credits
