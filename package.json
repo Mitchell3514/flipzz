@@ -27,7 +27,7 @@
   "homepage": "https://github.com/Mitchell3514/flippz#readme",
   "dependencies": {
     "ejs": "^3.1.5",
-    "express": "^4.17.1",
+    "express": "^4.22.1",
     "http-errors": "^1.7.2",
     "morgan": "^1.10.0",
     "ws": "^7.4.1"
